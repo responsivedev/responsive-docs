@@ -11,7 +11,7 @@ const FeatureList = [
         Migrate to Responsive in a matter of minutes
       </>
     ),
-    url: '/docs/getting-started/quickstart',
+    url: '/getting-started/quickstart',
     learnText: true,
   },
   {
@@ -22,7 +22,7 @@ const FeatureList = [
         Learn about the Responsive Platform architecture
       </>
     ),
-    url: '/docs/concepts/architecture',
+    url: '/concepts/architecture',
     learnText: true,
   },
   {
@@ -33,7 +33,7 @@ const FeatureList = [
         Discover all available features
       </>
     ),
-    url: '/docs/concepts/architecture',
+    url: '/category/api-reference',
     learnText: true,
   }
 ]

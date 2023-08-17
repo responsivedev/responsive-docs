@@ -98,7 +98,7 @@ const config = {
             items: [
               {
                 label: 'Home',
-                to: '/home',
+                to: '/',
               },
               {
                 label: 'Getting Started',
