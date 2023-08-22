@@ -4,6 +4,7 @@ sidebar_position: 1
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import PartialDependencies from './_dependencies.md';
 
 # Quickstart
 
@@ -46,7 +47,7 @@ compatible with Apache Cassandra. In this quickstart, we will spin up
     Docker Compose YAML
     </summary>
 
-    ```yaml title="docker-compose.yml"
+    ```yaml title="docker-compose.yml" showLineNumbers
     ---
     version: '3'
     services:
@@ -110,24 +111,7 @@ the [Maven Quickstart Archetype](https://maven.apache.org/guides/getting-started
 or the [Gradle Quickstart](https://docs.gradle.org/current/userguide/part1_gradle_init.html) 
 to initialize your project.
 
-<Tabs groupId="build-system">
-  <TabItem value="maven" label="Maven" default>
-
-  ```
-  <dependency>
-    <groupId>dev.responsive</groupId>
-    <artifactId>kafka-client</artifactId>
-    <version>0.7.1</version>
-  </dependency>
-  ```
-  </TabItem>
-  <TabItem value="gradle" label="Gradle">
-
-  ```
-  implementation 'dev.responsive:kafka-client:0.7.1'
-  ```
-  </TabItem>
-</Tabs>
+<PartialDependencies />
 
 ## Implement Word Count
 
@@ -138,12 +122,13 @@ Streams "Word Count" application that runs on Responsive.
 
 Take a look at the code below, which constructs the topology:
 
-```java {6} showLineNumbers
+```java showLineNumbers
 StreamsBuilder builder = new StreamsBuilder();
 KStream<String, String> textLines = builder.stream("plaintext-input");
 KTable<String, Long> wordCounts = textLines
     .flatMapValues(textLine -> Arrays.asList(textLine.toLowerCase().split("\\W+")))
     .groupBy((key, word) -> word)
+    // highlight-next-line
     .count(ResponsiveStores.materialized(ResponsiveKeyValueParams.keyValue("counts-store")));
 wordCounts
     .toStream()
@@ -161,10 +146,11 @@ Instead of using the `KafkaStreams#new(Topology, Map<?,?>)` method to construct
 your Kafka Streams instance, use the factory method on `ResponsiveKafkaStreams`
 as shown below:
 
-```java {4} showLineNumbers
+```java showLineNumbers
     Properties props = new Properties();
     // ...
 
+    // highlight-next-line
     KafkaStreams streams = ResponsiveKafkaStreams.create(builder.build(), props);
     streams.start();
 ```
@@ -185,7 +171,7 @@ git clone https://github.com/responsivedev/quickstart.git
   Toggle the Full Code Snippet
   </summary>
 
-  ```java title="ResponsiveWordCountApplication.java"
+  ```java title="ResponsiveWordCountApplication.java" showLineNumbers
   import dev.responsive.kafka.api.ResponsiveKafkaStreams;
   import dev.responsive.kafka.api.ResponsiveKeyValueParams;
   import dev.responsive.kafka.api.ResponsiveStores;
