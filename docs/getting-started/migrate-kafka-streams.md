@@ -181,6 +181,15 @@ responsive.client.id=<API KEY>
 responsive.client.secret=<API SECRET>
 ```
 
+## Logging (Optional)
+
+If supported by your logging implementation, you can configure Responsive logs
+to write directly to a Kafka Topic owned by Responsive. This will help us
+diagnose problems that your applications may encounter.
+
+If you're using log4j, you can look at [these example configurations](
+https://github.com/responsivedev/responsive-pub/tree/main/etc/log4j2) to see
+how to set this up.
 
 ## Supported Features
 
