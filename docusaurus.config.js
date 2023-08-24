@@ -83,7 +83,7 @@ const config = {
             position: 'left'
           },
           {
-            to: 'https://github.com/responsivedev',
+            to: 'getting-started/quickstart',
             label: 'Get Started',
             position: 'right',
             className: 'button button--secondary button--rg'
