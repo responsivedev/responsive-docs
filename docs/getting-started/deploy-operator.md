@@ -108,4 +108,4 @@ kubectl get pods -n responsive
 ## Next Steps
 
 - Configure your [autoscaling policies](configure-autoscaling-policy)
-- Read up how how our [control plane works](../concepts/introduction)
+- Read up how how our [control plane works](../concepts/autoscaling)
