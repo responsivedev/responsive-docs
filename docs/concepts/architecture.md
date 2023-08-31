@@ -2,16 +2,15 @@
 sidebar_position: 1
 ---
 
-# Introduction
+# Architecture
 
+## Overview
 Responsive is a platform for running stateful, reactive, backend applications. Responsive adopts a two layered architecture:
 
 1. An event processing runtime that is embedded in your application. Today, Responsive ships open source [Kafka Streams](https://kafka.apache.org/documentation/streams/) as its event processing runtime. 
 2. A set of backing services support your Kafka Streams applications. Today, we offer a managed [storage service](storage) to act as remote state stores, and a controller service combined with a kubernetes operator to enable [autoscaling](autoscaling) your Kafka Streams applications.
 
-# Architecture
-
-Here's how it all comes together:
+## How it fits together
 ![The responsive architecture consists of managed storage and control plane components, and a Kafka Streams runtime embedded in your app](/img/responsive-architecture.png "Responsive Architecture")
 
 1. Your Kafka Streams app continues to run in your environment as-is. You just need to pull in the Responsive client and swap `KafkaStreams` with `ResponsiveKafkaStreams` as documented in our [migration guide](../getting-started/migrate-kafka-streams).
