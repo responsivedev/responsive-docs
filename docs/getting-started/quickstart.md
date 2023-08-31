@@ -305,7 +305,7 @@ docker compose down
 
 ## Next Steps
 
-- [Learn more](/concepts/introduction) about the Responsive platform
+- [Learn more](/concepts/architecture) about the Responsive platform
 - Read the detailed [migration guide](migrate-kafka-streams) to migrate
   from Kafka Streams
 - See the full [API reference](/category/api-reference)
