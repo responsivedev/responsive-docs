@@ -119,21 +119,25 @@ const config = {
             ],
           },
           {
-            title: 'Community',
+            title: 'Social',
             items: [
-              {
-                label: 'Product',
-                href: 'https://responsive.dev',
-              },
-              {
+             {
                 label: 'LinkedIn',
                 href: 'https://www.linkedin.com/company/responsivedev/',
               },
+              {
+                label: 'X / Twitter' ,
+                href: 'https://twitter.com/responsive_apps',  
+              }
             ],
           },
           {
             title: 'More',
             items: [
+              {
+                label: 'Product',
+                href: 'https://responsive.dev',
+              },
               {
                 label: 'GitHub',
                 href: 'https://github.com/responsivedev',
