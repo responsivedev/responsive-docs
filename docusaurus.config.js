@@ -109,7 +109,7 @@ const config = {
                 to: '/category/getting-started',
               },
               {
-                label: 'Conecpts',
+                label: 'Concepts',
                 to: '/category/concepts',
               },
               {
