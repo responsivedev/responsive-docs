@@ -28,18 +28,10 @@ The limitations of copuling compute with storage are well known:
 1. Sizing your nodes becomes more of an art than a science, and many Kafka
    Streams deployments in the wild tend to overprovision on both to ensure
    that neither limitation is met.
-1. Scaling out becomes difficult since new nodes need to bootstrap storage
-   before they can become operational.
+1. Elastic scaling is impossible since new nodes must bootstrap storage before 
+   they can become operational.
 1. Recovering from a fault or rebalancing is a challenge for the same reason
    as above.
-
-:::info
-
-Curious to read more about tuning RocksDB state stores and contrasting it with
-Responsive Storage? Read our [blog post](https://responsive.dev/blog/separating-storage-and-compute)
-about it.
-
-:::
 
 Over time, the Kafka Streams developers have come up with elegant improvements
 to these problems: standby and warmup replicas, incremental rebalancing, sticky 
@@ -50,14 +42,14 @@ concerns in one fell swoop.
 
 ## Remote Storage
 
-
-At Responsive, we believe that reactive backends should power the most business-
-critical applications in your stack, that's why we built our storage solution
-to leverage [Scylla DB](https://github.com/scylladb/scylladb), a battle-tested
-distributed database that provides:
+As managed services in the cloud have become mission critical for many 
+businesses, the original design goal of keeping Kafka Streams free of external 
+dependencies holds less weight. To take advantage of this new paradigm, we 
+built our storage solution to leverage [Scylla DB](https://github.com/scylladb/scylladb), 
+a battle-tested distributed database that provides:
 
 - Fast writes & fast Key-Value reads
-- The transactional guarantees to implement the EOS `processing.guarantee`
+- Transactional guarantees to implement `processing.guarantee=exactly_once_v2`
 - Support for range queries
 - World class operations: scalability, durability, fault-tolerance
 
@@ -144,12 +136,27 @@ Beyond providing functional parity with RocksDB, Responsive remote stores
 promise the ability to implement features that were not easy to implement
 with a RocksDB based solution.
 
+### Flexible Partitioning
+
+Scylla's partitioning supports (and indeed performs better with) schemes that
+have many thousands (and even millions) of partitions. Responsive state stores
+takes advantages of this and maps each Kafka Partition to many remote storage
+partitions.
+
+This concept is immensely powerful because it allows flexibility with
+repartitioning - with a remapping function, it is possible to increase the
+number of source partitions without making any changes to the state stores.
+
+### Time To Live
+
 Already, Responsive offers time-to-live (or `ttl`) based on wall-clock - one
 of the most highly requested Kafka Streams features. The traditional RocksDB
 changelog restore mechanism means that implementing `ttl` is difficult, as
 the records in the changelog must be purged as well. Since records are only
 ever read into our remote store once, we can leverage Scylla's `ttl` feature
 and provide that functionality.
+
+### Interactive Queries
 
 In the works is another highly requested feature: routing layers for 
 Interactive Queries (IQ). In Kafka Streams, IQ only supports lookups on a
