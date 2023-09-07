@@ -3,3 +3,164 @@ sidebar_position: 3
 ---
 
 # Storage
+
+:::tip TLDR
+
+The punchline from this concepts doc is that Responsive Platform separates
+storage from compute as a means of improving operations without sacraficing
+transactional semantics at a neglible performance penalty.
+
+:::
+
+## History & Background
+
+Historically, Kafka Streams bundled storage locally on compute nodes by
+providing RocksDB based implementations of state stores. While storage on the
+compute nodes was not required to be durable (it could be recovered from
+a [changelog topic](https://developer.confluent.io/courses/kafka-streams/stateful-fault-tolerance/)
+in Kafka), performance necessitated storage to be persistent across restarts.
+The motivation for such a design was clear at the time: most deployments of
+Kafka Streams were running without access to the public cloud, and keeping
+the library free of external dependencies other than Kafka made it uniquely
+easy to deploy.
+
+The limitations of copuling compute with storage are well known: 
+1. Sizing your nodes becomes more of an art than a science, and many Kafka
+   Streams deployments in the wild tend to overprovision on both to ensure
+   that neither limitation is met.
+1. Elastic scaling is impossible since new nodes must bootstrap storage before 
+   they can become operational.
+1. Recovering from a fault or rebalancing is a challenge for the same reason
+   as above.
+
+Over time, the Kafka Streams developers have come up with elegant improvements
+to these problems: standby and warmup replicas, incremental rebalancing, sticky 
+task assignment... the list goes on.  Responsive takes a different approach to 
+solving this class of problems in Kafka Streams by improving the underlying 
+architecture to separate compute and storage - effectively eliminating these 
+concerns in one fell swoop.
+
+## Remote Storage
+
+As managed services in the cloud have become mission critical for many 
+businesses, the original design goal of keeping Kafka Streams free of external 
+dependencies holds less weight. To take advantage of this new paradigm, we 
+built our storage solution to leverage [Scylla DB](https://github.com/scylladb/scylladb), 
+a battle-tested distributed database that provides:
+
+- Fast writes & fast Key-Value reads
+- Transactional guarantees to implement `processing.guarantee=exactly_once_v2`
+- Support for range queries
+- World class operations: scalability, durability, fault-tolerance
+
+But just as Kafka Streams must solve many tough problems despite delegating
+the storage layer to RocksDB, Responsive has developed technology to ensure
+that Scylla operates well in the context of an event processing framework. The
+next few sections examine some of the concepts we've implemented.
+
+### Instant Restoration
+
+With a RocksDB-based deployment of Kafka Streams, restarting a node that has
+both a RocksDB store and a checkpoint file is easy: the application will know
+where from the changelog to start reading from and skip to that point before
+starting restoration.
+
+Responsive's remote storage takes inspiration from that strategy, and makes
+it apply to any node - including those that don't have a checkpoint file. 
+The latest offset stored in the remote storage is stored beside the remote
+store, so any new node can pick up from there. 
+
+This also doubles as a mechanism to ensure that all data written to the
+changelog topic is written to remote storage before the active task processes
+any data (see the next section for more information).
+
+
+### Exactly Once Semantics
+
+Responsive for Kafka Streams leverages [Lightweight Transactions](https://opensource.docs.scylladb.com/stable/using-scylla/lwt.html)
+along with the Kafka commit protocol to support `processing.guarantee=exactly_once_v2`.
+Specifically, three conditions must be met:
+
+1. Only the current active task may read uncommitted data while processing.
+1. A zombie task should not be able to commit 
+1. All data committed to Kafka must be committed to the remote storage before 
+   any committed data can be read.
+
+The first condition is ensured by buffering data in between Kafka commits. This
+means that the only time Responsive flushes data to the remote store is when
+data is committed to Kafka.
+
+Zombies are fenced by using an epoch per partition that is incremented when 
+a new active takes over an existing task.  Scylla's Lightweight Transactions 
+(LWT) are essentially a compare-and-set operation, and we can use this to 
+ensure that the first statement of every 
+[atomic batch](https://docs.datastax.com/en/dse/6.7/cql/cql/cql_using/useBatch.html)
+will check that the existing epoch is less than or equal to the epoch that
+the writer has reserved.
+
+Finally, we leverage Kafka Streams' changelog topics to ensure that all data
+is committed to remote storage before an active can begin processing. After
+flushing data to remote storage, the client also stores the last offset in
+the changelog topic that was flushed. On a restore, we read that offset and
+restore the changelog topic from that point onwards into the remote store.
+
+### Performance
+
+We can have our cake and eat it too when it comes to performance. The
+Responsive storage solution buffers writes and flushes concurrently, which
+makes writing extremely efficient. 
+
+Reads are more complicated - physics dictates that reads from a remote store
+will never be as fast as reads from local storage. But will that affect your 
+throughput? Responsive Platform provides many tools to ensure this isn't a 
+problem:
+
+- Most Kafka Streams applications benefit tremendously from caching: there is
+  only a single writer, which means that reading from cache is consistent. 
+  Some applications, such as windowed stores and aggregates, often read a
+  very predictable subset of the data, which makes caching extremely helpful.
+- Responsive Platform provides different types of stores that can be leveraged
+  to meet your workload. In some scenarios, these speicalized schemas may be
+  more effective than the generic key-value stores provided by RocksDB. See
+  the [State Store API Reference](../reference/state-stores) for more details.
+- While latency for individual reads may suffer with remote storage, the
+  ability to scale storage and compute separately often allows for improving
+  throughput with less compute. Experimentally we've discovered that our
+  solution can benefit from increasing the number of stream threads and/or
+  collocating more partitions on a single node while RocksDB based solutions
+  start to degrade.
+
+## Additional Features
+
+Beyond providing functional parity with RocksDB, Responsive remote stores
+promise the ability to implement features that were not easy to implement
+with a RocksDB based solution.
+
+### Flexible Partitioning
+
+Scylla's partitioning supports (and indeed performs better with) schemes that
+have many thousands (and even millions) of partitions. Responsive state stores
+takes advantages of this and maps each Kafka Partition to many remote storage
+partitions.
+
+This concept is immensely powerful because it allows flexibility with
+repartitioning - with a remapping function, it is possible to increase the
+number of source partitions without making any changes to the state stores.
+
+### Time To Live
+
+Already, Responsive offers time-to-live (or `ttl`) based on wall-clock - one
+of the most highly requested Kafka Streams features. The traditional RocksDB
+changelog restore mechanism means that implementing `ttl` is difficult, as
+the records in the changelog must be purged as well. Since records are only
+ever read into our remote store once, we can leverage Scylla's `ttl` feature
+and provide that functionality.
+
+### Interactive Queries
+
+In the works is another highly requested feature: routing layers for 
+Interactive Queries (IQ). In Kafka Streams, IQ only supports lookups on a
+single partition - any routing or scatter gather must be done by the client.
+Since Responsive's remote storage is backed by a fully distributed database,
+it can offer distributed queries that route the request to the correct node
+when queried from any node.
