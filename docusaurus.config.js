@@ -88,7 +88,7 @@ const config = {
           },
           {
             to: 'https://responsive.dev/sign-up-for-responsive-beta',
-            label: 'Join our Waitlist',
+            label: 'Join our Beta',
             position: 'right',
             className: 'button button--secondary button--rg'
           },
@@ -145,7 +145,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Responsive Computing, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Responsive Computing, Inc.`,
       },
       prism: {
         theme: lightCodeTheme,
