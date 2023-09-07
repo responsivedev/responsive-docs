@@ -6,12 +6,11 @@ sidebar_position: 4
 
 ## Overview
 
-Responsive automatically scales your applications to meet workload demands. You simply define a scaling policy that specifies health goals for the application. The Responsive Controller combines the policy
-with metrics and status updates from the application to decide how to size your cluster.
+Responsive automatically manages your applications to meet changing workload demands. You simply define a policy that specifies health goals for the application. The Responsive Controller combines the policy with metrics and status updates from the application and Responsive Operator to decide how to keep your cluster healthy. Then, it coordinates with the application and Responsive Operator to automatically execute remediating actions.
 
 ## Architecture
 
-(/img/control-architecture.png "Control Architecture")
+![Controller Architecture](/img/control-architecture.png "Control Architecture")
 
 You define a policy in a k8s custom resource (link to ref). The scaling policy defines a set of Diagnosers. A Diagnoser describes some health goals (e.g. keep latency low, keep utilization high) and constraints (dont scale past 10 replicas). Different diagnosers have different goals. For example, one diagnoser may have a goal of minimizing latency, while another diagnoser may have a goal of keeping utilization over some threshold. In conjunction, they define how to keep the cluster sized "just right" - large enough to keep up with your workload but keeping costs contained.
 
