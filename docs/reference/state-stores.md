@@ -15,8 +15,7 @@ Key Value stores are stores that support simple key-value operations, as well
 as some additional query functionality such as retreiving all or a certain
 range of keys.
 
-There are three specializations of the Key Value Store, optimized for different 
-access patterns: 
+There are three specializations of the Key Value Store:
 
 1. [Fact Store](#fact-store)
 2. [Timestamped Store](#timestamped-store)
