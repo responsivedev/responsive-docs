@@ -1,9 +1,11 @@
 # State Stores
 
-```
+::: info
+
 This page introduces the different Kafka Streams State Store implementations available
 in Responsive and how to configure them.
-```
+
+::: 
 
 ## Store Types
 
