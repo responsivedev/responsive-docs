@@ -87,7 +87,7 @@ const config = {
             position: 'left'
           },
           {
-            to: 'https://responsive.dev/sign-up-for-responsive-beta',
+            to: 'https://responsive.dev/join-our-waitlist',
             label: 'Join our Waitlist',
             position: 'right',
             className: 'button button--secondary button--rg'
