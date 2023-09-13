@@ -18,9 +18,9 @@ range of keys.
 There are three specializations of the Key Value Store, optimized for different 
 access patterns: 
 
-1. [Fact Store]{#fact-store}
-2. [Timestamped Store]{#timestamped-store}
-3. [Timestamped Fact Store]{#timestamped-fact-store}
+1. [Fact Store](#fact-store)
+2. [Timestamped Store](#timestamped-store)
+3. [Timestamped Fact Store](#timestamped-fact-store)
 
 
 #### Fact Store {#fact-store}
