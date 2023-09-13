@@ -1,6 +1,6 @@
 # State Stores
 
-::: info
+:::info
 
 This page introduces the different Kafka Streams State Store implementations available
 in Responsive and how to configure them.
@@ -41,10 +41,13 @@ time-to-live (`ttl`) when specifying the [`ResponsiveKeyValueParams`](#params).
 
 #### Timestamped Store {#timestamped-store}
 
+For use with the Kafka Streams DSL, these stores have a value type of
+[`ValueAndTimestamp`](https://kafka.apache.org/34/javadoc/org/apache/kafka/streams/state/ValueAndTimestamp.html), which embeds the record's timestamp in the value.
 
 #### Timestamped Fact Store {#timestamped-fact-store}
 
-
+A combination of the above two stores, allows embedding timestamps in the value of
+a fact store.
 
 ### Time Windowed
 
