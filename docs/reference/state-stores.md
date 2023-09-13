@@ -114,7 +114,7 @@ the [Key Value Schema](#key-value-schema).
 | Method Name | Notes |
 | ------------|-------|
 | `keyValue(String)` | Indicates that the desired store should be a key value store |
-| `timestamped(String)` | Indicates that the desired store should be a timestamped key value store |
+| `timestamped(String)` | Indicates that the desired store should be a [timestamped key value store](#timestamped-store) |
 | `fact(String)` | Indicates that the desired store should be a [fact store](#fact-store) |
-| `timestampedFact(String)` | Indicates that the desired store should be a timestamped fact store  |
+| `timestampedFact(String)` | Indicates that the desired store should be a [timestamped fact store](#timestamped-fact-store)  |
 | `withTimeToLive` | Sets a time-to-live (`ttl`) on the store created with these parameters. <br /><br /> `ttl` works on a wall-clock basis, meaning the records that are inserted will no longer be retrievable after `ttl` has elapsed independent of whether or not stream time is advanced. For more information on the distinction between stream/wallclock time see the [Kafka Streams docs](https://kafka.apache.org/35/javadoc/org/apache/kafka/streams/processor/PunctuationType.html) |
