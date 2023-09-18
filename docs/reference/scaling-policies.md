@@ -1,7 +1,5 @@
 # Responsive Policies
 
-:::info
-
 You define a policy as a k8s custom resource (CR). The CR specification is provided below:
 
 ```
@@ -119,4 +117,3 @@ The following table defines what each of these fields means.
 | spec.kafkaStreamsPolicy.diagnoser[i].processingRateScaleUp.rate | The rate over which to add a replica. |
 | spec.kafkaStreamsPolicy.diagnoser[i].processingRateScaleDown | This diagnoser tries to ensure that some node is processing more than some threshold of records per second. Whenever all the nodes dip below this threshold, it removes a replica. |
 | spec,kafkaStreamsPolicy.diagnoser[i].processingRateScaleDown.rate | Thre rate below which to remove a replica. |
-:::
