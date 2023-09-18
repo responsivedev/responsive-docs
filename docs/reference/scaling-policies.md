@@ -98,10 +98,10 @@ The following table defines what each of these fields means.
 | spec.status | Set to POLICY_STATUS_MANAGED to have the Operator automatically execute corrective actions. Set to POLICY_STATUS_DISABLED to have the policy evaluate but not execute actions. |
 | spec.policyType | The type of application under management. Must be set to KAFKA_STREAMS. |
 | spec.kafkaStreamsPolicy | Defines the policy for a Kafka Streams application. |
-| spec.kafkaStreamsPolicy.diagnosers | A list of diagnosers that govern the policy's behaviour. Diagnosers can produce conflicting actions. In that case, the diagnoser that comes first in the list takes precedence. |
 | spec.kafkaStreamsPolicy.maxReplicas | Specifies a constraint on the maximum number of replicas. The policy will never scale the application past this max. |
 | spec.kafkaStreamsPolicy.minReplicas | Specifies a constraint on the minimum number of replicas. The policy will never scale below this min. |
 | spec.kafkaStreamsPolicy.maxScaleUpReplicas | Specifies a constraint on the maximum number of replicas the policy will add in a given evaluation |
+| spec.kafkaStreamsPolicy.diagnosers | A list of diagnosers that govern the policy's behaviour. Diagnosers can produce conflicting actions. In that case, the diagnoser that comes first in the list takes precedence. |
 | spec.kafkaStreamsPolicy.diagnoser[n].type | Specifies the type of this diagnoser. One of PROCESSING_RATE_SCALE_UP, PROCESSING_RATE_SCALE_DOWN, EXPECTED_LATENCY, or THREAD_SATURATION. |
 | spec.kafkaStreamsPolicy.diagnoser[n].expectedLatency | Specifies an Expected Latency Diagnoser. This Diagnoser specifies a goal for the expected latency for a record to be processed at a sub-topology, when enqueued at a source topic partition of that sub-topology. |
 | spec.kafkaStreamsPolicy.diagnoser[i].expectedLatency.maxExpectedLatencySeconds | The max expected latency for an application to be considered healthy. |
