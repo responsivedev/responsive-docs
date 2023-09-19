@@ -20,19 +20,25 @@ Include the following dependencies into your project build.
 
 There are three steps to migrate a Kafka Streams application to Responsive:
 
+1. [Migrate KafkaStreams](#migrate-kafkastreams)
+2. [Migrate Stores](#migrate-stores)
+3. [Update Configuration](#update-configuration)
+
 ### Migrate KafkaStreams
 
-Replace usages of `KafkaStreams#new` with `ResponsiveKafkaStreams#create`.
-Since `ResponsiveKafkaStreams extends KafkaStreams`, you should only need
+Replace usages of `new KafkaStreams` with `new ResponsiveKafkaStreams`.
+Since `ResponsiveKafkaStreams` extends `KafkaStreams`, you should only need
 to change invocations of the constructor:
 
 ```diff showLineNumbers
--   KafkaStreams streams = new KafkaStreams(
-+   KafkaStreams streams = ResponsiveKafkaStreams.create(
-      builder.build(),
-      props
-    );
+-   KafkaStreams streams = new KafkaStreams(...)
++   KafkaStreams streams = new ResponsiveKafkaStreams(...)
+    // Everything else stays the same
+    streams.start();
 ```
+
+See the [Kafka Streams](../reference/kafka-streams) API Reference for
+more details.
 
 ### Migrate Stores
 
@@ -77,9 +83,9 @@ Responsive store using `ResponsiveStores#materialized`:
   );
 ```
 
-Note that `Materialized.as(ResponsiveStores.persistentKeyValueStore("table))`
+Note that `Materialized.as(ResponsiveStores.keyValueStore("table"))`
 will compile but will not perform important validation steps that prevent
-errors. Prefer the `ResponsiveStores.materialized` method.
+errors. Make sure to always use the `ResponsiveStores.materialized` method.
 </details>
 
 <details>
@@ -87,7 +93,7 @@ errors. Prefer the `ResponsiveStores.materialized` method.
 Using Stateful Transformers (DSL + PAPI)
 </summary>
 
-If you are using the DSL in conjunction with the PAPI, you must regitser stores
+If you are using the DSL in conjunction with the PAPI, you must register stores
 manually with the `StreamsBuilder`. These stores should be modified to use
 `ResponsiveStores`:
 
@@ -95,7 +101,7 @@ manually with the `StreamsBuilder`. These stores should be modified to use
   StreamsBuilder builder = new StreamsBuilder();
   builder.addStateStore(
 -   Stores.keyValueStoreBuilder(Stores.persistentKeyValueStore(
-+   ResponsiveStores.keyValueStoreBuilder(ResponsiveStores.persistentKeyValueStore(
++   ResponsiveStores.keyValueStoreBuilder(ResponsiveStores.keyValueStore(
       ...
     );
   );
@@ -115,15 +121,15 @@ manually with the `StreamsBuilder`. These stores should be modified to use
 Using Processor API (PAPI)
 </summary>
 
-If you are using the PAPI, you must regitser stores manually with the 
-`Topology`. These steores should be modified to use `ResponsiveStores`:
+If you are using the PAPI, you must register stores manually with the 
+`Topology`. These stores should be modified to use `ResponsiveStores`:
 
 ```diff showLineNumbers
   Topology topology = new Topology();
-
+  
   topology.addStateStore(
 -   Stores.keyValueStoreBuilder(Stores.persistentKeyValueStore(...), ...),
-+   ResponsiveStores.keyValueStoreBuilder(ResponsiveStores.persistentKeyValueStore(...), ...),
++   ResponsiveStores.keyValueStoreBuilder(ResponsiveStores.keyValueStore(...), ...),
     "processor-1"
   );
 
@@ -137,8 +143,32 @@ If you are using the PAPI, you must regitser stores manually with the
 
 </details>
 
+See the [State Stores](../reference/state-stores.md) API Reference for
+more details, as well as some additional state store configurations that are
+exclusive to Responsive.
 
-### Migrate Tests
+### Update Configuration
+
+When running your migrated Kafka Streams application with Responsive cloud
+as the backend, you will need to configure these additional properties.
+Simply add them to the `Properties` or config map that you pass in to the
+`ResponsiveKafkaStreams` constructor.
+
+The values for all of these required configs will be provided to you:
+
+```properties showLineNumbers
+responsive.storage.hostname=<RESPONSIVE STORAGE ENDPOINT>
+responsive.storage.port=9042
+responsive.storage.datacenter=AWS_US_WEST_2
+responsive.tenant.id=<YOUR TENANT ID>
+responsive.client.id=<API KEY>
+responsive.client.secret=<API SECRET>
+```
+
+See [Configuring your Application](../reference/kafka-streams#configuring-your-application) for 
+more details.
+
+### Migrate Tests (Optional)
 
 Responsive provides its own version of the `TopologyTestDriver` that can be
 used in exactly the same way, with all the same APIs, so that all you need
@@ -161,25 +191,10 @@ it a viable option for testing correctness and application logic.
 :::note
 
 You can check out [`ResponsiveTopologyTestDriverTest`](https://github.com/responsivedev/responsive-pub/blob/main/responsive-test-utils/src/test/java/dev/responsive/kafka/api/ResponsiveTopologyTestDriverTest.java)
-for some full examples of using the `ResponsiveTopologyTestDriver` if you are 
+for some full examples of using the `ResponsiveTopologyTestDriver` if you are
 writing new tests from scratch.
 
 :::
-
-## Configuration
-
-When running your migrated Kafka Streams application with Responsive cloud
-as the backend, you will need to configure these additional configurations.
-These values will be provided to you:
-
-```properties showLineNumbers
-responsive.storage.hostname=<RESPONSIVE STORAGE ENDPOINT>
-responsive.storage.port=9042
-responsive.storage.datacenter=AWS_US_WEST_2
-responsive.tenant.id=<YOUR TENANT ID>
-responsive.client.id=<API KEY>
-responsive.client.secret=<API SECRET>
-```
 
 ## Logging (Optional)
 
@@ -206,11 +221,11 @@ of `KafkaStreams` and `ResponsiveKafkaStreams`, even within the same JVM.
 
 :::
 
-| Feature | Notes |
-|---------|-----------|
-| Apache Kafka Version Compatibility | `3.x` |
-| Key Value Store | `range` and `all` are not yet supported |
-| Global Store | Fully Supported |
-| Window Stores| Support Coming Soon |
-| Processing Guarantee | `exaclty_once_v2`, `at_least_once`  |
+| Feature                              | Notes                                   |
+|--------------------------------------|-----------------------------------------|
+| Apache Kafka Version Compatibility   | `3.x`                                   |
+| Key Value Store                      | `range` and `all` are not yet supported |
+| Global Store                         | Support Coming Soon                     |
+| Window Stores                        | Support Coming Soon                     |
+| Processing Guarantee                 | `exactly_once_v2`, `at_least_once`      |
 

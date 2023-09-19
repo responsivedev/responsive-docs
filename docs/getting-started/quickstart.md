@@ -8,7 +8,7 @@ import PartialDependencies from './_dependencies.md';
 
 # Quickstart
 
-This guide demostrates how to get a minimal Responsive environment set up and
+This guide demonstrates how to get a minimal Responsive environment set up and
 running. The example use case implements the open source [Kafka Streams Demo 
 Application](https://kafka.apache.org/documentation/streams/quickstart) on
 the Responsive platform.
@@ -37,7 +37,7 @@ You should see an output resembling `Docker Compose version v2.19.1`.
 
 Responsive for Kafka Streams requires a Kafka broker and a storage backend
 compatible with Apache Cassandra. In this quickstart, we will spin up 
-`confluentinc/cp-kafka` and `scylladb/scylla` conatiners. 
+`confluentinc/cp-kafka` and `scylladb/scylla` containers. 
 
 1. Copy and paste the following YAML content into a file named 
   `docker-compse.yaml`:
@@ -138,20 +138,20 @@ wordCounts
 If you are familiar with Kafka Streams, you should feel right at home. The 
 only difference is on line 6 (highlighted), where we specifically indicate
 that the state store should be materialized using the Responsive state
-implementaiton.
+implementation.
 
 ### Creating the Application
 
-Instead of using the `KafkaStreams#new(Topology, Map<?,?>)` method to construct
-your Kafka Streams instance, use the factory method on `ResponsiveKafkaStreams`
-as shown below:
+Instead of using `new KafkaStreams(Topology, Map<?,?>)` to get your `KafkaStreams` 
+object, simply swap that out for `new ResponsiveKafkaStreams(Topology, Map<?,?>)`
+and pass in the same inputs. 
 
 ```java showLineNumbers
     Properties props = new Properties();
     // ...
 
     // highlight-next-line
-    KafkaStreams streams = ResponsiveKafkaStreams.create(builder.build(), props);
+    KafkaStreams streams = new ResponsiveKafkaStreams(builder.build(), props);
     streams.start();
 ```
 
@@ -204,7 +204,7 @@ git clone https://github.com/responsivedev/quickstart.git
       props.put(ResponsiveConfig.TENANT_ID_CONFIG, "quickstart");
 
       StreamsBuilder builder = new StreamsBuilder();
-      KStream<String, String> textLines = builder.stream(plaintext-input");
+      KStream<String, String> textLines = builder.stream("plaintext-input");
       KTable<String, Long> wordCounts = textLines
           .flatMapValues(textLine -> Arrays.asList(textLine.toLowerCase().split("\\W+")))
           .groupBy((key, word) -> word)
@@ -213,7 +213,7 @@ git clone https://github.com/responsivedev/quickstart.git
           .toStream()
           .to("wordcount-output", Produced.with(Serdes.String(), Serdes.Long()));
 
-      KafkaStreams streams = ResponsiveKafkaStreams.create(builder.build(), props);
+      KafkaStreams streams = new ResponsiveKafkaStreams(builder.build(), props);
       streams.start();
     }
   }
