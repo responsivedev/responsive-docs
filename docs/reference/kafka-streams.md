@@ -10,7 +10,7 @@ state stores.
 
 Creating your Kafka Streams application with Responsive platform is easy! Ultimately
 you're just running the same old KafkaStreams you know and love, with the Responsive
-state stores plugged into your topology. The [State Stores](../state-stores) API reference 
+state stores plugged into your topology. The [State Stores](state-stores) API reference 
 shows the available options for configuring your topology, whereas this reference covers how 
 to set up and run your application (or test) with that topology.
 
@@ -75,7 +75,7 @@ or check out the list of available constructors below.
 Just like with the regular `KafkaStreams`, there are two required parameters and some optional parameters.
 
 **Required:**
-1. Topology: your application topology that defines the computational logic with the stateful operators configured with Responsive state stores. Refer to [State Stores](../state-stores) for details.
+1. Topology: your application topology that defines the computational logic with the stateful operators configured with Responsive state stores. Refer to [State Stores](state-stores) for details.
 2. Configs: a map (or `Properties` object) that includes all required properties for both Responsive and Streams, as discussed in the [Configuration section](#configuring-your-application) above.
 
 **Optional:**
