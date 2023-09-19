@@ -12,7 +12,7 @@ in Responsive and how to configure them.
 ### Key Value
 
 Key Value stores are stores that support simple key-value operations, as well
-as some additional query functionality such as retreiving all or a certain
+as some additional query functionality such as retrieving all or a certain
 range of keys.
 
 There are three specializations of the Key Value Store:
@@ -98,14 +98,15 @@ KTable<String, Long> wordCounts = textLines
 
 ### Notable Methods
 
-| Method Name | Notes |
-| ------------|-------|
-| `keyValueStore(ResponsiveKeyValueParams)` | This method should be prefered over `keyValueStore(String)` as it provides additional functionality for configuring features unique to responsive, such as `ttl`, and the `timestamped` or `fact` variants. <br /><br />  Also see [`ResponsiveKeyValueParams`](#params). |
-| `materialized(ResponsiveKeyValueParams)` | Similar to the above methods, but for use in the Kafka Streams DSL |
+| Method Name | Notes                                                                                                                                                                                                                                                                                                                     |
+| ------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `keyValueStore(ResponsiveKeyValueParams)` | Returns a key-value `StoreSupplier` that can be This method should be prefered over `keyValueStore(String)` as it provides additional functionality for configuring features unique to responsive, such as `ttl`, and the `timestamped` or `fact` variants. <br /><br />  See also [`ResponsiveKeyValueParams`](#params). |
+| `materialized(ResponsiveKeyValueParams)` | Similar to the above methods, but for use in the Kafka Streams DSL                                                                                                                                                                                                                                                        |
+|                                          |                                                                                                                                                                                                                                                                                                                           |
 
 ## `ResponsiveKeyValueParams` {#params}
 
-A paramter class that contains the configuration options for all stores with 
+A parameter class that contains the configuration options for all stores with 
 the [Key Value Schema](#key-value-schema).
 
 ### Notable Methods
