@@ -186,7 +186,7 @@ and [StreamsUncaughtExceptionHandler](https://kafka.apache.org/35/javadoc/org/ap
 final Topology topology = buildMyApplicationTopology();
 
 // Since ResponsiveKafkaStreams extends KafkaStreams, you can continue to declare & refer to it as such
-final KafkaStreams streams = ResponsiveKafkaStreams.create(topology, props);
+final KafkaStreams streams = new ResponsiveKafkaStreams(topology, props);
 
 // Always remember to close the application and clean up any resources -- even if it hasn't been started
 Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
