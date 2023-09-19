@@ -158,13 +158,7 @@ and pass in the same inputs.
 
 ### Full Code
 
-You can either copy the code snippet below into your own Java project, or
-you can clone the code using:
-
-```bash
-# TODO: this repository doesn't exist yet
-git clone https://github.com/responsivedev/quickstart.git
-```
+To run the `ResponsiveWordCountApplication`, copy the code snippet below into your own Java project:
 
 <details>
   <summary>
