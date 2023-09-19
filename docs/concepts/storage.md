@@ -24,7 +24,7 @@ Kafka Streams were running without access to the public cloud, and keeping
 the library free of external dependencies other than Kafka made it uniquely
 easy to deploy.
 
-The limitations of copuling compute with storage are well known: 
+The limitations of coupling compute with storage are well known: 
 1. Sizing your nodes becomes more of an art than a science, and many Kafka
    Streams deployments in the wild tend to overprovision on both to ensure
    that neither limitation is met.

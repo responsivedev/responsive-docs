@@ -14,6 +14,7 @@ of everything you can configure, refer to the
 Make sure you have the following environment variables set.
 
 | Environment Variable | Description |
+|----------------------|-------------|
 | `APPLICATION_NAME` | The k8s name of your application's Deployment or StatefulSet |
 | `APPLICATION_NAMESPACE` | The k8s namespace your application is deployed into. |
 
