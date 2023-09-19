@@ -58,6 +58,7 @@ as they are required for the application to function in a healthy manner.
 
 1. `num.standby.replicas`: a Responsive application does not need standbys and may even be harmed by enabling their use. 
 2. `internal.task.assignor.class`: similarly, Responsive has no need for the "high availability" features of the default task assignor, and benefits greatly from disabling this in favor of more simple assignment logic without probing rebalances or warmup tasks.
+3. EOSv1 (`processing.guarantee`): Responsive is compatible with at-least-once-semantics (ALOS) and exactly-once-semantics v2 (EOSv2). If you're still using EOSv1, consider upgrading to EOSv2.
 
 ### Migrating from KafkaStreams to ResponsiveKafkaStreams
 You can migrate any existing application easily by simply replacing `new KafkaStreams(...)` with
@@ -203,4 +204,5 @@ streams.setUncaughtExceptionHandler(t -> StreamThreadExceptionResponse.REPLACE_T
 // Finally, start the application!
 streams.start();
 ```
+
 
