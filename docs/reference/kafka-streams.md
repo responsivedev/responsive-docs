@@ -2,8 +2,8 @@
 
 :::info
 
-This page covers the basic KafkaStreams and TopologyTestDriver wrappers, showing how
-to create a Kafka Streams application or TopologyTestDriver test that uses Responsive
+This page covers the basic KafkaStreams wrapper, showing how
+to create a Kafka Streams application that uses Responsive
 state stores.
 
 :::
@@ -203,6 +203,4 @@ streams.setUncaughtExceptionHandler(t -> StreamThreadExceptionResponse.REPLACE_T
 // Finally, start the application!
 streams.start();
 ```
-
-## ResponsiveTopologyTestDriver
 
