@@ -8,7 +8,7 @@ import PartialDependencies from './_dependencies.md';
 
 # Quickstart
 
-This guide demostrates how to get a minimal Responsive environment set up and
+This guide demonstrates how to get a minimal Responsive environment set up and
 running. The example use case implements the open source [Kafka Streams Demo 
 Application](https://kafka.apache.org/documentation/streams/quickstart) on
 the Responsive platform.
@@ -37,7 +37,7 @@ You should see an output resembling `Docker Compose version v2.19.1`.
 
 Responsive for Kafka Streams requires a Kafka broker and a storage backend
 compatible with Apache Cassandra. In this quickstart, we will spin up 
-`confluentinc/cp-kafka` and `scylladb/scylla` conatiners. 
+`confluentinc/cp-kafka` and `scylladb/scylla` containers. 
 
 1. Copy and paste the following YAML content into a file named 
   `docker-compse.yaml`:
@@ -138,7 +138,7 @@ wordCounts
 If you are familiar with Kafka Streams, you should feel right at home. The 
 only difference is on line 6 (highlighted), where we specifically indicate
 that the state store should be materialized using the Responsive state
-implementaiton.
+implementation.
 
 ### Creating the Application
 

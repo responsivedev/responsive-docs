@@ -13,15 +13,15 @@ operator in your kubernetes context.
 The Responsive platform uses Open Telemetry to collect the metrics it needs to
 make autoscaling decisions. You'll need the following information:
 
-| Environment Variable | Description |
-|----------------------|-------------|
-| `PATH_TO_JAVA_LIBS` | Configuring the open telemetry agent requires passing in the `javaagent` JAR. If you follow Step 1 above, this should be part of your Java `CLASSPATH` - check your container build to see where your JARs are placed. |
-|`PATH_TO_OTEL_JMX` | Open Telemetry needs a JMX configuration to know which metrics to export to Responsive. You should put [this configuration file]( https://github.com/responsivedev/responsive-pub/blob/main/etc/otel-jmx.config.yaml) in that path. |
-| `NAMESPACE`| This is the namespace that your streams applications in kubernetes runs in. |
-| `APPLICATION` | This is the name of your streams application in kubernetes. |
-| `CONTROLLER_ENDPOINT`| This is `https://<org-name>.ctl.us-west-2.aws.cloud.responsive.dev`(or the corresponding controller deployed in other regions) |
-| `API_KEY`/`API_SECRET` | These will be provided to you. We recommend you load these as environment variables through kubernetes secrets. |
-| `ENVIRONMENT` | A name for the environment in which the application runs. A good option here would be to use the name of the kubernetes cluster that runs the application. |
+| Environment Variable   | Description                                                                                                                                                                                                                         |
+|------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `PATH_TO_JAVA_LIBS`    | Configuring the open telemetry agent requires passing in the `javaagent` JAR. If you follow Step 1 above, this should be part of your Java `CLASSPATH` - check your container build to see where your JARs are placed.              |
+| `PATH_TO_OTEL_JMX`     | Open Telemetry needs a JMX configuration to know which metrics to export to Responsive. You should put [this configuration file]( https://github.com/responsivedev/responsive-pub/blob/main/etc/otel-jmx.config.yaml) in that path. |
+| `NAMESPACE`            | This is the namespace that your streams applications in kubernetes runs in.                                                                                                                                                         |
+| `APPLICATION`          | This is the name of your streams application in kubernetes.                                                                                                                                                                         |
+| `CONTROLLER_ENDPOINT`  | This is `https://<org-name>.ctl.us-west-2.aws.cloud.responsive.dev`(or the corresponding controller deployed in other regions)                                                                                                      |
+| `API_KEY`/`API_SECRET` | These will be provided to you. We recommend you load these as environment variables through kubernetes secrets.                                                                                                                     |
+| `ENVIRONMENT`          | A name for the environment in which the application runs. A good option here would be to use the name of the kubernetes cluster that runs the application.                                                                          |
 
 Once you have the values for these, you should run your Kafka Streams with 
 these additional arguments to configure the metrics collector:
@@ -42,7 +42,7 @@ these additional arguments to configure the metrics collector:
 
 ### Setup
 
-Install the Responsive Policy Custom Resoure Definition (CRD) by pulling the
+Install the Responsive Policy Custom Resource Definition (CRD) by pulling the
 latest version and applying it to your Kubernetes cluster:
 
 ```bash
