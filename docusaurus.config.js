@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Responsive',
-  tagline: 'Responsive is a platform for running stateful reactive applications on the modern cloud.',
+  tagline: 'Managed, Cloud-native, Modern Kafka Streams',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -82,7 +82,7 @@ const config = {
             position: 'left'
           },
           {
-            to: 'https://responsive.dev', 
+            to: 'https://responsive.dev/blog', 
             label: 'Blog', 
             position: 'left'
           },
