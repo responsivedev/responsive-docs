@@ -1,8 +1,21 @@
-# Autoscaling Policies
+# Controller Policies
 
-## Policy Specification
+:::info
 
-You define a policy as a k8s custom resource (CR). The CR specification is provided below:
+This page goes over the full policy specification for autoscaling with Responsive,
+including the set of required specs and the full list of available configuration
+options.
+
+:::
+
+## Custom Resource Specification
+
+You define a policy as a k8s custom resource (CR).
+See [Configure Autoscaling Policy](../getting-started/configure-controller-policy.md)
+for instructions on how to create one and an example of a user-defined policy
+that showcases some of the below configuration options.
+
+The full CR specification is as follows:
 
 ```
 properties:
@@ -35,9 +48,9 @@ properties:
               properties:
                 type:
                   enum:
-                  - PROCESSING_RATE_SCALE_UP
-                  - PROCESSING_RATE_SCALE_DOWN
                   - EXPECTED_LATENCY
+                  - PROCESSING_RATE_SCALE_DOWN
+                  - PROCESSING_RATE_SCALE_UP
                   - THREAD_SATURATION
                   type: string
                 expectedLatency:
@@ -197,3 +210,4 @@ Scope: `spec.kafkaStreamsPolicy.diagnoser[i].threadSaturation`
 | threadSaturation               | The Thread Saturation diagnoser tries to make sure that the application is making good use of the threads provisioned to process records. It does this by measuring how long each thread spends blocked waiting on new records to process vs processing records. If all the threads are spending most of their time blocked then it removes a replica. |
 | threadSaturation.threshold     | The threshold for blocked ratio over which to consider a thread "underutilized" and therefore removable.                                                                                                                                                                                                                                               |
 | threadSaturation.windowSeconds | Specifies how long of a window to evaluate when computing blocked time.                                                                                                                                                                                                                                                                                |
+
