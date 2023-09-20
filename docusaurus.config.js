@@ -64,7 +64,8 @@ const config = {
           alt: 'Responsive Logo',
           src: 'img/logo.svg',
           srcDark: 'img/logo-dark.svg',
-          href: 'https://responsive.dev'
+          href: 'https://responsive.dev', // logo should always point to main site
+          target: '_self' // tells the logo link to open in the same tab
         },
         items: [
           {
