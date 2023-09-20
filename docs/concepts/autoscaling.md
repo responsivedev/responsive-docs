@@ -17,9 +17,10 @@ Responsive Operator to automatically execute remediating actions.
 
 ![Controller Architecture](/img/control-architecture.png "Control Architecture")
 
-You define a policy in a [k8s custom resource](../reference/scaling-policies).
+You define a policy in a 
+[k8s custom resource](../reference/controller-policies#custom-resource-specification).
 The scaling policy defines a set of Diagnosers. A Diagnoser declares a set of
-health goals and constraints (e.g. dont scale past 10 replicas). Different
+health goals and constraints (e.g. don't scale past 10 replicas). Different
 diagnosers have different goals. For example, one diagnoser has a goal of
 minimizing latency, while another diagnoser has a goal of keeping utilization
 over some threshold. In conjunction, they define how to keep the cluster sized
@@ -27,14 +28,14 @@ over some threshold. In conjunction, they define how to keep the cluster sized
 same time keeping costs contained. Responsive takes over ensuring your
 application meets these goals - without the usual operational overhead required
 to do this by hand. You can check out the list of available diagnosers in the
-[policy specification](../reference/scaling-policies).
+[policy specification](../reference/controller-policies#policy-diagnosers).
 
 Each instance of the policy specifies how to manage a single application. The
 policy spec references the Deployment or Statefulset resource that defines your
 application.
 
-You also [install and run the Responsive
-Operator](../getting-started/deploy-operator) in your k8s cluster. It monitors
+You also [install and run the Responsive Operator](../getting-started/deploy-operator)
+in your k8s cluster. It monitors
 the installed policies and the applications they point to, and updates the
 Responsive Controller with the current policy spec and status of the
 applications.

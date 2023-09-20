@@ -7,8 +7,8 @@ sidebar_position: 3
 :::tip TLDR
 
 The punchline from this concepts doc is that Responsive Platform separates
-storage from compute as a means of improving operations without sacraficing
-transactional semantics at a neglible performance penalty.
+storage from compute as a means of improving operations without sacrificing
+transactional semantics at a negligible performance penalty.
 
 :::
 
@@ -51,7 +51,7 @@ a battle-tested distributed database that provides:
 - Fast writes & fast Key-Value reads
 - Transactional guarantees to implement `processing.guarantee=exactly_once_v2`
 - Support for range queries
-- World class operations: scalability, durability, fault-tolerance
+- World-class operations: scalability, durability, fault-tolerance
 
 But just as Kafka Streams must solve many tough problems despite delegating
 the storage layer to RocksDB, Responsive has developed technology to ensure
@@ -120,7 +120,7 @@ problem:
   Some applications, such as windowed stores and aggregates, often read a
   very predictable subset of the data, which makes caching extremely helpful.
 - Responsive Platform provides different types of stores that can be leveraged
-  to meet your workload. In some scenarios, these speicalized schemas may be
+  to meet your workload. In some scenarios, these specialized schemas may be
   more effective than the generic key-value stores provided by RocksDB. See
   the [State Store API Reference](../reference/state-stores) for more details.
 - While latency for individual reads may suffer with remote storage, the
@@ -138,7 +138,7 @@ with a RocksDB based solution.
 
 ### Flexible Partitioning
 
-Scylla's partitioning supports (and indeed performs better with) schemes that
+Scylla's partitioning supports (and indeed performs better with) schemas that
 have many thousands (and even millions) of partitions. Responsive state stores
 takes advantages of this and maps each Kafka Partition to many remote storage
 partitions.
