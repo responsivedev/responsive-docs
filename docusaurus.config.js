@@ -18,8 +18,8 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'responsivedev', // Usually your GitHub org/user name.
+  projectName: 'responsive-docs', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -41,10 +41,6 @@ const config = {
           routeBasePath: '/',
           sidebarCollapsed: false,
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/responsivedev/responsive-docs/tree/main/',
         },
         blog: false,
         theme: {
@@ -62,12 +58,14 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/logo-emblem.svg',
       navbar: {
         logo: {
           alt: 'Responsive Logo',
           src: 'img/logo.svg',
           srcDark: 'img/logo-dark.svg',
+          href: 'https://responsive.dev', // logo should always point to main site
+          target: '_self' // tells the logo link to open in the same tab
         },
         items: [
           {
