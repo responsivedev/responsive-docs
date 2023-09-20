@@ -64,7 +64,7 @@ const config = {
           alt: 'Responsive Logo',
           src: 'img/logo.svg',
           srcDark: 'img/logo-dark.svg',
-          to: 'https://responsive.dev'
+          href: 'https://responsive.dev'
         },
         items: [
           {
