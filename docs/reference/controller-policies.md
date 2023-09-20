@@ -11,7 +11,7 @@ options.
 ## Custom Resource Specification
 
 You define a policy as a k8s custom resource (CR).
-See [Configure Autoscaling Policy](../getting-started/configure-controller-policy.md)
+See [Configure Controller Policy](../getting-started/configure-controller-policy.md)
 for instructions on how to create one and an example of a user-defined policy
 that showcases some of the below configuration options.
 
