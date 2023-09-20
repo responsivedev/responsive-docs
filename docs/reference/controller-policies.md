@@ -19,7 +19,9 @@ The full CR specification is as follows:
 
 ```
 properties:
+  type: object
   spec:
+    type: object
     properties:
       applicationName:
         type: string
@@ -35,6 +37,7 @@ properties:
         - POLICY_STATUS_DISABLED
         type: string
       kafkaStreamsPolicy:
+        type: object
         properties:
           maxReplicas:
             type: integer
@@ -45,6 +48,7 @@ properties:
           diagnoser:
             type: array
             items:
+              type: object
               properties:
                 type:
                   enum:
@@ -62,6 +66,7 @@ properties:
                     scaleDownBufferSeconds:
                       type: integer
                     scaleUpStrategy:
+                      type: object
                       properties:
                         type:
                           enum:
@@ -70,37 +75,32 @@ properties:
                           - SCALE_TO_MAX
                           type: string
                         fixedReplica:
+                          type: object
                           properties:
                             replicas:
                               type: integer
-                          type: object
-                      type: object
                   type: object
                 processingRateScaleDown:
+                  type: object
                   properties:
                     rate:
                       type: integer
                     windowMs:
                       type: integer
-                  type: object
                 processingRateScaleUp:
+                  type: object
                   properties:
                     rate:
                       type: integer
                     windowMs:
                       type: integer
-                  type: object
                 threadSaturation:
+                  type: object
                   properties:
                     threshold:
                       type: number
                     windowSeconds:
                       type: integer
-                  type: object
-              type: object
-        type: object
-    type: object
-type: object
 ```
 
 ## Policy Specs
