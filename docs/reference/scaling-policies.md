@@ -1,4 +1,4 @@
-# Responsive Policies
+# Autoscaling Policies
 
 ## Policy Specification
 
