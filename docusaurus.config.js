@@ -85,6 +85,16 @@ const config = {
             position: 'left'
           },
           {
+            to: 'http://discord.gg/jEk8JvjJrg',
+            position: 'right',
+            className: "header-discord-link",
+          },
+          {
+            to: 'https://github.com/responsivedev',
+            position: 'right',
+            className: "header-github-link",
+          },
+          {
             to: 'https://responsive.dev/join-our-waitlist',
             label: 'Join our Waitlist',
             position: 'right',
@@ -126,6 +136,10 @@ const config = {
               {
                 label: 'X / Twitter' ,
                 href: 'https://twitter.com/responsive_apps',  
+              },
+              {
+                label: 'Discord',
+                href: 'http://discord.gg/jEk8JvjJrg'
               }
             ],
           },
