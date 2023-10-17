@@ -92,7 +92,7 @@ $ helm install responsive-operator oci://public.ecr.aws/j8q9y0n6/responsiveinc/c
     --version ${RESPONSIVE_OPERATOR_VERSION} \
     --set controllerEndpoint=dns:///${ORG_NAME}.ctl.us-west-2.aws.cloud.responsive.dev \
     --set logging.kafka.keySecret=logging-kafka-secret \
-    --set logging.kafka.endpoint=pkc-rgm37.us-west-2.aws.confluent.cloud:9092 \
+    --set logging.kafka.endpoint=pkc-n98pk.us-west-2.aws.confluent.cloud:9092 \
     --set logging.kafka.topic=responsive.telemetry.logs.${ORG_NAME}.operator \
     --set operatorOpts="-environment ${ENVIRONMENT}"
     --namespace responsive
