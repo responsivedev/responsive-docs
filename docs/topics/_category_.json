@@ -1,0 +1,8 @@
+{
+  "label": "Kafka Streams OSS Topics",
+  "position": 5,
+  "collapsed": true,
+  "link": {
+    "type": "generated-index"
+  }
+}
