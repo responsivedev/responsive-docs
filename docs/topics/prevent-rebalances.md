@@ -1,4 +1,8 @@
+import OssCaution from './_oss-caution.md';
+
 # Preventing Rebalances
+
+<OssCaution />
 
 These set of improvements attempt to hide the overhead of restoration, 
 so if a rebalance does happen it doesn't disrupt normal operations:

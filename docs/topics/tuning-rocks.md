@@ -1,4 +1,8 @@
+import OssCaution from './_oss-caution.md';
+
 # Tuning RocksDB
+
+<OssCaution />
 
 Tuning RocksDB is notoriously difficult. A good place to start is 
 [this guide](https://www.confluent.io/blog/how-to-tune-rocksdb-kafka-streams-state-stores-performance/)), 

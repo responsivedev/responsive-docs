@@ -1,4 +1,8 @@
+import OssCaution from './_oss-caution.md';
+
 # Capacity Planning
+
+<OssCaution />
 
 ## Do I Need More RocksDB Memory?
 

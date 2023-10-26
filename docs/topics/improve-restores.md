@@ -1,4 +1,8 @@
+import OssCaution from './_oss-caution.md';
+
 # Improve Restoration
+
+<OssCaution />
 
 The set below are miscellaneous improvements that speed up restores:
 

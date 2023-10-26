@@ -1,4 +1,8 @@
+import OssCaution from './_oss-caution.md';
+
 # Scaling Down
+
+<OssCaution />
 
 How can you tell when your application has too many resources provisioned and can be scaled down?
 

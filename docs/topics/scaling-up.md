@@ -1,4 +1,8 @@
+import OssCaution from './_oss-caution.md';
+
 # Scaling Up
+
+<OssCaution />
 
 So you’ve decided to scale up. The things to think about here are
 
