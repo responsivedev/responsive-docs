@@ -1,6 +1,6 @@
 # Responsive Documentation
 
-This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator, and is hosted on Netlify.
+This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator, and is hosted on Vercel.
 
 ### Installation
 
