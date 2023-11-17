@@ -39,69 +39,75 @@ Responsive for Kafka Streams requires a Kafka broker and a storage backend
 compatible with Apache Cassandra. In this quickstart, we will spin up 
 `confluentinc/cp-kafka` and `scylladb/scylla` containers. 
 
-1. Copy and paste the following YAML content into a file named 
-  `docker-compse.yaml`:
+<ol>
 
-   <details>
-    <summary>
-    Docker Compose YAML
-    </summary>
+  <li>
+    Copy and paste the following YAML content into a file named 
+    `docker-compse.yaml`:
 
-    ```yaml title="docker-compose.yml" showLineNumbers
-    ---
-    version: '3'
-    services:
-      zookeeper:
-        image: confluentinc/cp-zookeeper:7.3.0
-        container_name: zookeeper
-        environment:
-          ZOOKEEPER_CLIENT_PORT: 2181
-          ZOOKEEPER_TICK_TIME: 2000
+     <details>
+      <summary>Docker Compose YAML</summary>
 
-      broker:
-        image: confluentinc/cp-kafka:7.3.0
-        container_name: broker
-        ports:
-        # To learn about configuring Kafka for access across networks see
-        # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
-          - "9092:9092"
-        depends_on:
-          - zookeeper
-        environment:
-          KAFKA_BROKER_ID: 1
-          KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
-          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
-          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-          KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-          KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-          KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 1000
+      ```yaml title="docker-compose.yml" showLineNumbers
+      ---
+      version: '3'
+      services:
+        zookeeper:
+          image: confluentinc/cp-zookeeper:7.3.0
+          container_name: zookeeper
+          environment:
+            ZOOKEEPER_CLIENT_PORT: 2181
+            ZOOKEEPER_TICK_TIME: 2000
 
-      scylla:
-        image: scylladb/scylla:latest
-        container_name: scylla
-        ports:
-          - "9042:9042"
+        broker:
+          image: confluentinc/cp-kafka:7.3.0
+          container_name: broker
+          ports:
+          # To learn about configuring Kafka for access across networks see
+          # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
+            - "9092:9092"
+          depends_on:
+            - zookeeper
+          environment:
+            KAFKA_BROKER_ID: 1
+            KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
+            KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+            KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+            KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+            KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 1000
+
+        scylla:
+          image: scylladb/scylla:latest
+          container_name: scylla
+          ports:
+            - "9042:9042"
+      ```
+    </details>
+  </li>
+
+  <li>
+    Run the `docker-compse.yaml` file:
+    ```bash
+    $ docker compose up -d
+    [+] Running 3/3
+     ✔ Container scylla     Started                                                0.2s
+     ✔ Container zookeeper  Started                                                0.2s
+     ✔ Container broker     Started                                                0.4s
+
     ```
-  </details>
+  </li>
+  <li>
+    Initialize Scylla by creating a `KEYSPACE` to use for this quickstart:
+    ```bash
+    docker exec scylla cqlsh -e \
+      "CREATE KEYSPACE quickstart \
+        WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};"
 
-2. Run the `docker-compse.yaml` file:
-  ```bash
-  $ docker compose up -d
-  [+] Running 3/3
-   ✔ Container scylla     Started                                                0.2s
-   ✔ Container zookeeper  Started                                                0.2s
-   ✔ Container broker     Started                                                0.4s
-
-  ```
-
-3. Initialize Scylla by creating a `KEYSPACE` to use for this quickstart:
-  ```bash
-  docker exec scylla cqlsh -e \
-    "CREATE KEYSPACE quickstart \
-      WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};"
-
-  ```
+    ```
+  </li>
+</ol>
 
 ## Add Responsive Dependencies
 
