@@ -43,7 +43,7 @@ compatible with Apache Cassandra. In this quickstart, we will spin up
 
   <li>
     Copy and paste the following YAML content into a file named 
-    `docker-compse.yaml`:
+    `docker-compose.yaml`:
 
      <details>
       <summary>Docker Compose YAML</summary>
@@ -88,7 +88,7 @@ compatible with Apache Cassandra. In this quickstart, we will spin up
   </li>
 
   <li>
-    Run the `docker-compse.yaml` file:
+    Run the `docker-compose.yaml` file:
     ```bash
     $ docker compose up -d
     [+] Running 3/3
