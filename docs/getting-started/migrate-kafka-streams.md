@@ -224,9 +224,9 @@ of `KafkaStreams` and `ResponsiveKafkaStreams`, even within the same JVM.
 | Feature                              | Notes                                   |
 |--------------------------------------|-----------------------------------------|
 | Apache Kafka Version Compatibility   | `3.x`                                   |
-| Key Value Store                      | `range` and `all` are not yet supported |
-| Global Store                         | `range` and `all` are not yet supported |
+| Key Value Store                      |                                         |
+| Global Store                         |                                         |
 | Window Stores                        | stream-stream joins not yet supported   |
-| Session Stores                       | Coming Soon                     |
+| Session Stores                       | Coming Soon                             |
 | Processing Guarantee                 | `exactly_once_v2`, `at_least_once`      |
 
