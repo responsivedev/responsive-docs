@@ -32,6 +32,8 @@ const config = {
     locales: ['en'],
   },
 
+  plugins: ['./plugins/src/koala-plugin.js'],
+
   presets: [
     [
       'classic',
