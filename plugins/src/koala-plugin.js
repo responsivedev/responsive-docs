@@ -1,9 +1,6 @@
 export default function (context, options) {
   return {
     name: 'koala-plugin',
-    loadContent: async () => {
-      return {remoteHeadTags: await fetchHeadTagsFromAPI()};
-    },
     injectHtmlTags({content}) {
       return {
        postBodyTags: [`<script>
