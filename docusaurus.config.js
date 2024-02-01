@@ -97,8 +97,8 @@ const config = {
             className: "header-github-link",
           },
           {
-            to: 'https://responsive.dev/join-our-waitlist',
-            label: 'Join our Waitlist',
+            to: 'https://cloud.responsive.dev/login',
+            label: 'Login',
             position: 'right',
             className: 'button button--secondary button--rg'
           },
