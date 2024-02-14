@@ -6,6 +6,45 @@ toc_max_heading_level: 2
 
 # Changelog
 
+## Feb 13, 2024
+
+### Kafka Client (0.16.0)
+
+
+✨**GA for MongoDB Stores**:
+MongoDB is now considered generally available and supports nearly all of the
+Kafka Streams operations, including IQ and windowed stores.
+
+✨[responsive-pub/221](https://github.com/responsivedev/responsive-pub/pull/221):
+We made various improvements to performance, including this super cool PR to
+maintain local per-window bloom filters to avoid looking data up in remote storage
+if it's known not to exist during a window. 
+
+## Dec 18, 2023
+
+### Kafka Client (0.15.0)
+
+
+✨[responsive-pub/163](https://github.com/responsivedev/responsive-pub/pull/163):
+This change supports backing MongoDB storage! With the release, MongoDB is still
+in Beta but supports EOS and KV Tables.
+
+✨[responsive-pub/181](https://github.com/responsivedev/responsive-pub/pull/181):
+Cassandra implementation now supports Window stores!
+
+✨[responsive-pub/191](https://github.com/responsivedev/responsive-pub/pull/191):
+You no longer need to configure OTEL agent in order to integrate with Responsive.
+Simply set `responsive.metrics.enabled=true` in your configuration file along with
+the API key/secret provided.
+
+✨[responsive-pub/167](https://github.com/responsivedev/responsive-pub/pull/167):
+This is one of many PRs that have improved out metric suite to include a bunch
+of new metrics. Some of my personal favorites:
+- Metrics around the current kafka streams state (`RUNNING`, `REBALANCING`, etc...)
+- Some metrics around the Responsive Cache effecitveness
+- Additional metrics around restoration/thread errors
+
+
 ## October 16, 2023
 
 ### Breaking Changes (Code Incompatibility)

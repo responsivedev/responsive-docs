@@ -8,14 +8,14 @@ import TabItem from '@theme/TabItem';
   <dependency>
     <groupId>dev.responsive</groupId>
     <artifactId>kafka-client</artifactId>
-    <version>0.14.0</version>
+    <version>0.16.0</version>
   </dependency>
   ```
   </TabItem>
   <TabItem value="gradle" label="Gradle">
 
   ```
-  implementation 'dev.responsive:kafka-client:0.14.0'
+  implementation 'dev.responsive:kafka-client:0.16.0'
   ```
   </TabItem>
 </Tabs>
