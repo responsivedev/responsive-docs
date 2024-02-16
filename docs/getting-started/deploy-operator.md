@@ -8,6 +8,22 @@ This documentation covers how to set up the communication between your client
 application and the Responsive control plane, as well as how to deploy the
 operator in your kubernetes context.
 
+## Application Prerequisites
+
+Before deploying the Responsive operator, you'll need to make sure the Kafka Streams
+application has the required configuration. The Responsive platform uses Open Telemetry
+to collect the metrics it needs to make autoscaling decisions. You'll need to set the
+following configs in your properties file (or however you pass configs into
+`ResponsiveKafkaStreams`) using your Responsive api key and secret plus your 
+organization name (`orgId`) and environment name (`env`):
+
+```bash
+responsive.controller.endpoint=https://<orgId>-<env>.ctl.us-west-2.aws.cloud.responsive.dev
+responsive.metrics.enabled=true
+responsive.metrics.api.key=<key>
+responsive.metrics.secret=<secret>
+```
+
 ## Deploy the Operator
 
 ### Setup
@@ -58,6 +74,7 @@ the CRD. Once that is installed, install the Operator Chart in your kubernetes
 cluster:
 ```bash
 $ export ORG_ID=<your org name>
+$ export ENVIRONMENT=<your environment name>
 $ helm install responsive-operator oci://public.ecr.aws/j8q9y0n6/responsiveinc/charts/responsive-operator \
     --version ${RESPONSIVE_OPERATOR_VERSION} \
     --set controllerEndpoint=dns:///${ORG_ID}-${ENVIRONMENT}.ctl.us-west-2.aws.cloud.responsive.dev \
