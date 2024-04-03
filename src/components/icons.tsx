@@ -16,7 +16,7 @@ import {
     IconMapPinFilled,
     IconMenu,
     IconNews,
-    IconNotebook,
+    IconNotebook, IconPointFilled,
     IconShieldCheck,
     IconX,
 } from "@tabler/icons-react";
@@ -47,6 +47,7 @@ export const Icons = {
     mapPin: IconMapPinFilled,
     menu: IconMenu,
     note: IconNotebook,
+    pointFilled: IconPointFilled,
     post: IconNews,
     shieldCheck: IconShieldCheck,
     x: IconX,

@@ -3,6 +3,85 @@ slug: /
 sidebar_label: Home
 title: Documentation
 hide_title: true
+hide_table_of_contents: true
 ---
 
-Hello World **this is bold**
+import {Icons} from "../src/components/icons"
+
+export function Section({children, className}) {
+    return <div className={'p-4 rounded-lg border-2 border-gray-500 border-solid ' + className}>
+        {children}
+    </div>
+}
+
+export function MockWindow({ title, children, className }) {
+    return (
+        <div
+            className={"text-sm font-mono bg-white p-3 text-gray-700 border rounded-lg drop-shadow-xl border-gray-600 " + className}>
+            <div className="mb-2 flex items-center">
+                <Icons.pointFilled size={25} className="text-red-500 mr-[-8px]"/>
+                <Icons.pointFilled size={25} className="text-yellow-500 mr-[-8px]"/>
+                <Icons.pointFilled size={25} className="text-green-500 mr-[10px]"/>
+                <div className="text-muted-foreground border-0 border-b-2 border-solid border-gray-300">{title}</div>
+            </div>
+            {children}
+        </div>
+    )
+}
+
+<div className={'flex flex-col text-center items-center text-4xl font-heading'}>
+    The best way to run Kafka Streams in production<span className={'text-orange-500'}>.</span>
+</div>
+
+<div className={'flex justify-between font-heading pb-6 px-[40%] -mt-3 text-base'}>
+    <a href={'#'} className={'group text-orange-600 no-underline flex items-center'}>learn <Icons.chevronRight size={16}/></a>
+    <a href={'#'} className={'group text-orange-500 no-underline flex items-center'}>build <Icons.chevronRight size={16}/></a>
+    <a href={'#'} className={'group text-orange-400 no-underline flex items-center'}>deploy <Icons.chevronRight size={16}/></a>
+</div>
+
+
+<div className={'grid grid-cols-2 gap-4 px-[10%]'}>
+    <Section className={''}>
+        <div className={'font-heading text-xl'}>How does Responsive Work?</div>
+        Responsive is the next iteration of the Kafka Streams architecture that:
+
+        - separates [storage from compute](#) to eliminate restoration and simplify rebalances
+        - leverages [declarative policies](#) to [automatically scale](#) your workload
+        - provides out of the box [monitoring](#) and pre-configured observability dashboards
+
+        Responsive works directly with the open source code you've already written, see our
+        [quickstart](#) for the changes you need to make.
+    </Section>
+
+    <Section>
+        <div className={'font-heading text-xl'}>How can I get started?</div>
+        Check out our [quickstart](#) and see how you can migrate to `ResponsiveKafkaStreams` in 10 minutes.
+
+        <div className={'flex flex-col items-center mb-8'}>
+            <MockWindow title={'git-diff'} className={'text-xs'}>
+                <div>-- a/App.java</div>
+                <div>++ b/App.java</div>
+                <br/>
+                <div className="bg-red-100 text-black">- KafkaStreams streams = new KafkaStreams(...);</div>
+                <div className="bg-green-100 text-black">+ KafkaStreams streams = new ResponsiveKafkaStreams(...);</div>
+            </MockWindow>
+        </div>
+    </Section>
+
+    <Section>
+        <div className={'font-heading text-xl'}>Can I do X with Responsive?</div>
+        Responsive supports the entire Kafka Streams API. See our technical [API specification](#) for more
+        details or reach out to us if you have any questions!
+    </Section>
+
+    <Section className={''}>
+        <div className={'font-heading text-xl'}>Will Responsive work in my environment?</div>
+        The self-serve trial runs in AWS `us-west-2` and assumes you have access to a kubernetes cluster.
+        If you have another environment that you would like us to support, drop us an email at
+        <a href={'mailto:info@responsive.dev'}>info@repsonsive.dev</a>.
+
+        Our [pricing](https://www.responsive.dev/pricing) page covers BYOC and on-premise deployment options.
+    </Section>
+
+
+</div>
