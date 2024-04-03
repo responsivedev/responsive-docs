@@ -4,12 +4,17 @@
  * work well for content-centric websites.
  */
 
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* You can override the default Infima variables here. */
 :root {
+  --ifm-font-family-base: Arimo, 'Arimo';
+  --ifm-heading-font-weight: 500;
+
   --ifm-color-primary: #FF781D;
   --ifm-color-primary-dark: #29784c;
   --ifm-color-primary-darker: #277148;
@@ -19,4 +24,70 @@
   --ifm-color-primary-lightest: #3cad6e;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  --background: 0 0% 100%;
+  --foreground: 222.2 47.4% 11.2%;
+
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 47.4% 11.2%;
+
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 47.4% 11.2%;
+
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+
+  --accent: 24 100% 56%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 210 40% 98%;
+
+  --ring: 215 20.2% 65.1%;
 }
+
+.navbar__link {
+  color: hsl(var(--muted-foreground));
+  font-weight: 400;
+}
+
+.navbar__link:hover {
+  color: black;
+}
+
+.navbar-login {
+  color: white;
+  padding: .25rem 1rem;
+  background-color: black;
+  font-size: .875rem;
+  line-height: 1.25rem;
+  border-radius: 1rem;
+}
+
+.navbar-login:hover {
+  color: white;
+  background-color: #FF781D;
+}
+
+.navbar-talk {
+  padding: .25rem 1rem;
+  margin-right: 0.5rem;
+  font-size: .875rem;
+  line-height: 1.25rem;
+  border: 1px solid lightgray;
+  border-radius: 1rem;
+}
+
+.navbar-talk:hover {
+  color: #FF781D;
+}
+

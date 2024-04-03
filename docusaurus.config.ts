@@ -63,7 +63,38 @@ const config: Config = {
         width: 120,
         height: 60,
       },
-      items: [],
+      items: [
+        {
+          type: 'docSidebar',
+          sidebarId: 'tutorialSidebar',
+          position: 'left',
+          label: 'Home',
+        },
+        {
+          to: 'https://responsive.dev',
+          label: 'Product',
+          position: 'left',
+          target: '_blank',
+        },
+        {
+          to: 'https://responsive.dev/blog',
+          label: 'Blog',
+          position: 'left',
+          target: '_blank',
+        },
+        {
+          to: 'https://responsive.dev/talk-with-us',
+          label: 'Talk With Us',
+          position: 'right',
+          className: 'navbar-talk'
+        },
+        {
+          to: 'https://cloud.responsive.dev/login',
+          label: 'Login',
+          position: 'right',
+          className: 'navbar-login'
+        }
+      ],
     },
     prism: {
       theme: prismThemes.github,
