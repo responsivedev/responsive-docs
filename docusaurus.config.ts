@@ -27,7 +27,8 @@ const config: Config = {
   },
 
   plugins: [
-      './src/plugins/koala-plugin'
+      './src/plugins/koala-plugin',
+      './src/plugins/tailwind-config',
   ],
 
   presets: [
@@ -58,58 +59,11 @@ const config: Config = {
         alt: 'Responsive',
         src: 'img/logo.svg',
         href: 'https://responsive.dev', // logo should always point to main site
-        target: '_self', // tells the logo link to open in the same tab
+        target: '_blank',
         width: 120,
         height: 60,
       },
-      items: [
-
-      ],
-    },
-    footer: {
-      style: 'light',
-      links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Tutorial',
-              to: '/docs/intro',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
-            },
-          ],
-        },
-      ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      items: [],
     },
     prism: {
       theme: prismThemes.github,
