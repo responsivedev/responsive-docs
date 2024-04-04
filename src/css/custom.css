@@ -83,10 +83,6 @@ h1 { font-size: 2rem !important; }
   font-family: CalSans-SemiBold, serif;
 }
 
-.navbar {
-  box-shadow: none;
-}
-
 .navbar__link {
   color: hsl(var(--muted-foreground));
   text-decoration: none;
@@ -131,7 +127,7 @@ h1 { font-size: 2rem !important; }
 
 .menu__link {
   text-decoration: none;
-  line-height: 1;
+  line-height: 1.0;
 }
 
 .menu__caret:before {
@@ -140,6 +136,19 @@ h1 { font-size: 2rem !important; }
 
 .menu__link--sublist-caret:after {
   background: var(--ifm-menu-link-sublist-icon) 50%/2rem 1rem;
+}
+
+.menu__link--sublist {
+  margin-top: .5rem;
+}
+
+.menu__link--sublist.menu__link--active {
+  color: black;
+  font-weight: 500;
+}
+
+.table-of-contents__link {
+  text-decoration: none;
 }
 
 .breadcrumbs__link {

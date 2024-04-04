@@ -39,6 +39,7 @@ const config: Config = {
           routeBasePath: '/',
           sidebarPath: './sidebars.ts',
           editUrl: 'https://github.com/responsivedev/responsive-docs/tree/main/',
+          sidebarCollapsed: false,
         },
         blog: false,
         theme: {
@@ -66,7 +67,7 @@ const config: Config = {
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          sidebarId: 'docsSidebar',
           position: 'left',
           label: 'Home',
         },
