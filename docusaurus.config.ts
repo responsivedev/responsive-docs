@@ -99,6 +99,7 @@ const config: Config = {
     },
     prism: {
       theme: prismThemes.github,
+      additionalLanguages: ['java', 'diff'],
     },
   } satisfies Preset.ThemeConfig,
 };

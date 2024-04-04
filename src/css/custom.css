@@ -28,7 +28,6 @@
   --ifm-color-primary-light: #F1945C;
   --ifm-color-primary-lighter: #359962;
   --ifm-color-primary-lightest: #3cad6e;
-  --ifm-navbar-height: 50px;
 
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
   --doc-sidebar-width: 250px !important;
@@ -39,6 +38,7 @@
   --ifm-menu-link-padding-vertical: 0.25rem;
   --ifm-link-color: black;
   --ifm-link-decoration: underline;
+  --ifm-navbar-height: 50px;
 
   --ifm-breadcrumb-item-background-active: white;
   --ifm-breadcrumb-padding-horizontal: 0.25rem;
@@ -78,6 +78,8 @@
 }
 
 h1 { font-size: 2rem !important; }
+h2 { font-size: 1.7rem !important; }
+h3 { font-size: 1.5rem !important; }
 
 .font-heading {
   font-family: CalSans-SemiBold, serif;
@@ -122,10 +124,10 @@ h1 { font-size: 2rem !important; }
 
 .menu {
   font-weight: 300;
-  font-size: medium;
 }
 
 .menu__link {
+  font-size: small;
   text-decoration: none;
   line-height: 1.0;
 }
@@ -139,6 +141,7 @@ h1 { font-size: 2rem !important; }
 }
 
 .menu__link--sublist {
+  font-size: smaller;
   margin-top: .5rem;
 }
 
