@@ -1,13 +1,20 @@
-function tailwindPlugin(context, options) {
-  return {
-    name: "docusaurus-tailwindcss",
-    configurePostCss(postcssOptions) {
-      // Appends TailwindCSS and AutoPrefixer.
-      postcssOptions.plugins.push(require("tailwindcss"));
-      postcssOptions.plugins.push(require("autoprefixer"));
-      return postcssOptions;
-    },
-  };
-}
+export default function tailwindPlugin(context, options) {
+    return {
+        name: "docusaurus-tailwindcss",
+        configurePostCss(postcssOptions) {
+            postcssOptions.plugins.push(
+                require('postcss-import'),
+                require('tailwindcss'),
+                require('autoprefixer'),
+                require('postcss-preset-env')({
+                    autoprefixer: {
+                        flexbox: 'no-2009'
+                    },
+                    stage: 4
+                })
+            )
 
-module.exports = tailwindPlugin;
+            return postcssOptions;
+        },
+    };
+}

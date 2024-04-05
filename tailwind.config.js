@@ -2,10 +2,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   corePlugins: {
-    preflight: false, // disable Tailwind's reset
+    preflight: false, // disable Tailwind's reset so it doesn't conflict with docusaurus
   },
-  content: ["./src/**/*.{js,jsx,ts,tsx}", "./docs/**/*.mdx"], // my markdown stuff is in ../docs, not /src
-  darkMode: ['class', '[data-theme="dark"]'], // hooks into docusaurus' dark mode settigns
+  content: [
+      "./src/**/*.{html,js,jsx,ts,tsx}",
+      "./docs/**/*.{html,mdx,jsx,ts,tsx}",
+  ],
   theme: {
     extend: {},
   },
