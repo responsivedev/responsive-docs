@@ -8,12 +8,7 @@ hide_table_of_contents: true
 ---
 
 import {Icons} from "../src/components/icons"
-
-export function Section({children, className}) {
-    return <div className={'p-4 rounded-lg border-2 border-b-4 border-gray-500 border-solid ' + className}>
-        {children}
-    </div>
-}
+import Section from '/src/components/section'
 
 export function MockWindow({ title, children, className }) {
     return (

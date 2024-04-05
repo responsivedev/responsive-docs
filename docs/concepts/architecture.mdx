@@ -2,11 +2,7 @@
 title: Architecture
 ---
 
-export function Section({children, className}) {
-    return <div className={'p-4 rounded-lg border-2 border-b-4 border-gray-500 border-solid ' + className}>
-        {children}
-    </div>
-}
+import Section from '/src/components/section'
 
 ## Welcome to Responsive
 
@@ -14,7 +10,7 @@ Responsive is designed to modernize the Kafka Streams architecture and streamlin
 mission-critical production deployments. We built the platform around these four
 principles:
 
-<div className={'grid grid-cols-3 gap-4'}>
+<div className={'flex flex-col sm:grid sm:grid-cols-3 gap-4'}>
     <Section>
         #### Separate Storage & Compute
 
@@ -88,5 +84,4 @@ Let's dig into how this all fits together. The entire ecosystem consists of the 
 
 - Read more about the history and design of our [Storage Engine](storage)
 - Learn about how Operator and Controller work together to provide [Autoscaling](autoscaling)
-- Check out the Responsive [Observability](observability) pipeline
 - Get started by following our [Quickstart](/getting-started/quickstart)

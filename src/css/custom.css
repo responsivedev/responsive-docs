@@ -47,6 +47,13 @@
   --ifm-menu-color-background-active: white;
   --ifm-menu-color-background-hover: white;
 
+  --ifm-table-cell-padding: 0.5rem;
+  --ifm-table-stripe-background: #f5f5f5;
+  --ifm-table-head-background: black;
+  --ifm-table-head-color: white;
+  --ifm-table-head-font-weight: 300;
+  --ifm-table-border-color: none;
+
   --background: 0 0% 100%;
   --foreground: 222.2 47.4% 11.2%;
 
