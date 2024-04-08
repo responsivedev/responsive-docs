@@ -34,8 +34,11 @@
 
   --ifm-line-height-base: 1.6;
   --ifm-code-font-size: 80%;
-  --ifm-code-padding-vertical: 1px;
+  --ifm-code-padding-vertical: 0.1rem;
+  --ifm-code-padding-horizontal: 0.25rem;
   --ifm-menu-link-padding-vertical: 0.25rem;
+  --ifm-code-border-radius: 0.25rem;
+
   --ifm-link-color: black;
   --ifm-link-decoration: underline;
   --ifm-navbar-height: 50px;
@@ -170,8 +173,7 @@ h3 { font-size: 1.5rem !important; }
 }
 
 .details_node_modules-\@docusaurus-theme-classic-lib-theme-Details-styles-module {
+  --ifm-alert-border-color: black;
+  --ifm-alert-background-color: white;
   --ifm-code-background: rgb(246, 247, 248);
-  background-color: #f5f5f5;
-  border: none !important;
-  --docusaurus-details-decoration-color: #FF781D !important;
 }
