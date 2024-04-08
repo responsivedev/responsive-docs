@@ -172,7 +172,7 @@ h3 { font-size: 1.5rem !important; }
   display: none;
 }
 
-.details_node_modules-\@docusaurus-theme-classic-lib-theme-Details-styles-module {
+.alert {
   --ifm-alert-border-color: black;
   --ifm-alert-background-color: white;
   --ifm-code-background: rgb(246, 247, 248);
