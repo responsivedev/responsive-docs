@@ -168,3 +168,10 @@ h3 { font-size: 1.5rem !important; }
 .pagination-nav {
   display: none;
 }
+
+.details_node_modules-\@docusaurus-theme-classic-lib-theme-Details-styles-module {
+  --ifm-code-background: rgb(246, 247, 248);
+  background-color: #f5f5f5;
+  border: none !important;
+  --docusaurus-details-decoration-color: #FF781D !important;
+}

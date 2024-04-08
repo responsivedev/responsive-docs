@@ -220,6 +220,14 @@ nodes) and whenever all nodes are processing less than 1000 events per second to
 may configure the policy with whatever parameters you'd like to see how responsive handles the
 modifications.
 
+Once the controller successfully computes a window of data (you will need to wait about a minute)
+you will start seeing the full metrics appear on the dashboard:
+
+<img
+    alt={"Full Dashboard"}
+    src={require('/static/img/docs/getting-started/quickstart/full-dashboard.png').default}
+    className={'drop-shadow-xl lg:px-[10%] mb-4'} />
+
 You may begin varying the event generation rate by scaling the generator deployment up or down:
 
 ```bash
