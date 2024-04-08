@@ -1,3 +1,100 @@
 ---
 title: Kafka Streams
 ---
+
+import {Icons} from '/src/components/icons'
+
+:::info
+
+This page covers the basics for configuring your Responsive Kafka Streams application.
+
+:::
+
+`ResponsiveKafkaStreams` is initialized with an instantiated instance of `ResponsiveConfig`.
+Similarly to `KafkaStreams` this can be provided either as a `java.util.Properties` or as
+a `java.util.Map`. This document covers the main configurations needed to get up and running
+with Responsive, for a full list of the most up-to-date configurations, see
+[`ResponsiveConfig`](https://github.com/responsivedev/responsive-pub/blob/main/kafka-client/src/main/java/dev/responsive/kafka/api/config/ResponsiveConfig.java)
+source code (don't be afraid, it's easy to read).
+
+## Required
+
+| Config Name      | Type     | Description                                                 |
+|------------------|----------|-------------------------------------------------------------|
+| `responsive.org` | `String` | The Responsive organization slug (not the organization ID). |
+| `responsive.env` | `String` | The Responsive environment slug (not the environment ID).   |
+
+## Metrics
+
+:::note API Keys
+
+Note that the API Keys created for metrics can be used both for Operator and your `ResponsiveKafkaStreams`
+deployment. We recommended, however, to keep them separate for more granular control.
+
+:::
+
+| Config Name                      | Type       | Description                                                                                                                                                                                                                                                                             |
+|----------------------------------|------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `responsive.controller.endpoint` | `String`   | The endpoint provided to you in the Responsive UI for your controller connection.                                                                                                                                                                                                       |
+| `responsive.platform.api.key`    | `String`   | The API Key created in the Responsive UI for your `responsive.env`.                                                                                                                                                                                                                     |
+| `responsive.platform.api.secret` | `Password` | The API Secret created in the Responsive UI for your `responsive.env` that corresponds to `responsive.platform.api.key`                                                                                                                                                                 |
+| `responsive.metrics.enabled`     | `Boolean`  | Whether to enable metric reporting (required for autoscaling and UI integration).                                                                                                                                                                                                       |
+| `responsive.application.id`      | `String`   | The application ID that uniquely identifies this application with Responsive. This defaults to the configured Kafka Streams `application.id` but can be specified in the case you have multiple applications with the same `application.id` configured to run in the same `responsive.env` |
+
+## Storage
+
+Responsive supports two storage backends: `CASSANDRA` and `MONGO_DB`. Configurations for each
+of these are separate and not overlapping.
+
+### MongoDB
+
+| Config Name                                                     | Type      | Description                                                                                                                                                                                                                                                                                                                                                                            |
+|-----------------------------------------------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| <span className={'font-heading'}>Required Configurations</span> |           |                                                                                                                                                                                                                                                                                                                                                                                        |
+| `responsive.storage.backend.type`                               | `String`  | Must be set to `MONGO_DB`.                                                                                                                                                                                                                                                                                                                                                             |
+| `responsive.mongo.username`                                     | `String`  | The username to use when connecting to MongoDB. This is provided via the Responsive UI.                                                                                                                                                                                                                                                                                                |
+| `responsive.mongo.password`                                     | `String`  | The password to use when connecting to MongoDB. This is provided via the Responsive UI.                                                                                                                                                                                                                                                                                                |
+| `responsive.mongo.endpoint`                                     | `String`  | The endpoint to connect to. This is provided via the Responsive UI.                                                                                                                                                                                                                                                                                                                    |
+| <span className={'font-heading'}>Advanced Configurations</span> |           |                                                                                                                                                                                                                                                                                                                                                                                        |
+| `responsive.mongo.collection.sharding.enabled`                  | `Boolean` | Set this to `true` when running against a sharded mongo cluste                                                                                                                                                                                                                                                                                                                         |
+| `responsive.mongo.collection.sharding.chunks`                   | `Int`     | For sharded collections, sets the number of initial chunks to create the collection with.                                                                                                                                                                                                                                                                                              |
+| `responsive.mongo.windowed.key.timestamp.first`                 | `Boolean` | Whether to put the window start timestamp first in composite windowed key format. This can be toggled true/false to get better "performance depending on the density of unique keys per window, and should be experimented with for best results. However it is important to note that this cannot be changed for an active application. Messing with this can corrupt existing state! |
+
+### Cassandra
+
+:::warning Self-Serve Not Available
+
+Only `MONGO_DB` is supported in the self-serve Responsive UI. If you would like to configure Cassandra, you
+may reach out to us to provision a cluster for you. We provision a Cassandra-compatible backend using ScyllaDB
+Cloud.
+
+:::
+
+| Config Name                                                     | Type     | Description                                                                                                                                                                                                                                                                                                                                                                                              |
+|-----------------------------------------------------------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| <span className={'font-heading'}>Required Configurations</span> |          |                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `responsive.storage.backend.type`                               | `String` | Must be set to `CASSANDRA`.                                                                                                                                                                                                                                                                                                                                                                              |
+| `responsive.cassandra.username`                                 | `String` | The username to use when connecting to Cassandra.                                                                                                                                                                                                                                                                                                                                                        |
+| `responsive.cassandra.password`                                 | `String` | The password to use when connecting to Cassandra.                                                                                                                                                                                                                                                                                                                                                        |
+| `responsive.cassandra.hostname`                                 | `String` | The hostname to use when connecting to Cassandra.                                                                                                                                                                                                                                                                                                                                                        |
+| `responsive.cassandra.port`                                     | `Int`    | The port to use when connecting to Cassandra.                                                                                                                                                                                                                                                                                                                                                            |
+| `responsive.cassandra.datacenter`                               | `String` | The datacenter to use when connecting to Cassandra.                                                                                                                                                                                                                                                                                                                                                      |
+| <span className={'font-heading'}>Advanced Configurations</span> |          |                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `responsive.cassandra.consistency.reads`                        | `String` | See the [Cassandra Documentation](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html) for valid configuration values and their respective behavior.                                                                                                                                                                                                                  |
+| `responsive.cassandra.consistency.writes`                       | `String` | See the [Cassandra Documentation](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html) for valid configuration values and their respective behavior.                                                                                                                                                                                                                  |
+| `responsive.cassandra.desired.num.partitions`                   | `Int`    | The desired number of partitions to create in the remote store. This is a best effort target, as the actual number of partitions will be the next multiple of the Kafka topic's number of partitions that is greater than or equal to this number. This configuration does not apply to global stores. A value of `-1` indicates to use the number of Kafka Partitions as the remote partitions as well. |
+
+## Restricted Configurations
+
+There are a few Streams properties that are controlled by Responsive and should not be overridden as they are required for the application to function in a healthy manner.
+
+| Config Name                    | Description                                                                                           |
+|--------------------------------|-------------------------------------------------------------------------------------------------------|
+| `num.standby.replicas`         | Responsive applications do not need standbys and may even be harmed by enabling their use.            |
+| `internal.task.assignor.class` | Responsive uses an internal task assignment strategy and does not support overriding this.            |
+| `processing.guarantee`         | Responsive supports both `at_least_once` and `exactly_once_v2`. `exactly_once` (v1) is not supported. |
+
+## Performance
+
+There are many performance related configurations that are updated frequently. See [`ResponsiveConfig`](https://github.com/responsivedev/responsive-pub/blob/main/kafka-client/src/main/java/dev/responsive/kafka/api/config/ResponsiveConfig.java)
+for an up-to-date list or reach out to us for a consultation to improve your performance.
