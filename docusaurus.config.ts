@@ -54,6 +54,11 @@ const config: Config = {
   ],
 
   themeConfig: {
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: true,
+      respectPrefersColorScheme: false
+    },
     image: 'img/open-graph-image.png',
     navbar: {
       logo: {
