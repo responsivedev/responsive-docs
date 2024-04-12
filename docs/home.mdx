@@ -43,45 +43,53 @@ export function MockWindow({ title, children, className }) {
 <div className={'grid grid-cols-2 gap-4 px-[10%]'}>
     <Section className={''}>
         <div className={'font-heading text-xl'}>How does Responsive work?</div>
-        Responsive is the next iteration of the Kafka Streams architecture that:
+        <div>
+            Responsive is the next iteration of the Kafka Streams architecture that:
 
-        - separates [storage from compute](/concepts/architecture) to eliminate restoration and simplify rebalances
-        - leverages [declarative policies](/reference/policies) to [automatically scale](/concepts/autoscaling) your workload
-        - provides out of the box monitoring and pre-configured observability dashboards
+            - separates [storage from compute](/concepts/architecture) to eliminate restoration and simplify rebalances
+            - leverages [declarative policies](/reference/policies) to [automatically scale](/concepts/autoscaling) your workload
+            - provides out of the box monitoring and pre-configured observability dashboards
 
-        Responsive works directly with the open source code you've already written, see our
-        [quickstart](/getting-started/quickstart) for the changes you need to make.
+            Responsive works directly with the open source code you've already written, see our
+            [quickstart](/getting-started/quickstart) for the changes you need to make.
+        </div>
     </Section>
 
     <Section>
         <div className={'font-heading text-xl'}>How can I get started?</div>
-        Check out our [quickstart](/getting-started/quickstart) and see how you can migrate to `ResponsiveKafkaStreams` in 10 minutes.
+        <div>
+            Check out our [quickstart](/getting-started/quickstart) and see how you can migrate to `ResponsiveKafkaStreams` in 10 minutes.
 
-        <div className={'flex flex-col items-center mb-8'}>
-            <MockWindow title={'git-diff'} className={'text-xs'}>
-                <div>-- a/App.java</div>
-                <div>++ b/App.java</div>
-                <br/>
-                <div className="bg-red-100 text-black">- KafkaStreams streams = new KafkaStreams(...);</div>
-                <div className="bg-green-100 text-black">+ KafkaStreams streams = new ResponsiveKafkaStreams(...);</div>
-            </MockWindow>
+            <div className={'flex flex-col items-center mb-8'}>
+                <MockWindow title={'git-diff'} className={'text-xs'}>
+                    <div>-- a/App.java</div>
+                    <div>++ b/App.java</div>
+                    <br/>
+                    <div className="bg-red-100 text-black">- KafkaStreams streams = new KafkaStreams(...);</div>
+                    <div className="bg-green-100 text-black">+ KafkaStreams streams = new ResponsiveKafkaStreams(...);</div>
+                </MockWindow>
+            </div>
         </div>
     </Section>
 
     <Section>
         <div className={'font-heading text-xl'}>Can I do X with Responsive?</div>
-        Responsive supports the entire Kafka Streams API. So generally speaking: yes.
+        <div>
+            Responsive supports the entire Kafka Streams API. So generally speaking: yes.
 
-        See our technical reference specification for more details or reach out to us if you have any questions!
+            See our technical reference specification for more details or reach out to us if you have any questions!
+        </div>
     </Section>
 
     <Section className={''}>
         <div className={'font-heading text-xl'}>Will Responsive work in my environment?</div>
-        The self-serve trial runs in AWS `us-west-2` and assumes you have access to a kubernetes cluster.
-        If you have another environment that you would like us to support, drop us an email at
-        <a href={'mailto:info@responsive.dev'}>info@repsonsive.dev</a>.
+        <div>
+            The self-serve trial runs in AWS `us-west-2` and assumes you have access to a kubernetes cluster.
+            If you have another environment that you would like us to support, drop us an email at
+            info@repsonsive.dev.
 
-        Our [pricing](https://www.responsive.dev/pricing) page covers BYOC and on-premise deployment options.
+            Our [pricing](https://www.responsive.dev/pricing) page covers BYOC and on-premise deployment options.
+        </div>
     </Section>
 
 
