@@ -1,15 +1,58 @@
 ---
 title: Changelog
 toc_min_heading_level: 2
-toc_max_heading_level: 2
+toc_max_heading_level: 3
 ---
 
 # Changelog
 
+##
+
+## Apr 5, 2024
+
+### Kafka Client (0.23.0)
+
+❗[responsive-pub/269](https://github.com/responsivedev/responsive-pub/pull/269)
+This is a backwards incompatible change to the way we name configurations. See
+the PR description for a migration guide.
+
+## Mar 6, 2024
+
+### Kafka Client (0.22.0)
+
+✨ [responsive-pub/248](https://github.com/responsivedev/responsive-pub/pull/248):
+Responsive now supports all window stores, including **Session Stores**!
+
+### Operator (0.13.0)
+
+✨ [responsive-pub/257](https://github.com/responsivedev/responsive-pub/pull/257)
+The cooldown for the policy execution is now configurable, so you can schedule more
+aggressive policies if your application is sensitive to throughput changes.
+
+## Feb 26, 2024
+
+### Kafka Client (0.20.0)
+
+🐛 [responsive-pub/249](https://github.com/responsivedev/responsive-pub/pull/249):
+Fixes issues with restoration when restoring from an early point in the changelog topic.
+This is usually only relevant if you are running the bootstrap tool introduced in 0.17.0.
+
+## Feb 20, 2024
+
+### Kafka Client (0.17.0)
+
+✨[responsive-pub/233](https://github.com/responsivedev/responsive-pub/pull/233):
+Introduce tooling to bootstrap a new storage cluster using an existing changelog topic.
+This can be used to migrate your stores from RocksDB to Responsive, or to migrate between
+Responsive storage solutions.
+
+🐛 [responsive-pub/230](https://github.com/responsivedev/responsive-pub/pull/230):
+Changes the default Cassandra consistency levels to QUORUM/QUORUM and allows configuration
+via config.
+
 ## Feb 13, 2024
 
 ### Kafka Client (0.16.0)
-
 
 ✨**GA for MongoDB Stores**:
 MongoDB is now considered generally available and supports nearly all of the
