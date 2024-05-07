@@ -27,8 +27,9 @@ const config: Config = {
   },
 
   plugins: [
-      './src/plugins/koala-plugin',
-      './src/plugins/tailwind-config',
+    './src/plugins/koala-plugin',
+    './src/plugins/tailwind-config',
+    'vercel-analytics'
   ],
 
   presets: [
