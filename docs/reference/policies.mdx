@@ -29,6 +29,8 @@ properties:
         type: string
       applicationNamespace:
         type: string
+      applicationId:
+        type: string
       policyType:
         enum:
         - KAFKA_STREAMS
@@ -119,6 +121,7 @@ Scope: `spec`
 | spec                      | The Responsive Policy specification.                                                                                                                                           |
 | spec.applicationName      | The name of your application's deployment/statefulset.                                                                                                                         |
 | spec.applicationNamespace | The k8s namespace that your application is deployed into.                                                                                                                      |
+| spec.applicationId        | The id of your application in Responsive cloud.                                                                                                                                |
 | spec.status               | Set to POLICY_STATUS_MANAGED to have the Operator automatically execute corrective actions. Set to POLICY_STATUS_DISABLED to have the policy evaluate but not execute actions. |
 | spec.policyType           | The type of application under management. Must be set to KAFKA_STREAMS.                                                                                                        |
 
