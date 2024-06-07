@@ -32,7 +32,7 @@ As with all real-world systems, performance depends heavily on the specific use 
 To give an idea of the benefits of using the async processor when your topology includes higher latency external calls, we ran a test that injected a variable latency in our remote storage client while running a simple application that would deduplicate events over a window. A couple of things stand out from the results above: 
 
 1. The greater the remote latency, the bigger the impact of async. At 2 ms round trip latency, throughput improves by 5.5x. At 1 ms round trip latency, throughput improves by 3x.
-2. The throughput with async processing enabled is stable even with varying latency.
+2. The throughput with async processing enabled is stable even with varying remote latency. The processor was ultimately bottlenecked on the resources available on the client side!
 
 :::warning
 The async processor makes the round trip network latency a non-factor in achieving high throughput. However, using the async processor will generally place more load on the remote system, which in turn may get saturated, which in turn will drive up the latencies, which will mean the throughput gains of the async processor will be below the theoretical maximum.
