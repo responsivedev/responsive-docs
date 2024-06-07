@@ -17,7 +17,7 @@ It works by giving each StreamThread a dedicated thread pool which it uses to pr
 
 The Async Processor was built to shine when processors include a long-running step such as remote state store requests or generic RPCs. The classic solution for achieving high throughput when you are bottlenecked by network latency is to increase the parallelism of the calls to the target system, which is exactly what the async processor does for Kafka Streams. 
 
-This makes the Async Processor the perfect tool to complement Responsive state stores, meaning you don’t need to sacrifice performance in order to gain the availability and elasticity benefits of remote storage with Kafka Streams!
+This makes the Async Processor the perfect tool to complement Responsive state stores: you no longer need to sacrifice performance in order to gain the availability and elasticity benefits of remote storage with Kafka Streams!
 
 ## Expected Performance Gains
 
@@ -29,7 +29,7 @@ As with all real-world systems, performance depends heavily on the specific use 
     className={'px-[10%] mb-4'} />
 
 
-To give an idea of the benefits of using the async processor when your topology includes higher latency external calls, we ran a test that injected a variable latency in our remote storage client while running a simple application that would deduplicate events over a window. A couple of things stand out from the results above: 
+To give an idea of the benefits of using the async processor when your topology includes higher latency external calls, we ran a test that injected a variable latency in our remote storage client while running a simple application that deduplicates events over a window. A couple of things stand out from the results above: 
 
 1. The greater the remote latency, the bigger the impact of async processing. At 2 ms round trip latency, throughput improves by 5.5x. At 1 ms round trip latency, throughput improves by 3x.
 2. The throughput with async processing enabled is stable even with varying remote latency. The processor was ultimately bottlenecked by the resources available on the client side!
