@@ -62,10 +62,9 @@ Example:
     
     // After
     kstream.processValues(
-        createAsyncProcessorSupplier(
-            new MyStatefulProcessorSupplier<>(),
-            Named.as("AsyncProcessor"),
-            STORE_NAME);
+        createAsyncProcessorSupplier(new MyStatefulProcessorSupplier<>()),
+        Named.as("AsyncProcessor"),
+        STORE_NAME);
             
     // note: the Named.as was modified to highlight the example,
     // changing the processor name is not required to enable async processing
