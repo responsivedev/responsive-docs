@@ -5,9 +5,9 @@ import {Icons} from '/src/components/icons'
 
 :::info
 
-This page covers the Responsive Async Processor: its benefits, its limitations, how to use it, and how to tune it.
+This page covers the Async Processor: its benefits, its limitations, how to use it, and how to tune it.
 
-The Async Processor is available with Responsive client **v0.24.0** onward.
+The Async Processor is available with Responsive client **v0.25.0** onward.
 :::
 
 ## Why use the Async Processor
@@ -15,13 +15,13 @@ Async processing allows Kafka Streams applications to concurrently process recor
 
 It works by giving each StreamThread a dedicated thread pool which it uses to process the records passing through an async processor. Records of the same key are still processed in order and all the same consistency and correctness guarantees of Kafka Streams are maintained, including exactly-once semantics.
 
-While async processing can help improve performance of any application with a large keyspace, it was built to shine when processors include a long-running step such as remote state store requests or generic RPCs. The classic solution for achieving high throughput when you are bottlenecked by network latency is to increase the parallelism of the calls to the target system, which is exactly what the async processor does for Kafka Streams. 
+The Async Processor was built to shine when processors include a long-running step such as remote state store requests or generic RPCs. The classic solution for achieving high throughput when you are bottlenecked by network latency is to increase the parallelism of the calls to the target system, which is exactly what the async processor does for Kafka Streams. 
 
 This makes the Responsive Async Processor the perfect tool to complement Responsive state stores, meaning you don’t need to sacrifice performance in order to gain the availability and elasticity benefits of remote storage with Kafka Streams!
 
 ## Expected Performance Gains
 
-As with all real-world systems, performance depends heavily on the specific use case and parameters. However, in all of our experiments, async processing showed an improvement over regular Kafka Streams when a topology includes a processor which makes a remote call. 
+As with all real-world systems, performance depends heavily on the specific use case and parameters. However, in all of our experiments, async processing showed a significant improvement over regular Kafka Streams when a topology includes a processor which makes a remote or long-blocking call. 
 
 <img
     alt={"Responsive Asyc Processor Peformancs"}
@@ -34,10 +34,10 @@ To give an idea of the benefits of using the async processor when your topology 
 1. The greater the remote latency, the bigger the impact of async. At 2 ms round trip latency, throughput improves by 5.5x. At 1 ms round trip latency, throughput improves by 3x.
 2. The throughput with async processing enabled is stable even with varying latency.
 
-:::note
-The async processor makes the round trip network latency a non-factor in achieving high throughput. However, using the async processor will generally place more load on the remote system, which in turn may get saturated, which in turns will drive up the latencies, which will bring down the throughput gains of the async processor. 
+:::warning
+The async processor makes the round trip network latency a non-factor in achieving high throughput. However, using the async processor will generally place more load on the remote system, which in turn may get saturated, which in turn will drive up the latencies, which will mean the throughput gains of the async processor will be below the theoretical maximum.
 
-Even so, the async processor performed at a steady 30% better even when the remote system was at its limit in our testing.
+So make sure to load test with your remote system and tune the async processor accordingly.
 :::
 
 We are continuing to test and tune the async processor, and will share more results as we have them. 
@@ -86,6 +86,19 @@ You will know if this is not set up correctly by an immediate `IllegalStateExcep
 
 Several new configs have been introduced as part of the async processing feature, but the framework also interacts with several existing Streams and client configs. See the advice below for our thoughts on the best possible setup to make the most of async processing for your application.
 
+Eventually, the Responsive Controller will automatically tune the async processor for you, but if you have questions hop on to our discord and [ask us](https://discord.gg/jEk8JvjJrg)!
+
+
+### Summary
+
+Here is a summary of the relevant configs. More details on each are provided below.
+
+| Config | How to think about it |
+|--------|--------------|
+| `commit.interval.ms` | The semantics of the commit interval don't change when changing the async processor, but a low value will mean you get less of a benefit from using the async processor | 
+| `num.stream.threads` | If you have already set the this value, leave it unchanged. If you have not set it, the rule of thumb is to have have twice the number of stream threads as the number of cores on the machine your application is running on. |
+| `responsive.async.thread.pool.size` | The size of the async thread pool. There will be one async thread pool per stream thread, so the actual number of async threads on a node will be `num.stream.threads` x `responsive.async.thread.pool.size`. We describe why this shouldn't cause a problem in most cases below.|
+
 ### commit.interval.ms
 
 Although we always advise increasing the commit interval for EOS applications, it is especially to do so when enabling the async processing framework if you want to maximize its potential. If your application has only a few subtopologies (one or two), you can probably bump up the `commit.interval.ms` to 30s (which is the default for at-least-once-semantics). If your application has a larger number of subtopologies, the end-to-end latency will accrue across them, so it may be good to divide the 30s recommendation by a factor of the subtopology count. 
@@ -104,7 +117,6 @@ One of the most important of the new configs is of course the `responsive.async.
 
 The rules for selecting a good async thread pool size are a bit different from the rule of thumb for selecting the `num.stream.threads` (which is usually one StreamThread per core). As discussed above, many of the async threads will spend their time waiting on a blocking call, as is their job, so you’ll want to have many more async threads than cores. Try to configure the thread pool size to be roughly 10 times the number of cores and experiment from there. The sensitivity of an app to the number of async threads is also dependent on the latency of any blocking calls — the longer they spend waiting, the more threads you’ll want to run in parallel
 
-Eventually, the Responsive Controller will tune the async processor for you, but if you have questions hop on to our discord and [ask us](https://discord.gg/jEk8JvjJrg)!
 
 ## Limitations
 
