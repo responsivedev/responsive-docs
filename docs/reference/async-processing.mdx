@@ -78,7 +78,7 @@ Configure the thread pool size by setting the ResponsiveConfig `responsive.async
 ### 3. Ensure that you implement the Processor#stores method
 
 Note that the async processing framework requires a stateful processor to connect its StateStores by implementing the `ProcessorSupplier#stores` method. Please verify that your processor supplier implements this method before passing it into the async wrapper, or switch to this method of connecting state stores if it does not.
-You will know if this is not set up correctly by an immediate `IllegalStateException` upon startup.
+You will know if this is not set up correctly by an immediate `UnsupportedOperationException` upon startup.
 
 ## Tuning the AsyncProcessor
 
