@@ -6,7 +6,27 @@ toc_max_heading_level: 3
 
 # Changelog
 
-##
+## Jun 10, 2024
+
+### Kafka Client (0.25.0)
+
+✨ [responsive-pub/268](https://github.com/responsivedev/responsive-pub/pull/268):
+**Async Processing** is now available in `ResponsiveKafkaStreams`. Async processing allows Kafka Streams
+applications to concurrently process records within a single task, thus changing the upper limit of parallelization
+from the level of a Kafka partition to the level of a record key.
+See [the documentation](/reference/async-processing) for more information.
+
+🐛 [responsive-pub/292](https://github.com/responsivedev/responsive-pub/pull/292):
+Adds back a previously truncated metric (last rebalance seconds ago).
+
+❗[responsive-pub/301](https://github.com/responsivedev/responsive-pub/pull/301):
+As of 0.25.0, changelog truncation is no longer supported.
+
+### Operator (0.15.0)
+
+✨ [responsive-pub/274](https://github.com/responsivedev/responsive-pub/pull/274)
+This is the first in a chain of pull requests that allows for actions to be triggered
+remotely from the Responsive Controller (such as restarting a pod).
 
 ## Apr 5, 2024
 
