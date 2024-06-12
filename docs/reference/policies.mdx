@@ -20,91 +20,130 @@ that showcases some of the below configuration options.
 The full CR specification is as follows:
 
 ```yaml showLineNumbers
-properties:
-  type: object
-  spec:
-    type: object
     properties:
-      applicationName:
-        type: string
-      applicationNamespace:
-        type: string
-      applicationId:
-        type: string
-      policyType:
-        enum:
-        - KAFKA_STREAMS
-        type: string
-      status:
-        enum:
-        - POLICY_STATUS_MANAGED
-        - POLICY_STATUS_DISABLED
-        type: string
-      kafkaStreamsPolicy:
-        type: object
+      type: object
+      spec:
         properties:
-          maxReplicas:
-            type: integer
-          maxScaleUpReplicas:
-            type: integer
-          minReplicas:
-            type: integer
-          diagnoser:
-            type: array
-            items:
-              type: object
-              properties:
-                type:
-                  enum:
-                  - EXPECTED_LATENCY
-                  - PROCESSING_RATE_SCALE_DOWN
-                  - PROCESSING_RATE_SCALE_UP
-                  - THREAD_SATURATION
-                  type: string
-                expectedLatency:
+          applicationNamespace:
+            type: string
+          applicationName:
+            type: string
+          applicationId:
+            type: string
+          status:
+            enum:
+            - POLICY_STATUS_UNSPECIFIED
+            - POLICY_STATUS_MANAGED
+            - POLICY_STATUS_DISABLED
+            - UNRECOGNIZED
+            - VALUES
+            - value
+            type: string
+          policyType:
+            enum:
+            - KAFKA_STREAMS
+            type: string
+          kafkaStreamsPolicy:
+            properties:
+              maxReplicas:
+                type: integer
+              minReplicas:
+                type: integer
+              maxScaleUpReplicas:
+                type: integer
+              diagnosers:
+                items:
                   properties:
-                    maxExpectedLatencySeconds:
-                      type: integer
-                    windowSeconds:
-                      type: integer
-                    scaleDownBufferSeconds:
-                      type: integer
-                    scaleUpStrategy:
-                      type: object
+                    type:
+                      enum:
+                      - PROCESSING_RATE_SCALE_UP
+                      - PROCESSING_RATE_SCALE_DOWN
+                      - ARRIVAL_RATE_SCALE_UP
+                      - LAG_SCALE_UP
+                      - EXPECTED_LATENCY
+                      - THREAD_SATURATION
+                      type: string
+                    processingRateScaleUp:
                       properties:
-                        type:
-                          enum:
-                          - FIXED_REPLICA
-                          - RATE_BASED
-                          - SCALE_TO_MAX
-                          type: string
-                        fixedReplica:
-                          type: object
+                        rate:
+                          type: integer
+                        windowMs:
+                          type: integer
+                      type: object
+                    processingRateScaleDown:
+                      properties:
+                        rate:
+                          type: integer
+                        windowMs:
+                          type: integer
+                      type: object
+                    arrivalRateScaleUp:
+                      properties:
+                        rate:
+                          type: integer
+                        windowMs:
+                          type: integer
+                      type: object
+                    expectedLatency:
+                      properties:
+                        maxExpectedLatencySeconds:
+                          type: integer
+                        windowSeconds:
+                          type: integer
+                        projectionSeconds:
+                          type: integer
+                        scaleDownBufferSeconds:
+                          type: integer
+                        graceSeconds:
+                          type: integer
+                        staggerSeconds:
+                          type: integer
+                        scaleUpStrategy:
                           properties:
-                            replicas:
-                              type: integer
+                            type:
+                              enum:
+                              - FIXED_REPLICA
+                              - RATE_BASED
+                              - SCALE_TO_MAX
+                              type: string
+                            fixedReplica:
+                              properties:
+                                replicas:
+                                  type: integer
+                              type: object
+                          type: object
+                      type: object
+                    threadSaturation:
+                      properties:
+                        threshold:
+                          type: number
+                        windowSeconds:
+                          type: integer
+                        numWindows:
+                          type: integer
+                        graceSeconds:
+                          type: integer
+                        blockedMetric:
+                          items:
+                            type: string
+                          type: array
+                      type: object
                   type: object
-                processingRateScaleDown:
-                  type: object
-                  properties:
-                    rate:
-                      type: integer
-                    windowMs:
-                      type: integer
-                processingRateScaleUp:
-                  type: object
-                  properties:
-                    rate:
-                      type: integer
-                    windowMs:
-                      type: integer
-                threadSaturation:
-                  type: object
-                  properties:
-                    threshold:
-                      type: number
-                    windowSeconds:
-                      type: integer
+                type: array
+              cooldown:
+                properties:
+                  stateTransitionCooldownSeconds:
+                    type: integer
+                  rebalanceCooldownSeconds:
+                    type: integer
+                type: object
+            type: object
+        type: object
+      status:
+        properties:
+          message:
+            type: string
+        type: object
 ```
 
 ## Policy Specs
@@ -130,12 +169,14 @@ Scope: `spec`
 
 Scope: `spec.kafkaStreamsPolicy`
 
-| Field Name                            | Description                                                                                                          |
-|---------------------------------------|----------------------------------------------------------------------------------------------------------------------|
-| kafkaStreamsPolicy                    | Defines the policy for a Kafka Streams application.                                                                  |
-| kafkaStreamsPolicy.maxReplicas        | Specifies a constraint on the maximum number of replicas. The policy will never scale the application past this max. |
-| kafkaStreamsPolicy.minReplicas        | Specifies a constraint on the minimum number of replicas. The policy will never scale below this min.                |
-| kafkaStreamsPolicy.maxScaleUpReplicas | Specifies a constraint on the maximum number of replicas the policy will add in a given evaluation.                  |
+| Field Name                                                            | Description                                                                                                          |
+|-----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|
+| kafkaStreamsPolicy                                                    | Defines the policy for a Kafka Streams application.                                                                  |
+| kafkaStreamsPolicy.maxReplicas                                        | Specifies a constraint on the maximum number of replicas. The policy will never scale the application past this max. |
+| kafkaStreamsPolicy.minReplicas                                        | Specifies a constraint on the minimum number of replicas. The policy will never scale below this min.                |
+| kafkaStreamsPolicy.maxScaleUpReplicas                                 | Specifies a constraint on the maximum number of replicas the policy will add in a given evaluation.                  |
+| kafkaStreamsPolicy.cooldown.properties.stateTransitionCooldownSeconds | Specifies the amount of time to wait after a scaling operation before performing an additional scaling operation     |
+| kafkaStreamsPolicy.cooldown.properties.rebalanceCooldownSeconds       | Specifies the amount of time to wait after a rebalance before performing a scaling operation                         |
 
 
 ### Policy Diagnosers
@@ -167,6 +208,8 @@ We currently offer four diagnoser types:
 
 Type: `EXPECTED_LATENCY`
 
+Action: Scale Up
+
 Scope: `spec.kafkaStreamsPolicy.diagnoser[i].expectedLatency`
 
 | Field Name                                             | Description                                                                                                                                                                                                                                                                                                                                                                             |
@@ -184,6 +227,8 @@ Scope: `spec.kafkaStreamsPolicy.diagnoser[i].expectedLatency`
 
 Type: `PROCESSING_RATE_SCALE_DOWN`
 
+Action: Scale Down
+
 Scope: `spec.kafkaStreamsPolicy.diagnoser[i].processingRateScaleDown`
 
 | Field Name                   | Description                                                                                                                                                                        |
@@ -196,6 +241,8 @@ Scope: `spec.kafkaStreamsPolicy.diagnoser[i].processingRateScaleDown`
 
 Type: `PROCESSING_RATE_SCALE_UP`
 
+Action: Scale Up
+
 Scope: `spec.kafkaStreamsPolicy.diagnoser[i].processingRateScaleUp`
 
 | Field Name                 | Description                                                                                                                                                                           |
@@ -207,6 +254,8 @@ Scope: `spec.kafkaStreamsPolicy.diagnoser[i].processingRateScaleUp`
 ### Thread Saturation
 
 Type: `THREAD_SATURATION`
+
+Action: Scale Down
 
 Scope: `spec.kafkaStreamsPolicy.diagnoser[i].threadSaturation`
 
