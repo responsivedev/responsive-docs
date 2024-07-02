@@ -8,7 +8,7 @@ title: Storage
 
 The punchline from this concepts doc is that Responsive Platform separates
 storage from compute as a means of improving operations without sacrificing
-transactional semantics at a negligible performance penalty.
+transactional semantics without a performance penalty.
 
 :::
 
@@ -42,21 +42,23 @@ concerns in one fell swoop.
 
 ## Remote Storage
 
-As managed services in the cloud have become mission critical for many
+As managed services in the cloud have become mission-critical for many
 businesses, the original design goal of keeping Kafka Streams free of external
 dependencies holds less weight. To take advantage of this new paradigm, we
-built our storage solution to leverage [Scylla DB](https://github.com/scylladb/scylladb),
-a battle-tested distributed database that provides:
+built our storage solution to leverage existing distributed databases that
+are available in all public clouds such as [MongoDB](https://www.mongodb.com/)
+and [ScyllaDB](https://www.scylladb.com/).
 
-- Fast writes & fast Key-Value reads
-- Transactional guarantees to implement `processing.guarantee=exactly_once_v2`
-- Support for range queries
-- World-class operations: scalability, durability, fault-tolerance
+We selected these databases because the meet the following requirements:
+- Can execute common state store operations efficiently such as Key-Value reads and range scans
+- Provide atomic operations that allow us to implement `exactly_once_v2` processing guarantees
+- Are available in AWS, GCP and Azure
+- Are battle-tested and come out of the box with world-class scalability, durability and fault-tolerance
 
-But just as Kafka Streams must solve many tough problems despite delegating
-the storage layer to RocksDB, Responsive has developed technology to ensure
-that Scylla operates well in the context of an event processing framework. The
-next few sections examine some of the concepts we've implemented.
+Just as Kafka Streams must solve many tough problems despite delegating
+the storage layer to RocksDB, Responsive has developed solutions that ensure
+these databases operate well in the context of kafka Streams. The next few
+sections examine some of the concepts we've implemented.
 
 ### Instant Restoration
 
@@ -77,7 +79,8 @@ any data (see the next section for more information).
 
 ### Exactly Once Semantics
 
-Responsive for Kafka Streams leverages [Lightweight Transactions](https://opensource.docs.scylladb.com/stable/using-scylla/lwt.html)
+Responsive for Kafka Streams leverages MongoDB's [Atomic Writes](https://www.mongodb.com/docs/manual/tutorial/model-data-for-atomic-operations/)
+jand Scylla's [Lightweight Transactions](https://opensource.docs.scylladb.com/stable/using-scylla/lwt.html)
 along with the Kafka commit protocol to support `processing.guarantee=exactly_once_v2`.
 Specifically, three conditions must be met:
 
@@ -90,25 +93,27 @@ The first condition is ensured by buffering data in between Kafka commits. This
 means that the only time Responsive flushes data to the remote store is when
 data is committed to Kafka.
 
-Zombies are fenced by using an epoch per partition that is incremented when
-a new active takes over an existing task.  Scylla's Lightweight Transactions
-(LWT) are essentially a compare-and-set operation, and we can use this to
-ensure that the first statement of every
-[atomic batch](https://docs.datastax.com/en/dse/6.7/cql/cql/cql_using/useBatch.html)
-will check that the existing epoch is less than or equal to the epoch that
-the writer has reserved.
+Zombies are fenced by using an epoch mechanism similar to that of the Kafka transaction
+protocol. Epochs are tracked differently for each different storage backend, but
+the concepts behind them are the same. The epoch is incremented whenever a new active task
+comes online using an atomic write operation (atomic writes in MongoDB and Lighweight
+Transactions in Scylla). This ensures that there will never be two tasks with the
+same epoch. Whenever a write is sent to the remote, the atomic operation also ensures
+that the current writer's epoch is greater than or equal to the stored one, which in
+turn ensures that zombies are fenced.
 
 Finally, we leverage Kafka Streams' changelog topics to ensure that all data
 is committed to remote storage before an active can begin processing. After
 flushing data to remote storage, the client also stores the last offset in
 the changelog topic that was flushed. On a restore, we read that offset and
-restore the changelog topic from that point onwards into the remote store.
+restore the changelog topic from that point onwards into the remote store. This
+allows the changelog to function as a write-ahead-log.
 
 ### Performance
 
 We can have our cake and eat it too when it comes to performance. The
 Responsive storage solution buffers writes and flushes concurrently, which
-makes writing extremely efficient.
+affords writes negligible overhead to throughput.
 
 Reads are more complicated - physics dictates that reads from a remote store
 will never be as fast as reads from local storage. But will that affect your
@@ -118,17 +123,20 @@ problem:
 - Most Kafka Streams applications benefit tremendously from caching: there is
 only a single writer, which means that reading from cache is consistent.
 Some applications, such as windowed stores and aggregates, often read a
-very predictable subset of the data, which makes caching extremely helpful.
+very predictable subset of the data, which makes caching extremely effective.
 - Responsive Platform provides different types of stores that can be leveraged
 to meet your workload. In some scenarios, these specialized schemas may be
 more effective than the generic key-value stores provided by RocksDB. See
 the [State Store API Reference](/reference/stores) for more details.
-- While latency for individual reads may suffer with remote storage, the
-ability to scale storage and compute separately often allows for improving
-throughput with less compute. Experimentally we've discovered that our
-solution can benefit from increasing the number of stream threads and/or
-collocating more partitions on a single node while RocksDB based solutions
-start to degrade.
+- We have implemented various mechanisms to prevent unnecessary lookups to
+the remote storage. In windowed operations, for example, we implemented a
+localized [Bloom Filter](https://en.wikipedia.org/wiki/Bloom_filter) that
+prevents many negative lookups.
+- We implement [Async Processing](../reference/async-processing) to concurrently
+process records within a single task, thus changing the upper limit of parallelization
+from the level of a Kafka partition to the level of a record key. This means
+that even in situations where remote reads cannot be avoided, they can be parallelized
+and have no effect on throughput.
 
 ## Additional Features
 
@@ -138,14 +146,10 @@ with a RocksDB based solution.
 
 ### Flexible Partitioning
 
-Scylla's partitioning supports (and indeed performs better with) schemas that
-have many thousands (and even millions) of partitions. Responsive state stores
-takes advantages of this and maps each Kafka Partition to many remote storage
-partitions.
-
-This concept is immensely powerful because it allows flexibility with
-repartitioning - with a remapping function, it is possible to increase the
-number of source partitions without making any changes to the state stores.
+Both MongoDB and ScyllaDB allow us to partition data independently of the
+Kafka partition. Responsive state stores takes advantages of this and allows
+flexibility with repartitioning - with a remote store, it is possible to increase
+the number of input partitions without changing the remote storage at all.
 
 ### Time To Live
 
@@ -164,3 +168,10 @@ single partition - any routing or scatter gather must be done by the client.
 Since Responsive's remote storage is backed by a fully distributed database,
 it can offer distributed queries that route the request to the correct node
 when queried from any node.
+
+### Patching Data
+
+A common operation in data systems is to perform some manual surgery to remediate
+corrupted data. Since the Responsive remote stores are true databases, and do not
+rely on the recovering from the changelog topic, it is possible to patch the
+data in the remote stores directly.
