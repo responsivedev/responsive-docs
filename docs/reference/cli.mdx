@@ -1,0 +1,86 @@
+---
+title: Command Line Interface
+---
+
+:::warning
+
+The Command Line Interface (CLI) is currently in alpha. This documentation shows the
+limited functionality that is available today. Contact hello@responsive.dev for feedback
+and other inquiries.
+
+:::
+
+## Overview
+
+The Responsive CLI runs a proxy server that handles communication with storage services and
+control plane services that run in the Responsive network. Today, it supports the following
+operations:
+
+1. `use`: selects the store to use
+1. `find`: retrieve the value for a specific key
+1. `update`: updates the value for a specific key
+
+<div className={'mx-auto max-w-sm mb-4 border-2 border-black'}>
+    <img
+        alt={"Responsive CLI"}
+        src={require('/static/img/docs/reference/cli/responsive-cli.gif').default}
+        className={'shadow-2xl'} />
+</div>
+
+## Getting Started
+
+Today, installation is available only via Docker and you must run both the proxy server and
+the CLI for it to function. Both the CLI and the proxy server accept the same properties file
+as a `ResponsiveKafkaStreams` application. If constructing a standalone configuration for use
+with the CLI, include the following configurations:
+
+| Configuration                          | Required                                              |
+|----------------------------------------|-------------------------------------------------------|
+| `responsive.mongo.endpoint`            | Yes                                                   |
+| `responsive.mongo.username`            | if configured with security                           |
+| `responsive.mongo.password`            | if configured with security                           |
+| `schema.registry.url`                  | if your store uses schema registry                    |
+| `schema.registry.basic.auth.user.info` | if your schema registry is configured with basic auth |
+
+This configuration file must be mounted at `/mnt/app.properties`, which the docker container
+will look for when configuring.
+
+```bash
+# first run the proxy server
+$ docker run --init \
+  -v <path/to/app.propertie>s:/mnt/app.properties \
+  -p 8080:8080 public.ecr.aws/j8q9y0n6/responsivedev/store-proxy:0.26.0 run-statestore-proxy
+```
+
+This will create the server, which listens to port 8080. The interactive CLI will connect to this server
+over the localhost network<sup>1</sup>:
+
+```bash
+docker run -it --init \
+  --network host \
+  -v <path/to/app.properties>:/mnt/app.properties \
+  public.ecr.aws/j8q9y0n6/responsivedev/store-proxy:0.26.0 responsive-cli
+```
+
+### Commands
+
+| Command                                    | Info                                                                                                                                                                                            |
+|--------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `use <store>`                              | Specifies which state store to use in this session. This should match the name of your state store                                                                                              |
+| `find <key>`                               | Finds the value for the specified key and prints it out. If using schema registry, the schema registry deserializer will be used to deserialize the value                                       |
+| `update <key> <value>`                     | Updates the key to the given value. If using schema registry, the specified value will be validated for correct schema before updating the value.                                               |
+| `setType <target> <type>` | Sets either the `KEY` or `VALUE` serde to be one of `RAW`, `BASE64` or `JSON`.<sup>2</sup> |
+
+<div className={'text-sm'}>
+    <hr className={'mt-8 mb-2'}/>
+    <ol>
+        <li>
+            You can avoid using the `host` network by executing into the docker container created
+            by the first command and run `bash responsive-cli`.
+        </li>
+        <li>
+            `RAW` will use the text raw UTF8 bytes. `BASE64` will assume the target is Base64
+            encoded. `JSON` will assume a correct JSON encoding.
+        </li>
+    </ol>
+</div>
