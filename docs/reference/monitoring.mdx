@@ -1,0 +1,79 @@
+---
+title: Monitoring & Metrics
+---
+
+:::info
+
+This page covers all the metrics exposed in the Responsive Dashboard as well as how
+to integrate with our Metrics API (which exposes more metrics than are available in
+the Dashboard by default).
+
+:::
+
+## The Responsive Dashboard
+
+The dashboard in our UI is broken up into three sections:
+1. An Overview that provides at-a-glance information on the health of your application.
+2. A Processing Metrics section that dives deeper into the state of processing.
+3. A Storage Metrics section (only available with Responsive configured storage) that snapshots
+    some information on associated state storage.
+
+### Overview Metrics
+
+<img src={'/img/docs/reference/monitoring/overview-metrics.png'} alt={'Overview Metrics'} className={'shadow-lg'}/>
+<div className={'h-4'} />
+
+| Title                   | Metric (Exposed via Metrics API)                                                                            | Description                                                                                                             |
+|-------------------------|-------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| Running Containers      | This is a derived metric which counts the number of containers emitting `kafka_streams_thread_process_rate` | The number of running Kafka Streams containers                                                                          |
+| Current Processing Rate | `kafka_streams_thread_process_rate`                                                                         | This is the number of events per second processed across your entire application                                        |
+| Input Append Rate       | `diagnoser_latency_expected_partition_append_rate`                                                          | This is the number of events per second that are being appended across all input topic(s) processed by your application |
+| Storage Size (Used)     | `hardware_disk_metrics_disk_space_used_bytes` for MongoDB and `node_filesystem_size_bytes` for ScyllaDB     | The amount of storage utilized by your state store in the remote database.                                              |
+
+### Processing Metrics
+
+<div className={'grid md:grid-cols-3 gap-2 m-4'}>
+    <img src={'/img/docs/reference/monitoring/process-rate.png'} alt={'Process Rate'} className={'shadow-lg md:col-span-2 rounded-lg'}/>
+    <img src={'/img/docs/reference/monitoring/lag-table.png'} alt={'Lag Table'} className={'shadow-lg row-span-2 rounded-lg'}/>
+    <img src={'/img/docs/reference/monitoring/input-append-rate.png'} alt={'Input Append Rate'} className={'shadow-lg md:col-span-2 rounded-lg'}/>
+</div>
+
+| Title                     | Metric (Exposed via Metrics API)                   | Description                                                                                                                    |
+|---------------------------|----------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| Process Rate (Graph)      | `kafka_streams_thread_process_rate`                | This is the number of events per second processed (per container)                                                              |
+| Input Append Rate (Graph) | `diagnoser_latency_expected_partition_append_rate` | This is the number of events per second that are being appended across per input topic-partition processed by your application |
+| Lag (Table)               | `kafka_streams_records_lag`                        | This is a table of per topic-partition lag (the number of events behind the latest record)                                     |
+
+<div className={'grid md:grid-cols-2 gap-2 m-4 mt-12'}>
+    <img src={'/img/docs/reference/monitoring/events-processed.png'} alt={'Events Processed'} className={'shadow-lg'}/>
+    <img src={'/img/docs/reference/monitoring/expected-latency.png'} alt={'Expected Latency'} className={'shadow-lg'}/>
+</div>
+
+| Title            | Metric (Exposed via Metrics API)                                           | Description                                                                                                           |
+|------------------|----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| Events Processed | Derivative of `responsive_kafka_streams_source_offset_end` summed by topic | The total number of events processed by this application per day (used for billing)                                   |
+| Expected Latency | `diagnoser_latency_expected_node_seconds`                                  | The expected amount of time it would take for an event to be processed if it were enqueued onto the source topic now. |
+
+
+
+<div className={'grid md:grid-cols-2 gap-2 m-4 mt-12'}>
+    <img src={'/img/docs/reference/monitoring/lag-graph.png'} alt={'Lag Graph'} className={'shadow-lg'}/>
+    <img src={'/img/docs/reference/monitoring/processing-ratio.png'} alt={'Processing Ratio'} className={'shadow-lg'}/>
+</div>
+
+| Title            | Metric (Exposed via Metrics API)                             | Description                                                                                               |
+|------------------|--------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
+| Lag (Graph)      | `kafka_streams_records_lag`                                  | This is a graph of per topic-partition lag (the number of events behind the latest record)                |
+| Processing Ratio | `kafka_streams_thread_{commit,poll,punctuate,process}_ratio` | The percentage of time spent in each of the main phases of computation (commit, poll, punctuate, process) |
+
+
+<div className={'grid md:grid-cols-2 gap-2 m-4 mt-12'}>
+    <img src={'/img/docs/reference/monitoring/rebalancing.png'} alt={'Rebalancing'} className={'shadow-lg'}/>
+    <img src={'/img/docs/reference/monitoring/assignment.png'} alt={'Assignment'} className={'shadow-lg'}/>
+</div>
+
+| Title                | Metric (Exposed via Metrics API)    | Description                                                                                        |
+|----------------------|-------------------------------------|----------------------------------------------------------------------------------------------------|
+| Rebalancing          | `kafka_streams_rebalance_rate`      | This will be a value of 1 if during a period of time there was a rebalance, otherwise it will be 0 |
+| Partition Assignment | `kafka_streams_assigned_partitions` | This is the number of partitions assigned to each instance of your application.                    |
+
