@@ -77,3 +77,13 @@ The dashboard in our UI is broken up into three sections:
 | Rebalancing          | `kafka_streams_rebalance_rate`      | This will be a value of 1 if during a period of time there was a rebalance, otherwise it will be 0 |
 | Partition Assignment | `kafka_streams_assigned_partitions` | This is the number of partitions assigned to each instance of your application.                    |
 
+### Storage Metrics
+
+<img src={'/img/docs/reference/monitoring/storage-metrics.png'} alt={'Overview Metrics'} className={'shadow-lg'}/>
+<div className={'h-4'} />
+
+| Title               | MongoDB Metric / ScyllaDB Metric                                                | Description                                                                        |
+|---------------------|---------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
+| Storage Size        | `hardware_disk_metrics_disk_space_used_byte` <br/> `node_filesystem_size_bytes` | The amount of remote storage utilized (across all applications using this storage) |
+| Read Latency (Avg)  | `mongodb_opLatencies_reads_latency` <br/> `rlatencya`                           | The average read latency                                                           |
+| Write Latency (Avg) | `mongodb_opLatencies_writes_latency` <br/> `wlatencya`                          | The average write latency                                                          |
