@@ -6,7 +6,7 @@ description: Async Processing increases the level of parallelism in Kafka Stream
 import {Icons} from '/src/components/icons'
 
 :::info
-This page covers the Async Processor: its benefits, its limitations, how to use it, and how to tune it. The Async Processor is available with Responsive client **v0.25.0** onward.
+This page covers the Async Processor: its benefits, its limitations, how to use it, and how to tune it. The Async Processor is available with Responsive client **v0.27.0** onward.
 :::
 
 ## Why use the Async Processor
@@ -14,7 +14,12 @@ Async processing allows Kafka Streams applications to concurrently process recor
 
 It works by giving each StreamThread a dedicated thread pool which it uses to process the records passing through an async processor. Records of the same key are still processed in order and all the same consistency and correctness guarantees of Kafka Streams are maintained, including exactly-once semantics.
 
-The Async Processor was built to shine when processors include a long-running step such as remote state store requests or generic RPCs. The classic solution for achieving high throughput when you are bottlenecked by network latency is to increase the parallelism of the calls to the target system, which is exactly what the async processor does for Kafka Streams. 
+The Async Processor was built to shine when processors include a long-running step such as remote state store requests or generic RPCs.
+The main problem with remote calls during processing in Kafka Streams is that they are executed serially per StreamThread. Thus the total
+latency of a batch of messages processed by a StreamThread is the sum of the latency of each remote call made while processing that batch.
+The high cumulative latency can have a crushing effect on throughput.
+
+The classic solution for achieving high throughput when you are bottlenecked by network latency is to increase the parallelism of the calls to the target system, which is exactly what the async processor does for Kafka Streams.
 
 This makes the Async Processor the perfect tool to complement Responsive state stores: you no longer need to sacrifice performance in order to gain the availability and elasticity benefits of remote storage with Kafka Streams!
 
