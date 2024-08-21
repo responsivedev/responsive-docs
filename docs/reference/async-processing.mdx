@@ -84,6 +84,9 @@ Configure the thread pool size by setting the ResponsiveConfig `responsive.async
 Note that the async processing framework requires a stateful processor to connect its StateStores by implementing the `ProcessorSupplier#stores` method. Please verify that your processor supplier implements this method before passing it into the async wrapper, or switch to this method of connecting state stores if it does not.
 You will know if this is not set up correctly by an immediate `UnsupportedOperationException` upon startup.
 
+Also, while non-Responsive state stores (eg RocksDB) are fully supported for use within an async processor, you must at least use the Responsive StoreBuilder to plug those state stores in.
+Make sure that the StoreBuilders being returned from your `ProcessorSupplier#stores` (if any) use the `ResponsiveStores` version of the StoreBuilder rather than the basic `Stores` API.
+
 ## Tuning the AsyncProcessor
 
 Several new configs have been introduced as part of the async processing feature, but the framework also interacts with several existing Streams and client configs. See the advice below for our thoughts on the best possible setup to make the most of async processing for your application.

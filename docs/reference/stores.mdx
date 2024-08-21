@@ -50,7 +50,7 @@ again have one `StoreBuilder` (with a unique `StoreSupplier`) for each state sto
 ```java {2-4} showLineNumbers title="Example Usage (PAPI)"
     builder.addStateStore(
         ResponsiveStores.timestampedKeyValueStoreBuilder(
-                .keyValueStore(ResponsiveKeyValueParams.keyValue(STATE_STORE)
+                ResponsiveStores.keyValueStore(ResponsiveKeyValueParams.keyValue(STATE_STORE)
                 .withTimeToLive(Duration.ofDays(30))),
             new StringSerde(),
             new StringSerde()
