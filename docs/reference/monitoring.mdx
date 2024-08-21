@@ -2,6 +2,8 @@
 title: Monitoring & Metrics
 ---
 
+import {IconFileDownload} from "@tabler/icons-react";
+
 :::info
 
 This page covers all the metrics exposed in the Responsive Dashboard as well as how
@@ -87,3 +89,51 @@ The dashboard in our UI is broken up into three sections:
 | Storage Size        | `hardware_disk_metrics_disk_space_used_byte` <br/> `node_filesystem_size_bytes` | The amount of remote storage utilized (across all applications using this storage) |
 | Read Latency (Avg)  | `mongodb_opLatencies_reads_latency` <br/> `rlatencya`                           | The average read latency                                                           |
 | Write Latency (Avg) | `mongodb_opLatencies_writes_latency` <br/> `wlatencya`                          | The average write latency                                                          |
+
+## Metrics API
+
+The metrics API for your organization is available at `<org id>-<env id>.metrics.us-west-2.aws.responsive.cloud` and
+authenticates using the API keys you create for that environment in the UI. This means that if you are using
+prometheus you can configure a prometheus scrape job to scrape these metrics:
+
+```yaml
+job_name: responsive-streams-metrics
+scrape_interval: 10s
+scheme: https
+metrics_path: /export
+basic_auth:
+  username: <api key> # this is an API key created in your Responsive Cloud environment
+  password: <secret>  # this is the secret for the key created above
+static_configs:
+  - targets:
+    - <org id>-<env id>.metrics.us-west-2.aws.responsive.cloud
+```
+
+Once you’ve got an application reporting metrics to Responsive and your API keys, you can simply run local docker
+Prometheus and Grafana containers to pull data from Responsive. First make sure that you have `prometheus.yml` in
+your local directory setup correctly (with the scrape job config from above).
+
+Then run the following docker commands:
+
+```bash
+docker run --name prometheus -d -p 9090:9090 \
+  -v $(pwd)/prometheus.yml:/etc/prometheus/prometheus.yml \
+  prom/prometheus
+
+docker run -d -p 3000:3000 --name=grafana grafana/grafana-enterprise
+```
+
+Once that is up and running, you can setup grafana to use your local prometheus instance
+(use http://host.docker.internal:9090 as the URL for prometheus if you haven’t set up explicit docker
+networking).
+
+### Recreate the Responsive Dashboard
+
+Import the dashboard definition below and you’ll immediately start seeing the metrics show up in
+Grafana!
+
+<a target="_blank" href="/files/responsive-grafana.json" download className={'flex gap-2 text-no'}>
+    <IconFileDownload/> <p>Responsive Grafana Dashboard</p>
+</a>
+
+<img src={'/img/docs/reference/monitoring/grafana.png'} alt={'Grafana'} />
