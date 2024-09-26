@@ -1,0 +1,86 @@
+---
+title: Spring Boot
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+:::note
+
+This page covers the changes you need to make to support Responsive with Spring
+Boot. Note that Spring Boot integration currently requires:
+
+- An application running JDK 17
+- Version `3.2.4` of `spring-kafka`
+- Version `>= 0.29` of `dev.responsive.kafka-client`
+
+We are working with the `spring-kafka` maintainer team to lift these requirements.
+If your team requires a different configuration, please reach out to us at
+[info@responsive.dev](mailto:info@responisve.dev).
+
+:::
+
+## Usage
+
+### Dependencies
+
+In order to use Responsive with `spring-kafka`, you must include the following
+dependency:
+
+<Tabs groupId="build-system">
+    <TabItem value="maven" label="Maven" default>
+
+        ```xml
+        <dependency>
+            <groupId>dev.responsive</groupId>
+            <artifactId>responsive-spring</artifactId>
+            <version>RESPONSIVE_CLIENT_VERSION</version>
+        </dependency>
+        ```
+    </TabItem>
+    <TabItem value="gradle" label="Gradle">
+
+        ```
+        implementation 'dev.responsive:kafka-client:RESPONSIVE_CLIENT_VERSION'
+        ```
+    </TabItem>
+</Tabs>
+
+### Auto-Wiring
+
+If you use auto-wiring support for spring, replace the `@EnableKafkaStreams` annotation with
+`@EnableResponsive`:
+
+```diff java showLineNumbers
++ import dev.responsive.spring.annotations.EnableResponsive;
+
+  @Configuration
+  @EnableKafka
++ @EnableResponsive
+- @EnableKafkaStreams
+  public class MyKafkaStreamsConfiguration {
+
+    @Bean
+    public KStream<String, String> stream(StreamsBuilder streamsBuiler) {
+      // this code remains the same
+      ...
+    }
+
+  }
+```
+
+### Manual Configuration
+
+If you manually wire the configuration using the `StreamsBuilderFactoryBean` class, you
+must replace all usages with `dev.responsive.spring.config.ResponsiveFactoryBean`. For example:
+
+```diff java showLineNumbers
+-  import org.springframework.kafka.config.StreamsBuilderFactoryBean;
++  import dev.responsive.spring.config.ResponsiveFactoryBean;
+
+   @Bean
+   public FactoryBean<StreamsBuilder> myKStreamBuilder(KafkaStreamsConfiguration streamsConfig) {
+-      return new StreamsBuilderFactoryBean(streamsConfig);
++      return new ResponsiveFactoryBean(streamsConfig);
+   }
+```
