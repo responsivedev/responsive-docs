@@ -58,11 +58,11 @@ again have one `StoreBuilder` (with a unique `StoreSupplier`) for each state sto
     );
 ```
 
-### Responsive StateStore Features
+## Responsive StateStore Features
 
 Responsive state stores offer some features beyond what's available for the built-in stores of Kafka Streams:
 
-#### Time-to-live for key-value stores
+### Time-to-live for key-value stores
 
 Key-value stores in Kafka Streams have infinite retention, but this can be undesirable for data sets with an
 unbounded keyspace or timeseries data. To address these use cases and minimize storage needs, Responsive allows you
@@ -78,7 +78,7 @@ params in to the appropriate `ResponsiveStores` method (depending on whether you
 above section).
 There are two ways of doing this, corresponding to the two different types of ttl we offer:
 
-##### Constant ttl
+#### Constant ttl
 The first type of ttl that Responsive provides is a simple, constant tll. In this case the retention is applied equally
 to all records in the store. You can use the `ResponsiveKeyValueParams#withTimeToLive(Duration)` API to define a constant
 ttl for your store, as in the following example:
@@ -89,7 +89,7 @@ final ResponsiveKeyValueParams ttlKeyValueParams = ResponsiveKeyValueParams
     .withTimeToLive(Duration.ofDays(30))
 ```
 
-##### Row-level ttl
+#### Row-level ttl
 The second type of ttl that Responsive provides is "row-level" ttl, in which a different retention can be applied to each
 individual record (or "row") in your state store. The ttl function can use either the key or value, or both, to compute
 the ttl for that row and override the default ttl. It's also possible to define a row-level ttl function with no default ttl,
