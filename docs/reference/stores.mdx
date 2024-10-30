@@ -57,3 +57,66 @@ again have one `StoreBuilder` (with a unique `StoreSupplier`) for each state sto
         )
     );
 ```
+
+### Responsive StateStore Features
+
+Responsive state stores offer some features beyond what's available for the built-in stores of Kafka Streams:
+
+#### Time-to-live for key-value stores
+
+Key-value stores in Kafka Streams have infinite retention, but this can be undesirable for data sets with an
+unbounded keyspace or timeseries data. To address these use cases and minimize storage needs, Responsive allows you
+to define a ttl (time-to-live) on any KeyValueStore to set a retention time for the data inside it.
+
+Responsive ttl is most effective for non-historical data, as the data is actively expired based on wallclock time
+rather than stream-time. Backfilling historical data may build up and require more storage until the ttl kicks in.
+Note, however, that results are always filtered in the client layer based on stream-time, so that you can trust
+in the ttl semantics and get reliable, deterministic results.
+
+To define a ttl for your Responsive KeyValueStore, simply apply it to the `ResponsiveKeyValueParams` and pass these
+params in to the appropriate `ResponsiveStores` method (depending on whether you use the DSL or PAPI, as shown in the
+above section).
+There are two ways of doing this, corresponding to the two different types of ttl we offer:
+
+##### Constant ttl
+The first type of ttl that Responsive provides is a simple, constant tll. In this case the retention is applied equally
+to all records in the store. You can use the `ResponsiveKeyValueParams#withTimeToLive(Duration)` API to define a constant
+ttl for your store, as in the following example:
+
+```
+final ResponsiveKeyValueParams ttlKeyValueParams = ResponsiveKeyValueParams
+    .keyValue("my-store")
+    .withTimeToLive(Duration.ofDays(30))
+```
+
+##### Row-level ttl
+The second type of ttl that Responsive provides is "row-level" ttl, in which a different retention can be applied to each
+individual record (or "row") in your state store. The ttl function can use either the key or value, or both, to compute
+the ttl for that row and override the default ttl. It's also possible to define a row-level ttl function with no default ttl,
+in other words, to apply no retention by default and only expire specific records. Conversely, you can apply a finite default
+ttl but override this to retain certain records infinitely.
+
+This kind of ttl is defined using a `TtlProvider` passed in via the `ResponsiveKeyValueParams#withTtlProvider` API.
+
+The following example shows a store with a default ttl of 30 days, where records with a key containing "OTTER" being
+retained infinitely and records with a key containing "SQUIRREL" being kept for only 24 hours.
+```
+final TtlProvider<String, ?> ttlProvider =
+    TtlProvider.<String, Object>withDefault(Duration.ofDays(30))
+    .fromKey(k -> {
+      if (k.contains("OTTER")) {
+        // keep forever
+        return Optional.of(TtlDuration.infinite());
+      } else if (k.contains("SQUIRREL")) {
+        // keep for only a day
+        return Optional.of(TtlDuration.of(Duration.ofDays(1)));
+      } else {
+        // keep for the default (30 days)
+        return Optional.empty();
+      }
+    });
+
+final ResponsiveKeyValueParams params = ResponsiveKeyValueParams
+    .keyValue("my-store")
+    .withTtlProvider(ttlProvider);
+```
