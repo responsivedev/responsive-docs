@@ -68,11 +68,6 @@ Key-value stores in Kafka Streams have infinite retention, but this can be undes
 unbounded keyspace or timeseries data. To address these use cases and minimize storage needs, Responsive allows you
 to define a ttl (time-to-live) on any KeyValueStore to set a retention time for the data inside it.
 
-Responsive ttl is most effective for non-historical data, as the data is actively expired based on wallclock time
-rather than stream-time. Backfilling historical data may build up and require more storage until the ttl kicks in.
-Note, however, that results are always filtered in the client layer based on stream-time, so that you can trust
-in the ttl semantics and get reliable, deterministic results.
-
 To define a ttl for your Responsive KeyValueStore, simply apply it to the `ResponsiveKeyValueParams` and pass these
 params in to the appropriate `ResponsiveStores` method (depending on whether you use the DSL or PAPI, as shown in the
 above section).
