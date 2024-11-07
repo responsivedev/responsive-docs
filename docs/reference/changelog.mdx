@@ -6,6 +6,16 @@ toc_max_heading_level: 3
 
 # Changelog
 
+## Nov 1, 22024
+
+### Kafka Client (0.32.0)
+
+✨ [responsive-pub/370](https://github.com/responsivedev/responsive-pub/pull/370):
+**Row-level ttl** is now available for Responsive key-value stores. You can now define a default ttl as well
+as a function that computes a row-level override for an individual records from the key, value, or both.
+See the "Row-level ttl" section of the [State Stores](/reference/stores) documentation for more details on this
+feature and instructions on how to use it.
+
 ## Aug 20, 2024
 
 ### Kafka Client (0.27.0)
@@ -114,7 +124,7 @@ the API key/secret provided.
 This is one of many PRs that have improved out metric suite to include a bunch
 of new metrics. Some of my personal favorites:
 - Metrics around the current kafka streams state (`RUNNING`, `REBALANCING`, etc...)
-- Some metrics around the Responsive Cache effecitveness
+- Some metrics around the Responsive Cache effectiveness
 - Additional metrics around restoration/thread errors
 
 
