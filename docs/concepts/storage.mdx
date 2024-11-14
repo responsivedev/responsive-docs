@@ -127,12 +127,12 @@ very predictable subset of the data, which makes caching extremely effective.
 - Responsive Platform provides different types of stores that can be leveraged
 to meet your workload. In some scenarios, these specialized schemas may be
 more effective than the generic key-value stores provided by RocksDB. See
-the [State Store API Reference](/reference/stores) for more details.
+the [State Store API Reference](/products/java-sdk/stores) for more details.
 - We have implemented various mechanisms to prevent unnecessary lookups to
 the remote storage. In windowed operations, for example, we implemented a
 localized [Bloom Filter](https://en.wikipedia.org/wiki/Bloom_filter) that
 prevents many negative lookups.
-- We implement [Async Processing](../reference/async-processing) to concurrently
+- We implement [Async Processing](/products/java-sdk/async-processing) to concurrently
 process records within a single task, thus changing the upper limit of parallelization
 from the level of a Kafka partition to the level of a record key. This means
 that even in situations where remote reads cannot be avoided, they can be parallelized

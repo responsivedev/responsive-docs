@@ -71,7 +71,7 @@ cluster at all.
 
 :::tip Autoscaling Policies
 
-If you've already read our [Autoscaling Policy Reference](/reference/policies) you may notice
+If you've already read our [Autoscaling Policy Reference](/products/control-plane/policies) you may notice
 that the table below closely correlates to the different types of scaling policies. This is no
 coincidence!
 
@@ -120,7 +120,7 @@ execute remediating actions.
 
 There are a few components to the autoscaling architecture:
 
-1. **A Policy Spec**: this is a [kubernetes custom resource](/reference/policies#custom-resource-specification)
+1. **A Policy Spec**: this is a [kubernetes custom resource](/products/control-plane/policies#custom-resource-specification)
     which specifies a declarative language for defining your goals as well as constraints on
     meeting those goals.
 1. **The Responsive Operator**: this is a kubernetes operator that can execute actions in
@@ -149,4 +149,4 @@ events in situations with unpredictable short-term traffic.
 ## Next Steps
 
 - To learn how to get started with autoscaling, follow our [Quickstart](/getting-started/quickstart).
-- To see all available policies and learn how to specify them, see our [Technical Reference](/reference/policies).
+- To see all available policies and learn how to specify them, see our [Technical Reference](/products/control-plane/policies).

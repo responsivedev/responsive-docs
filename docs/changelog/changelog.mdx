@@ -13,7 +13,7 @@ toc_max_heading_level: 3
 ✨ [responsive-pub/370](https://github.com/responsivedev/responsive-pub/pull/370):
 **Row-level ttl** is now available for Responsive key-value stores. You can now define a default ttl as well
 as a function that computes a row-level override for an individual records from the key, value, or both.
-See the "Row-level ttl" section of the [State Stores](/reference/stores) documentation for more details on this
+See the "Row-level ttl" section of the [State Stores](/products/java-sdk/stores) documentation for more details on this
 feature and instructions on how to use it.
 
 ## Aug 20, 2024
@@ -24,7 +24,7 @@ feature and instructions on how to use it.
 **Async Processing** now supports all PAPI topologies with any number of async processors. The very first version of
 the Responsive Async Processor limited applications to only one async processor per topology. This limitation has
 now been lifted.
-See [the async processing documentation](/reference/async-processing) for the latest state of the feature and how to use it.
+See [the async processing documentation](/products/java-sdk/async-processing) for the latest state of the feature and how to use it.
 
 ## Jun 10, 2024
 
@@ -34,7 +34,7 @@ See [the async processing documentation](/reference/async-processing) for the la
 **Async Processing** is now available in `ResponsiveKafkaStreams`. Async processing allows Kafka Streams
 applications to concurrently process records within a single task, thus changing the upper limit of parallelization
 from the level of a Kafka partition to the level of a record key.
-See [the documentation](/reference/async-processing) for more information.
+See [the documentation](/products/java-sdk/async-processing) for more information.
 
 🐛 [responsive-pub/292](https://github.com/responsivedev/responsive-pub/pull/292):
 Adds back a previously truncated metric (last rebalance seconds ago).
