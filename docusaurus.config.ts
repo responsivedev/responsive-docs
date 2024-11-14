@@ -3,8 +3,8 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'Responsive Docs',
-  tagline: 'The best way to run Kafka Streams in production.',
+  title: 'Responsive Documentation',
+  tagline: 'Kafka Streams made Reliable, Scalable, and Automated',
   favicon: 'img/favicon.png',
 
   url: 'https://docs.responsive.dev',

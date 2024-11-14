@@ -157,9 +157,8 @@ h3 { font-size: 1.5rem !important; }
 }
 
 .menu__link--sublist {
-  font-size: smaller;
   margin-top: .5rem;
-}
+  }
 
 .menu__link--sublist.menu__link--active {
   color: black;

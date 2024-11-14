@@ -1,0 +1,12 @@
+.listItem {
+    margin-bottom: 10px;
+}
+
+.listItem a {
+    text-decoration: none;
+    color: #333;
+}
+
+.listItem a:hover {
+    color: #007acc; /* Link hover color */
+}
