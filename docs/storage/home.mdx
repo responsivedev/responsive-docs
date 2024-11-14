@@ -1,6 +1,20 @@
 ---
-title: Storage
+slug: /storage
+sidebar_label: State Storage
+sidebar_position: 0
+title: Documentation
+hide_title: true
+hide_table_of_contents: true
 ---
+
+import DocCardList from '@theme/DocCardList';
+
+<div className={'flex flex-col text-center items-center text-4xl font-heading'}>
+    All the state storage options you need<span className={'text-orange-500'}>.</span>
+</div>
+
+Responsive extends Kafka Streams to use traditional Databases like MongoDB and Cassandra as state stores, as well as
+Responsive's cloud-native, object store based, store, RS3. Learn all about these options here.
 
 # Storage
 
@@ -127,12 +141,12 @@ very predictable subset of the data, which makes caching extremely effective.
 - Responsive Platform provides different types of stores that can be leveraged
 to meet your workload. In some scenarios, these specialized schemas may be
 more effective than the generic key-value stores provided by RocksDB. See
-the [State Store API Reference](/products/java-sdk/stores) for more details.
+the [State Store API Reference](/java-sdk/stores) for more details.
 - We have implemented various mechanisms to prevent unnecessary lookups to
 the remote storage. In windowed operations, for example, we implemented a
 localized [Bloom Filter](https://en.wikipedia.org/wiki/Bloom_filter) that
 prevents many negative lookups.
-- We implement [Async Processing](/products/java-sdk/async-processing) to concurrently
+- We implement [Async Processing](/java-sdk/async-processing) to concurrently
 process records within a single task, thus changing the upper limit of parallelization
 from the level of a Kafka partition to the level of a record key. This means
 that even in situations where remote reads cannot be avoided, they can be parallelized
@@ -175,3 +189,7 @@ A common operation in data systems is to perform some manual surgery to remediat
 corrupted data. Since the Responsive remote stores are true databases, and do not
 rely on the recovering from the changelog topic, it is possible to patch the
 data in the remote stores directly.
+
+# Learn More
+
+<DocCardList />

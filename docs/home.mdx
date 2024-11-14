@@ -19,19 +19,52 @@ Responsive is a Kafka Streams solution that improves the reliability, scalabilit
 * Offering a cloud-native managed state store,
 * And more.
 
-Stop fighting with restoration, rebalancing, and resource management. Responsive's [Java SDK](/products/java-sdk),
-[Control plane](/products/control-plane), and [storage options](/products/storage) collectively separate state from
+Stop fighting with restoration, rebalancing, and resource management. Responsive's [Java SDK](//java-sdk),
+[Control plane](/control-plane), and [storage options](/storage) collectively separate state from
 compute, automate operations, and maintains 100% compatibility with your existing code.
+
+# Architecture Overview
+
+The first two principles, separating storage from compute and automating operations, require
+changing the architecture of Kafka Streams to look like this:
+
+<img
+    alt={"architecture"}
+    src={require('/static/img/docs/concepts/architecture/architecture.png').default}
+    className={'px-[10%] mb-4'} />
+
+Let's dig into how this all fits together. The entire ecosystem consists of the following "players":
+
+1. **A Kafka Cluster**. Responsive is agnostic to the Kafka Cluster -- it can run self-hosted in your VPC,
+in some Cloud Provider (such as Confluent, Redpanda or Warpstream) or even locally for testing.
+1. **Your Kafka Streams Applications**. Represented in the diagram above as `java` boxes, these applications
+run on your hardware in your network. To take advantage of the Responsive autoscaling capabilities,
+these apps must run on an orchestration framework such as Kubernetes.
+1. **The Responsive Operator**. Responsive provides a Helm chart to deploy the operator inside your network.
+This component manages your Kafka Streams Applications, configuring and scaling up and down based
+on signals it polls from the Responsive Controller.
+1. **The Responsive Controller**. Responsive deploys a multi-tenant Controller in our VPC. This Controller
+collects metrics from your Kafka Streams Applications and executes user-defined policies, the results of
+which are polled by the operator.
+1. **The Storage Backend**. Instead of embedding RocksDB stores, `ResponsiveKafkaStreams` offloads this
+state to a natively distributed database. Today we support [MongoDB](https://www.mongodb.com/) and
+anything Cassandra-compatible such as [ScyllaDB](https://www.scylladb.com/).
+
+## Further Reading
+
+- Read more about the history and design of our [Storage Engine](/storage)
+- Learn about how Operator and Controller work together to provide [Autoscaling](/control-plane)
+
 
 # Get started fast
 
-Our [Quickstart](/getting-started/quickstart) shows you how to use the SDK to run your Kafka Streams app with MongoDB
+Our [Quickstart](/java-sdk/migrate) shows you how to use the SDK to run your Kafka Streams app with MongoDB
 in under 10 minutes.
 
 # Explore
 
-* [Java SDK](/products/java-sdk): Kafka Streams library extensions that enable remote state,
+* [Java SDK](/java-sdk): Kafka Streams library extensions that enable remote state,
  calling external services at scale with Async processing, and more.
-* [Control Plane](/products/control-plane): learn how to autoscale your apps, get one-click observability, and more.
-* [Storage](/products/storage): explore the managed storage options for your Kafka Streams state, including RS3,
+* [Control Plane](/control-plane): learn how to autoscale your apps, get one-click observability, and more.
+* [Storage](/storage): explore the managed storage options for your Kafka Streams state, including RS3,
 Responsive's cloud native object-store based state storage implementation for Kafka Streams.

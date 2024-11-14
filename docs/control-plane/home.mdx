@@ -1,9 +1,22 @@
 ---
-title: Autoscaling
+slug: /control-plane
+sidebar_label: Control Plane
+sidebar_position: 1
+title: Documentation
+hide_title: true
+hide_table_of_contents: true
 ---
 
+import DocCardList from "@theme/DocCardList";
 import Section from '/src/components/section'
 import {Icons} from '/src/components/icons'
+
+<div className={'flex flex-col text-center items-center text-4xl font-heading'}>
+    Mission Control for Kafka Streams<span className={'text-orange-500'}>.</span>
+</div>
+
+The Responsive Control Plane brings automates the operations of Kafka Streams applications. With policy-based autoscaling,
+a rich observability suite, and more, the control plane keeps your apps streaming.
 
 :::note
 
@@ -71,7 +84,7 @@ cluster at all.
 
 :::tip Autoscaling Policies
 
-If you've already read our [Autoscaling Policy Reference](/products/control-plane/policies) you may notice
+If you've already read our [Autoscaling Policy Reference](/control-plane/policies) you may notice
 that the table below closely correlates to the different types of scaling policies. This is no
 coincidence!
 
@@ -120,13 +133,13 @@ execute remediating actions.
 
 There are a few components to the autoscaling architecture:
 
-1. **A Policy Spec**: this is a [kubernetes custom resource](/products/control-plane/policies#custom-resource-specification)
-    which specifies a declarative language for defining your goals as well as constraints on
-    meeting those goals.
+1. **A Policy Spec**: this is a [kubernetes custom resource](/control-plane/policies#custom-resource-specification)
+which specifies a declarative language for defining your goals as well as constraints on
+meeting those goals.
 1. **The Responsive Operator**: this is a kubernetes operator that can execute actions in
-    your network, such as scaling, on behalf of the Responsive Controller.
+your network, such as scaling, on behalf of the Responsive Controller.
 1. **The Responsive Controller**: the controller runs in Responsive Cloud and is responsible
-    for making sure that your applications are meeting the health goals specified in your policy.
+for making sure that your applications are meeting the health goals specified in your policy.
 
 The interactions between these components are outlined in the diagram above. You first define
 your policy and register it with your Kuberentes cluster. The operator monitors the installed
@@ -148,5 +161,9 @@ events in situations with unpredictable short-term traffic.
 
 ## Next Steps
 
-- To learn how to get started with autoscaling, follow our [Quickstart](/getting-started/quickstart).
-- To see all available policies and learn how to specify them, see our [Technical Reference](/products/control-plane/policies).
+- To learn how to get started with autoscaling, follow our [Quickstart](/control-plane/quickstart).
+- To see all available policies and learn how to specify them, see our [Technical Reference](/control-plane/policies).
+
+# Learn more
+
+<DocCardList />
