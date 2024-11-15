@@ -26,7 +26,7 @@ architecture.
 
 # Architecture Overview
 
-The Responsive solutino comprises the Java SDK, Control plane, and storage providers as follows which combine as follows:
+The Responsive solution comprises the Java SDK, Control plane, and storage providers as follows which combine as follows:
 
 <div className={'flex justify-center mb-8'}>
     <img
@@ -40,20 +40,21 @@ Let's dig into how this all fits together. The entire ecosystem consists of the 
 1. **Kafka Provider**. Responsive is agnostic to the Kafka Cluster -- it can run self-hosted in your VPC,
 in some Cloud Provider (such as Confluent, Redpanda or Warpstream) or even locally for testing.
 1. **Java SDK**. These are Responsive library extensions for Kafka Streams that enable the use of remote storage, as well as
-adding features like async processing, row-level TTL, and more. The SDK is a library you can add to your application
+adding features like async processing, row-level TTL, and more. The SDK is a library you add to your application
 and is 100% compatible with the Kafka Streams API, which means your application code doesn't need to change in order to
 get features like remote state.
-1. **Responsive Operator**. Responsive provides a Helm chart to deploy the operator inside your network.
-This component manages your Kafka Streams Applications, configuring and scaling up and down based
-on signals it polls from a Controller service running in the Responsive managed Control Plane.
+1. **Responsive Operator**. The Responsive Operator manages your Kafka Streams Applications, configuring and scaling up
+and down based on signals it polls from a Controller service running in the Responsive managed Control Plane.
+Responsive provides a Helm chart to deploy the operator in your K8s cluster.
 1. **Control Plane**. The Responsive Control Plane includes a Controller which monitors your app and computes the optimal
 configuration based on your autoscaling policies and live application metrics. This configuration is
 executed by the Operator running in your k8s cluster. The Control Plane also serves live application metrics via a
-Metrics API.
+Metrics API. All the services in the Responsive Control Plane are managed by Responsive in the Responsive Network.
 1. **Storage Backend**. Instead of embedding RocksDB stores, `ResponsiveKafkaStreams` offloads this
 state to a natively distributed database. Today we support [MongoDB](https://www.mongodb.com/) and
 anything Cassandra-compatible such as [ScyllaDB](https://www.scylladb.com/), along with our own object-store native managed state store
-implementation [RS3](/storage/rs3). Support for DynamoDB is also coming soon.
+implementation [RS3](/storage/rs3). Support for DynamoDB is also coming soon. You can run these backends
+in your network on in the network of the storage provider which may be VPC peered with you.
 
 # Get started
 
