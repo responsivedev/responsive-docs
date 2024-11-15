@@ -1,6 +1,6 @@
 ---
 slug: /
-sidebar_label: Home
+sidebar_label: Responsive
 sidebar_position: 0
 title: Documentation
 hide_title: true
@@ -21,12 +21,12 @@ Responsive is a Kafka Streams solution that improves the reliability, scalabilit
 
 Stop fighting with restoration, rebalancing, and resource management. Responsive's [Java SDK](/java-sdk),
 [Control plane](/control-plane), and [storage solutions](/storage) collectively separate storage from
-comput and automate operations while maintaining 100% compatibility with your existing code and deployment
+compute and automate operations while maintaining 100% compatibility with your existing code and deployment
 architecture.
 
 # Architecture Overview
 
-The Responsive solution comprises the Java SDK, Control plane, and storage providers as follows which combine as follows:
+The Responsive solution comprises the Java SDK, Control plane, and storage providers fit together as follows:
 
 <div className={'flex justify-center mb-8'}>
     <img
@@ -35,9 +35,7 @@ The Responsive solution comprises the Java SDK, Control plane, and storage provi
     />
 </div>
 
-Let's dig into how this all fits together. The entire ecosystem consists of the following "players":
-
-1. **Kafka Provider**. Responsive is agnostic to the Kafka Cluster -- it can run self-hosted in your VPC,
+1. **Kafka Provider**. Responsive works with Kafka Cluster and any deployment model -- it can run self-hosted in your VPC,
 in some Cloud Provider (such as Confluent, Redpanda or Warpstream) or even locally for testing.
 1. **Java SDK**. These are Responsive library extensions for Kafka Streams that enable the use of remote storage, as well as
 adding features like async processing, row-level TTL, and more. The SDK is a library you add to your application
@@ -58,7 +56,7 @@ in your network on in the network of the storage provider which may be VPC peere
 
 # Get started
 
-Our [Quickstart](/java-sdk/migrate) shows you how to use the SDK to run your Kafka Streams app with MongoDB
+Our [Quickstart](/java-sdk/quickstart) shows you how to use the SDK to run your Kafka Streams app with MongoDB
 in under 10 minutes.
 
 # Explore
