@@ -16,17 +16,14 @@ import DocCardList from '@theme/DocCardList';
 Responsive extends Kafka Streams to use traditional Databases like MongoDB and Cassandra as state stores, as well as
 Responsive's cloud-native, object store based, store, RS3. Learn all about these options here.
 
-# Storage
 
 :::tip TLDR
 
-The punchline from this concepts doc is that Responsive Platform separates
-storage from compute as a means of improving operations without sacrificing
-transactional semantics without a performance penalty.
-
+Responsive Platform separates storage from compute as a means of improving operations without sacrificing
+transactional semantics and without imposing a performance penalty.
 :::
 
-## History & Background
+# The problems with embedding RocksDB in Kafka Streams
 
 Historically, Kafka Streams bundled storage locally on compute nodes by
 providing RocksDB based implementations of state stores. While storage on the
@@ -47,21 +44,25 @@ they can become operational.
 1. Recovering from a fault or rebalancing is a challenge for the same reason
 as above.
 
+You can read more about these limitations in this [blog post](https://www.responsive.dev/blog/stop-embedding-rocksdb-in-kafka-streams).
+
 Over time, the Kafka Streams developers have come up with elegant improvements
 to these problems: standby and warmup replicas, incremental rebalancing, sticky
-task assignment... the list goes on.  Responsive takes a different approach to
-solving this class of problems in Kafka Streams by improving the underlying
-architecture to separate compute and storage - effectively eliminating these
+task assignment... the list goes on.
+
+However, Responsive takes a different approach to solving this class of problems in Kafka Streams by
+improving the underlying architecture to separate compute and storage - effectively eliminating these
 concerns in one fell swoop.
 
-## Remote Storage
+
+# Remote Storage Requirements
 
 As managed services in the cloud have become mission-critical for many
 businesses, the original design goal of keeping Kafka Streams free of external
 dependencies holds less weight. To take advantage of this new paradigm, we
 built our storage solution to leverage existing distributed databases that
 are available in all public clouds such as [MongoDB](https://www.mongodb.com/)
-and [ScyllaDB](https://www.scylladb.com/).
+and [ScyllaDB](https://www.scylladb.com/), as well as our very own [RS3](/storage/rs3).
 
 We selected these databases because the meet the following requirements:
 - Can execute common state store operations efficiently such as Key-Value reads and range scans
@@ -71,10 +72,11 @@ We selected these databases because the meet the following requirements:
 
 Just as Kafka Streams must solve many tough problems despite delegating
 the storage layer to RocksDB, Responsive has developed solutions that ensure
-these databases operate well in the context of kafka Streams. The next few
-sections examine some of the concepts we've implemented.
+these databases operate well in the context of Kafka Streams. T
 
-### Instant Restoration
+# Benefits of disaggregated state storage
+
+## Instant Restoration and Rebalances
 
 With a RocksDB-based deployment of Kafka Streams, restarting a node that has
 both a RocksDB store and a checkpoint file is easy: the application will know
@@ -90,8 +92,41 @@ This also doubles as a mechanism to ensure that all data written to the
 changelog topic is written to remote storage before the active task processes
 any data (see the next section for more information).
 
+## Flexible Partitioning
 
-### Exactly Once Semantics
+Our remote stores allow us to partition data independently of the
+Kafka partition. Responsive state stores takes advantages of this and allows
+flexibility with repartitioning - with a remote store, it is possible to increase
+the number of input partitions without changing the remote storage at all.
+
+## Row-level Time To Live
+
+Responsive offers row-level time-to-live (or `ttl`) for items in the state stores based on wall-clock - one
+of the most highly requested Kafka Streams features. The traditional RocksDB
+changelog restore mechanism means that implementing `ttl` is difficult, as
+the records in the changelog must be purged as well. Since records are only
+ever read into our remote store once, we can leverage the remote storage engine's `ttl` feature
+and provide that functionality. Learn how to use this feature in our [SDK documentation](/java-sdk/stores#time-to-live-for-key-value-stores).
+
+## Interactive Queries
+
+In the works is another highly requested feature: routing layers for
+Interactive Queries (IQ). In Kafka Streams, IQ only supports lookups on a
+single partition - any routing or scatter gather must be done by the client.
+Since Responsive's remote storage is backed by a fully distributed database,
+it can offer distributed queries that route the request to the correct node
+when queried from any node.
+
+## Patching Data
+
+A common operation in data systems is to perform some manual surgery to remediate
+corrupted data. Since the Responsive remote stores are true databases, and do not
+rely on the recovering from the changelog topic, it is possible to patch the
+data in the remote stores directly. Check out the [CLI](/storage/cli) for more details.
+
+# Challenges with Remote State, and how we solve them
+
+## Exactly Once Semantics
 
 Responsive for Kafka Streams leverages MongoDB's [Atomic Writes](https://www.mongodb.com/docs/manual/tutorial/model-data-for-atomic-operations/)
 jand Scylla's [Lightweight Transactions](https://opensource.docs.scylladb.com/stable/using-scylla/lwt.html)
@@ -123,7 +158,7 @@ the changelog topic that was flushed. On a restore, we read that offset and
 restore the changelog topic from that point onwards into the remote store. This
 allows the changelog to function as a write-ahead-log.
 
-### Performance
+## Performance
 
 We can have our cake and eat it too when it comes to performance. The
 Responsive storage solution buffers writes and flushes concurrently, which
@@ -152,43 +187,6 @@ from the level of a Kafka partition to the level of a record key. This means
 that even in situations where remote reads cannot be avoided, they can be parallelized
 and have no effect on throughput.
 
-## Additional Features
-
-Beyond providing functional parity with RocksDB, Responsive remote stores
-promise the ability to implement features that were not easy to implement
-with a RocksDB based solution.
-
-### Flexible Partitioning
-
-Both MongoDB and ScyllaDB allow us to partition data independently of the
-Kafka partition. Responsive state stores takes advantages of this and allows
-flexibility with repartitioning - with a remote store, it is possible to increase
-the number of input partitions without changing the remote storage at all.
-
-### Time To Live
-
-Already, Responsive offers time-to-live (or `ttl`) based on wall-clock - one
-of the most highly requested Kafka Streams features. The traditional RocksDB
-changelog restore mechanism means that implementing `ttl` is difficult, as
-the records in the changelog must be purged as well. Since records are only
-ever read into our remote store once, we can leverage Scylla's `ttl` feature
-and provide that functionality.
-
-### Interactive Queries
-
-In the works is another highly requested feature: routing layers for
-Interactive Queries (IQ). In Kafka Streams, IQ only supports lookups on a
-single partition - any routing or scatter gather must be done by the client.
-Since Responsive's remote storage is backed by a fully distributed database,
-it can offer distributed queries that route the request to the correct node
-when queried from any node.
-
-### Patching Data
-
-A common operation in data systems is to perform some manual surgery to remediate
-corrupted data. Since the Responsive remote stores are true databases, and do not
-rely on the recovering from the changelog topic, it is possible to patch the
-data in the remote stores directly.
 
 # Learn More
 

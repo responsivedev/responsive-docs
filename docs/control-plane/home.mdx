@@ -17,10 +17,12 @@ import {Icons} from '/src/components/icons'
 The Responsive Control Plane automates the operations of Kafka Streams applications. With policy-based autoscaling,
 a rich observability suite, and more, the control plane keeps your apps streaming.
 
+# Understanding the Responsive Autoscaler
+
 :::note
 
-This documentation starts with a bit of history around how to manually tune Kafka
-Streams clusters. This is important to understand how we came up with our autoscaling
+This section starts with a bit of history around how to manually tune Kafka
+Streams applications. This is important to understand how we came up with our autoscaling
 algorithms and which metrics we collect.
 
 **If you are only curious about how the autoscaling works, jump down to the
@@ -28,9 +30,9 @@ algorithms and which metrics we collect.
 
 :::
 
-## History & Manual Scaling
+## Manual Scaling
 
-Before Responsive, sizing Kafka Streams clusters was an iterative process.
+Before Responsive, sizing Kafka Streams applications was an iterative process.
 
 You start off by guessing a good starting configuration and waiting for it to stabilize.
 If you see certain metric anomalies (we'll get into these in a bit), you can tune
@@ -76,7 +78,7 @@ is healthy. We define healthy using the following checklist:
     | <Icons.check/> | Make sure you bound memory usage | If you are using RocksDB, you need to bound memory utilization. See this [developer guide](https://kafka.apache.org/37/documentation/streams/developer-guide/memory-mgmt) for more details. |
 </div>
 
-### Size & Tune
+### Resize & Tune
 
 Before we talk about how to resize a Kafka Streams cluster, you need to determine if you _should_ resize your
 cluster at all.
@@ -158,7 +160,7 @@ Note that the Controller has additional safeguards and best practices built into
 there is a "cooldown" period on policy evaluation so that it won't trigger back-to-back scaling
 events in situations with unpredictable short-term traffic.
 
-## Next Steps
+# Next Steps
 
 - To learn how to get started with autoscaling, follow our [Quickstart](/control-plane/quickstart).
 - To see all available policies and learn how to specify them, see our [Technical Reference](/control-plane/policies).
