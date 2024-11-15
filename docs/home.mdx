@@ -70,8 +70,8 @@ The Responsive solution comprises the Java SDK, Control plane, and storage provi
     | **Component**           | **Description**                                                                                                                                                          |
     |-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
     | Kafka Provider      | Runs in any environment: self-hosted, cloud (e.g., Confluent, Redpanda, Warpstream), or locally for testing.                                                             |
-    | Java SDK            | Extends Kafka Streams with features like remote storage, async processing, and row-level TTL. Fully compatible with the Kafka Streams API; no app code changes required. |
-    | Responsive Operator | Manages Kafka Streams apps, scaling them via signals from a Controller in Responsive’s Control Plane. Deployable via a Helm chart.                                       |
+    | Java SDK            | A Kafka Streams library extension with features like remote storage, async processing, and row-level TTL. Fully compatible with the Kafka Streams API; no app code changes required. |
+    | Responsive Operator | Manages Kafka Streams apps, scaling them via signals from a Controller in Responsive’s Control Plane. Deployable via a Helm chart into your k8s cluster.                                       |
     | Control Plane       | Monitors apps, computes optimal configs for autoscaling, and provides live metrics via a Metrics API. Fully managed by Responsive.                                       |
     | Storage Backend     | Offloads state to distributed databases like MongoDB, ScyllaDB, or RS3. Supports VPC-peered or provider-managed storage. DynamoDB support is coming soon.                |
     </div>
