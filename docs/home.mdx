@@ -7,62 +7,95 @@ hide_title: true
 hide_table_of_contents: true
 ---
 
-<div className={'flex flex-col text-center items-center text-4xl font-heading'}>
-    Reliable, Scalable, and Automated Kafka Streams<span className={'text-orange-500'}>.</span>
+import {Icons} from "/src/components/icons"
+
+<div className={
+    'bg-gradient-to-r from-[#FF781D] via-[#B800B5] to-[#007AFF] inline-block text-transparent bg-clip-text text-4xl font-semibold'
+}>
+    Reliable, Scalable, Automated Kafka Streams
 </div>
+<div className={'text-gray-400 text-2xl'}>Explore our guides and examples</div>
 
-Responsive is a Kafka Streams solution that improves the reliability, scalability, and operability of Kafka Streams by
-
-* Separating compute from storage,
-* Providing policy-based and metrics-driven autoscaling,
-* Adding async processing that enables you to scale beyond the Kafka partition count,
-* Offering a cloud-native managed state store,
-* And more.
+<div className={'h-4'}/>
 
 Stop fighting with restoration, rebalancing, and resource management. Responsive's [Java SDK](/java-sdk),
 [Control plane](/control-plane), and [storage solutions](/storage) collectively separate storage from
 compute and automate operations while maintaining 100% compatibility with your existing code and deployment
 architecture.
 
-# Architecture Overview
-
-The Responsive solution comprises the Java SDK, Control plane, and storage providers fit together as follows:
-
-<div className={'flex justify-center mb-8'}>
-    <img
-        alt={"architecture"}
-        src={require('/static/img/docs/concepts/architecture/architecture.png').default}
-    />
+<div className={'grid md:grid-cols-2 gap-3 pt-4 pb-8 max-w-4xl mx-auto'}>
+    <div className={'rounded-xl border border-gray-300 border-dashed p-4 flex flex-col items-center'}>
+        <div className={'flex gap-1 items-center'}>
+            <div className={'inline-block mt-2'}><Icons.terminal /></div>
+            <div className={'font-semibold lg:text-lg'}>Separate compute from storage</div>
+        </div>
+        <div>Read about the [Responsive SDK](/java-sdk)</div>
+    </div>
+    <div className={'rounded-xl border border-gray-300 border-dashed p-4 flex flex-col items-center'}>
+        <div className={'flex gap-1 items-center'}>
+            <div className={'inline-block mt-2'}><Icons.cloud /></div>
+            <div className={'font-semibold lg:text-lg'}>Policy-based, metrics-driven autoscaling</div>
+        </div>
+        <div>Read about the [Responsive Control Plane](/control-plane)</div>
+    </div>
+    <div className={'rounded-xl border border-gray-300 border-dashed p-4 flex flex-col items-center'}>
+        <div className={'flex gap-1 items-center'}>
+            <div className={'inline-block mt-2'}><Icons.bolt /></div>
+            <div className={'font-semibold lg:text-lg'}>Scale throughput beyond partition limits</div>
+        </div>
+        <div>Read about the [Async Processing](/java-sdk/async-processing)</div>
+    </div>
+    <div className={'rounded-xl border border-gray-300 border-dashed p-4 flex flex-col items-center'}>
+        <div className={'flex gap-1 items-center'}>
+            <div className={'inline-block mt-2'}><Icons.dbSmile /></div>
+            <div className={'font-semibold lg:text-lg'}>Cloud-native, bespoke streaming storage</div>
+        </div>
+        <div>Read about the [RS3](/storage/rs3) storage engine</div>
+    </div>
 </div>
 
-1. **Kafka Provider**. Responsive works with Kafka Cluster and any deployment model -- it can run self-hosted in your VPC,
-in some Cloud Provider (such as Confluent, Redpanda or Warpstream) or even locally for testing.
-1. **Java SDK**. These are Responsive library extensions for Kafka Streams that enable the use of remote storage, as well as
-adding features like async processing, row-level TTL, and more. The SDK is a library you add to your application
-and is 100% compatible with the Kafka Streams API, which means your application code doesn't need to change in order to
-get features like remote state.
-1. **Responsive Operator**. The Responsive Operator manages your Kafka Streams Applications, configuring and scaling up
-and down based on signals it polls from a Controller service running in the Responsive managed Control Plane.
-Responsive provides a Helm chart to deploy the operator in your K8s cluster.
-1. **Control Plane**. The Responsive Control Plane includes a Controller which monitors your app and computes the optimal
-configuration based on your autoscaling policies and live application metrics. This configuration is
-executed by the Operator running in your k8s cluster. The Control Plane also serves live application metrics via a
-Metrics API. All the services in the Responsive Control Plane are managed by Responsive in the Responsive Network.
-1. **Storage Backend**. Instead of embedding RocksDB stores, `ResponsiveKafkaStreams` offloads this
-state to a natively distributed database. Today we support [MongoDB](https://www.mongodb.com/) and
-anything Cassandra-compatible such as [ScyllaDB](https://www.scylladb.com/), along with our own object-store native managed state store
-implementation [RS3](/storage/rs3). Support for DynamoDB is also coming soon. You can run these backends
-in your network on in the network of the storage provider which may be VPC peered with you.
+## Architecture Overview
+The Responsive solution comprises the Java SDK, Control plane, and storage providers as follows which combine as follows:
 
-# Get started
+<div className={'grid lg:grid-cols-2 gap-4'}>
+    <div className={'flex flex-col items-center mb-8 aspect-square max-w-[400px] mx-auto'}>
+        <img
+            alt={"architecture"}
+            src={require('/static/img/docs/concepts/architecture/architecture.png').default}
+            className={'my-auto'}
+        />
+    </div>
 
-Our [Quickstart](/java-sdk/quickstart) shows you how to use the SDK to run your Kafka Streams app with MongoDB
-in under 10 minutes.
+    <div className={'max-w-4xl mx-auto text-sm flex flex-col justify-center'}>
+    | **Component**           | **Description**                                                                                                                                                          |
+    |-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+    | Kafka Provider      | Runs in any environment: self-hosted, cloud (e.g., Confluent, Redpanda, Warpstream), or locally for testing.                                                             |
+    | Java SDK            | Extends Kafka Streams with features like remote storage, async processing, and row-level TTL. Fully compatible with the Kafka Streams API; no app code changes required. |
+    | Responsive Operator | Manages Kafka Streams apps, scaling them via signals from a Controller in Responsive’s Control Plane. Deployable via a Helm chart.                                       |
+    | Control Plane       | Monitors apps, computes optimal configs for autoscaling, and provides live metrics via a Metrics API. Fully managed by Responsive.                                       |
+    | Storage Backend     | Offloads state to distributed databases like MongoDB, ScyllaDB, or RS3. Supports VPC-peered or provider-managed storage. DynamoDB support is coming soon.                |
+    </div>
+</div>
 
-# Explore
+## Get Started
+<div className={'grid grid-cols-3'}>
+    <div className={'border border-dashed p-2 border-gray-300 rounded-tl'}>
+        <div>[**Java SDK**](/java-sdk): Kafka Streams library extensions that enable remote state,
+            calling external services at scale with Async processing, and more.</div>
+    </div>
+    <div className={'border border-dashed p-2 border-gray-300'}>
+        <div>[**Control Plane**](/control-plane): policy-based autoscaling for your apps, one-click observability, and more.</div>
+    </div>
+    <div className={'border border-dashed p-2 border-gray-300 rounded-tr'}>
+        <div>[**Storage**](/storage): managed storage options for your Kafka Streams state, including RS3, Responsive's cloud native object-store based state storage implementation for Kafka Streams.</div>
+    </div>
+</div>
 
-* [Java SDK](/java-sdk): Kafka Streams library extensions that enable remote state,
- calling external services at scale with Async processing, and more.
-* [Control Plane](/control-plane): policy-based autoscaling for your apps, one-click observability, and more.
-* [Storage](/storage): managed storage options for your Kafka Streams state, including RS3,
-Responsive's cloud native object-store based state storage implementation for Kafka Streams.
+<div className={'flex items-center gap-1 p-4 border border-dashed border-gray-300 rounded'}>
+    <a href={'/java-sdk/quickstart'}>
+        <div className={'mx-4 px-3 py-1 bg-black text-white rounded-xl flex items-center justify-center w-32'}>
+            <div>Get Started ></div>
+        </div>
+    </a>
+    <div>Our [Quickstart](/java-sdk/migrate) shows you how to use the SDK to run your Kafka Streams app with MongoDB in under 10 minutes.</div>
+</div>
