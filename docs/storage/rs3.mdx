@@ -12,13 +12,13 @@ The Responsive Streaming Storage Service (RS3) is a managed state store for Kafk
 object-store native with SlateDB. With RS3, you can enjoy all the benefits of managed state with far superior
 elasticity, and far lower costs, without sacrificing performance or correctness.
 
-*RS3 is in a private beta. If you would like to join the beta, please apply [here](https://www.responsive.dev/rs3-storage).*
+*RS3 is in a private beta. If you would like to join the beta, __[apply here](https://www.responsive.dev/rs3-storage).__*
 
 :::
 
 RS3 is Responsive's cloud native, object-store based Managed State Store built on top of [SlateDB](https://www.slatedb.io).
 It offers a superior cost and operations profile compared with other databases while delivering all the benefits
-of disaggregated state. It's particularly relevant to applications with high amounts of state since it solves the
+of disaggregated state. It's particularly relevant to applications with large amounts of state since it solves the
 reliability and operability problems typically faced by these applications without adding significant costs.
 
 This page covers the high level RS3 architecture and benefits, and has information for how you can sign up for the
@@ -60,9 +60,9 @@ Now let’s look more closely at the RS3 storage service and client:
 :::info
 
 [SlateDB](https://slatedb.io/) is an Apache 2.0 licensed LSM tree implementation designed for object stores.
-SlateDB has applied to be a part of the CNCF and is [awaiting entry](https://github.com/cncf/sandbox/issues/114) into
-the CNCF sandbox. Responsive has been one of the primary contributors to SlateDB from day 0, and we look forward to
-building SlateDB with contributors from across the industry!
+SlateDB has [applied](https://github.com/commonhaus/foundation/pull/212) to be a part of the [CommonHaus Foundation](https://www.commonhaus.org/).
+Responsive has been one of the primary contributors to SlateDB from day 0, and we look forward to building SlateDB with
+contributors from across the industry!
 
 We think a storage technology like SlateDB is a perfect way to bring cloud-native state storage to stream processors
 like Kafka Streams because LSM trees are a great fit for both streaming storage *and* object stores. They are designed

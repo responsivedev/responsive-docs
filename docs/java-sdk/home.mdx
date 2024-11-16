@@ -12,11 +12,62 @@ import DocCardList from '@theme/DocCardList';
     Essential library extensions for Kafka Streams<span className={'text-orange-500'}>.</span>
 </div>
 
-The Responsive Java SDK adds the following capabilities to open source Kafka Streams:
+Developers love Kafka Streams for its library form factor and its rich event processing APIs. Since Kafka Streams
+embeds into your applications like any other library, apps built with Kafka Streams look like every other
+application you develop. You can use the same build and deployment tooling, the same observability stack, and the same
+operational processes as the rest of your applications. Developers building mission-critical event driven applications
+love this!
 
-* a disaggregated state architecture, with support for MongoDB, Cassandra, JBDC (coming soon), and DynamoDB (coming soon) as state backends.
+Responsive's Java SDK is designed to meaningfully extend Kafka Streams without changing its form factor. While
+remaining a library, the Responsive SDK adds the following capabilities to open source Kafka Streams:
+
+* a disaggregated state architecture, with support for MongoDB, Cassandra, [RS3](/storage/rs3), JBDC (coming soon), and
+DynamoDB (coming soon) as state backends.
 * async processing, which enables you to call external services from your Kafka Streams app without impacting throughput.
-* Row-level TTL for Responsive `StateStores`, which gives fine grain control on expiring data from your state stores.
+* row-level TTL for Responsive `StateStores`, which gives fine grained control on expiring data from your state stores.
+
+## How the SDK works
+
+You can think of Kafka Streams as a three layered architecture, as depicted below:
+
+<div className={'flex mb-4 mx-auto w-3/4'}>
+    <img
+        alt={"RS3 architecture"}
+        src={require('/static/img/docs/java-sdk/kafka-stream-architecture.png').default}
+    />
+</div>
+
+### The Core Kafka Streams Runtime
+
+The core Kafka Streams runtime can be broken into three layers depicted in blue in the diagram above:
+
+- At the top layer, Kafka Streams exposes the DSL and PAPI APIs which you use to write powerful event driven
+applications.
+- Below that, Kafka Streams implements operators for functionality like streaming joins and aggregations.
+- Finally, you have the thread and task management system that routes events to threads within which your processing
+code is executed.
+
+You can think of the core runtime as providing the core functionality of Kafka Streams, including modeling entities
+like `KTables`, providing operators to manipulate these entities, and providing the execution model for these operators.
+
+From a functional perspective, when people think of Kafka Streams, this is the layer they are typically thinking about.
+The Responsive SDK doesn't modify this layer at all, which means that your application code will continue to function
+exactly as it would without the SDK.
+
+### The Pluggable components
+
+The core Kafka Streams runtime relies on various subsystems, presented in orange in the diagram above. These subsystems
+implement state management , task assignment, etc. and are are abstracted away from the core runtime through
+well-defined public interfaces.
+
+For instance, you can swap out the state store by implementing the `StateStore` interface, and you can swap out the
+task assignment mechanism by implementing the `TaskAssignor` interface. You can also swap out the Kafka Clients by
+defining your own `ClientSupplier`.
+
+These pluggable components collectively comprise the parts of Kafka Streams that make it hard to operate. For instance,
+state restoration and rebalancing problems are rooted the state stores and task assignors. By swapping these out with
+managed services, the Responsive SDK improves the reliability and reduces the operational burden of running Kafka Streams
+without sacrificing the functionality or the form factor that developers love.
 
 # Learn more
 
