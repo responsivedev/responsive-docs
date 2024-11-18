@@ -90,8 +90,8 @@ const config: Config = {
           target: '_blank',
         },
         {
-          to: 'https://responsive.dev/talk-with-us',
-          label: 'Talk With Us',
+          to: 'https://responsive.dev/sdk',
+          label: 'Try Free',
           position: 'right',
           className: 'navbar-talk'
         },
