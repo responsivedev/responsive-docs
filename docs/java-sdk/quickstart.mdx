@@ -1,11 +1,9 @@
 ---
-title: Quickstart
+title: Java SDK Quickstart
 slug: /java-sdk/quickstart
 sidebar_position: 0
 description: Everything you need to run a basic WordCount application with the Responsive SDK
 ---
-
-# Java SDK Quickstart
 
 :::note Overview
 
@@ -25,7 +23,9 @@ run through the following quickstart:
 1. Migrate to `ResponsiveKafkaStreams` and run it
 1. Query MongoDB to demonstrate disaggregated state
 
-### Requirements
+## Initial setup
+
+### Required tools
 
 In order to run this quickstart, you must have access to the following systems:
 
@@ -33,7 +33,7 @@ In order to run this quickstart, you must have access to the following systems:
 - Docker and Docker Compose (or a compatible engine)
 - Gradle (it will install JDK 21 if you do not have it installed)
 
-## Get the Code
+### Get the Code
 
 Get the quickstart code locally with:
 
@@ -42,7 +42,9 @@ $ git clone https://github.com/responsivedev/java-sdk-quickstart.git
 $ cd java-sdk-quickstart
 ```
 
-## Prepare Dependencies
+## Prepare your dependencies
+
+### Setup Kafka and MongoDB
 
 The first step is to deploy a Kafka broker and a MongoDB instance. You can use the
 following `docker-compose.yml` file (which is also included in `<root>/etc` of this repository):
@@ -101,7 +103,7 @@ $ kafka-topics --create \
     --topic output
 ```
 
-## Build & Run
+### Build & Run your Kafka Streams app
 
 Start by building the code.
 
@@ -118,7 +120,7 @@ topic, split by whitespace. To run the application, use:
 ./gradlew run
 ```
 
-### Produce & Consume
+### Test your setup: Produce & Consume events
 
 Let's produce some data in the `words` topic, and then verify that
 the application is counting those words! First, produce using `kafka-console-producer`
@@ -153,7 +155,7 @@ kafka	1
 streams	2
 ```
 
-# Use the Responsive SDK
+## Add the Responsive SDK
 
 Introducing the Responsive SDK for an app that only uses the DSL
 is as simple as it gets:
@@ -192,7 +194,7 @@ specify stores using the `Materialized` API or use the Processor API
 read [the documentation](migrate) to get a sense of how
 to migrate individual stores. We promise it's just as easy.
 
-## Build & Run
+### Build & Run your Responsive App
 
 When you run the Responsive version of the app for the first time,
 it will read the existing changelog topic and bootstrap the remote
@@ -220,7 +222,7 @@ Finally, you can produce more data using the console producer
 and confirm that it works using the console producer with the
 same steps outlined above.
 
-# Next Steps
+## Next Steps
 
 Congrats! You have successfully run through the quickstart for the
 Responsive SDK. Here's what you can do next:

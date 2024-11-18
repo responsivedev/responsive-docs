@@ -3,11 +3,29 @@ sidebar_label: Choosing Storage
 sidebar_position: 0
 title: Documentation
 hide_title: true
-hide_table_of_contents: true
+hide_table_of_contents: false
 ---
 
+:::info
 
+This page will help you choose the appropriate storage service for your remote Kafka Streams state stores
 
-# Which storage option is right for you?
+:::
 
-TODO: summary of when to choose between MongoDB, Cassandra, and RS3.
+## Supported Storage Services
+
+Responsive supports the following databases as Kafka Streams state stores.
+
+- [MongoDB](https://www.mongodb.com)
+- [ScyllaDB](https://www.scylladb.com)
+- [RS3: Responsive Streaming Storage Service](/storage/rs3)
+
+## Considerations for choosing the right storage service
+
+The pro's and con's of each of these services is enumerated below:
+
+|Service|Pros|Cons|Notes|
+|-------|---|----|------|
+|MongoDB|Widely supported; Production Grade; Robust deployment options; Flexible indexing schemes |Uses BTree indexes, which can impact write throughput|If you already use MongoDB and don't have very large amounts of state, MongoDB may be perfect for you.|
+|ScyllaDB|Production grade database; Uses LSM trees, and thus can support high volume writes at large scale | Cloud options not as mature as MongoDB | Use ScyllaDB if you have large amounts of state with high write volumes and need a high performance store. |
+|RS3| Uses SlateDB with persistence on S3. Is extremely cost effective and elastic, which makes many large state apps economical|Is in private beta, and not yet advised for mission-critical workloads|RS3 was designed for cloud-native streaming applications. If you have large state and need a more economical remote storage option, this is the right choice for you.|
