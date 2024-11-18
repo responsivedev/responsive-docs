@@ -39,8 +39,7 @@ You can think of Kafka Streams as a three layered architecture, as depicted belo
 
 ### The Core Kafka Streams Runtime
 
-The core Kafka Streams runtime can be broken into three layers depicted in <span className='text-blue-600'>blue</span>
-in the diagram above:
+The core Kafka Streams runtime can be broken into three layers depicted in blue in the diagram above:
 
 - At the top layer, Kafka Streams exposes the DSL and PAPI APIs which you use to write powerful event driven
 applications.
@@ -57,10 +56,9 @@ exactly as it would without the SDK.
 
 ### The Pluggable components
 
-The core Kafka Streams runtime relies on various subsystems, presented in <span className="text-amber-600">orange</span>
-in the diagram above. These subsystems implement state management , task assignment, etc. and are abstracted away
-from the core runtime through
-well-defined public interfaces.
+The core Kafka Streams runtime relies on various subsystems, presented in orange in the diagram above. These subsystems
+implement state management , task assignment, etc. and are abstracted away from the core runtime through well-defined
+public interfaces.
 
 For instance, you can swap out the state store by implementing the `StateStore` interface, and you can swap out the
 task assignment mechanism by implementing the `TaskAssignor` interface. You can also swap out the Kafka Clients by
