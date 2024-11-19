@@ -55,7 +55,7 @@ architecture.
 </div>
 
 ## Architecture Overview
-The Responsive solution comprises the Java SDK, Control plane, and storage providers as follows which combine as follows:
+The Responsive solution comprises the Java SDK, Control plane, and storage providers which combine as follows:
 
 <div className={'grid lg:grid-cols-2 gap-4'}>
     <div className={'flex flex-col items-center mb-8 aspect-square max-w-[400px] mx-auto'}>
@@ -69,7 +69,7 @@ The Responsive solution comprises the Java SDK, Control plane, and storage provi
     <div className={'max-w-4xl mx-auto text-sm flex flex-col justify-center'}>
     | **Component**           | **Description**                                                                                                                                                          |
     |-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-    | Kafka Provider      | Runs in any environment: self-hosted, cloud (e.g., Confluent, Redpanda, Warpstream), or locally for testing.                                                             |
+    | Kafka Provider      | Your Kafka provider: it could be self-hosted, cloud (e.g., Confluent, Redpanda, Warpstream), or locally for testing.                                                             |
     | Java SDK            | A Kafka Streams library extension with features like remote storage, async processing, and row-level TTL. Fully compatible with the Kafka Streams API; no app code changes required. |
     | Responsive Operator | Manages Kafka Streams apps, scaling them via signals from a Controller in Responsive’s Control Plane. Deployable via a Helm chart into your k8s cluster.                                       |
     | Control Plane       | Monitors apps, computes optimal configs for autoscaling, and provides live metrics via a Metrics API. Fully managed by Responsive.                                       |
