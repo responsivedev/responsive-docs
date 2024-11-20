@@ -161,6 +161,44 @@ streams	2
 
 ## Add the Responsive SDK
 
+<details>
+<summary>Shortcut: No Editor Necessary</summary>
+
+Copy the follow diff and run `pbpaste | git apply` to apply it.
+
+```diff showLineNumbers title="patch.diff"
+diff --git a/app/src/main/java/dev/responsive/quickstart/WordCount.java b/app/src/main/java/dev/responsive/quickstart/WordCount.java
+index f53d193..a2bbe9a 100644
+--- a/app/src/main/java/dev/responsive/quickstart/WordCount.java
++++ b/app/src/main/java/dev/responsive/quickstart/WordCount.java
+@@ -1,5 +1,6 @@
+ package dev.responsive.quickstart;
+
++import dev.responsive.kafka.api.ResponsiveKafkaStreams;
+ import dev.responsive.kafka.api.config.ResponsiveConfig;
+ import dev.responsive.kafka.api.config.StorageBackend;
+ import java.util.Arrays;
+@@ -44,7 +45,7 @@ public class WordCount {
+
+         final Topology topology = builder.build();
+
+-        final KafkaStreams streams = new KafkaStreams(topology, props);
++        final KafkaStreams streams = new ResponsiveKafkaStreams(topology, props);
+         final CountDownLatch latch = new CountDownLatch(1);
+
+         // attach shutdown handler to catch control-c
+
+```
+
+To update the license in the code to your trial license, you can run the following command:
+```bash
+LICENSE='<YOUR_LICENSE>'; sed -i '' "s|<YOUR_LICENSE>|${LICENSE}|" app/src/main/java/dev/responsive/quickstart/WordCount.java
+```
+
+You can now skip to the next section.
+
+</details>
+
 Introducing the Responsive SDK for an app that only uses the DSL
 is as simple as it gets:
 
