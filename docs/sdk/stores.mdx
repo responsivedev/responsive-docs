@@ -79,7 +79,7 @@ The first type of ttl that Responsive provides is a simple, constant tll. In thi
 to all records in the store. You can use the `ResponsiveKeyValueParams#withTimeToLive(Duration)` API to define a constant
 ttl for your store, as in the following example:
 
-```
+```java
 final ResponsiveKeyValueParams ttlKeyValueParams = ResponsiveKeyValueParams
     .keyValue("my-store")
     .withTimeToLive(Duration.ofDays(30))
@@ -96,7 +96,7 @@ This kind of ttl is defined using a `TtlProvider` passed in via the `ResponsiveK
 
 The following example shows a store with a default ttl of 30 days, where records with a key containing "OTTER" being
 retained infinitely and records with a key containing "SQUIRREL" being kept for only 24 hours.
-```
+```java
 final TtlProvider<String, ?> ttlProvider =
     TtlProvider.<String, Object>withDefault(Duration.ofDays(30))
     .fromKey(k -> {
