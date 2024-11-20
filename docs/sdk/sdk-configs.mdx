@@ -19,10 +19,10 @@ source code (don't be afraid, it's easy to read).
 
 ## License
 
-| Config Name               | Type   | Description                                            |
-|---------------------------|--------|--------------------------------------------------------|
-| `responsive.license`      | string | Required if `responsive.license.file` is not specified |
-| `responsive.license.file` | string | Required if `responsive.license` is not specified      |
+| Config Name               | Type     | Description                                            |
+|---------------------------|----------|--------------------------------------------------------|
+| `responsive.license`      | `String` | Required if `responsive.license.file` is not specified |
+| `responsive.license.file` | `String` | Required if `responsive.license` is not specified      |
 
 You can request a free trial license [here](https://www.responsive.dev/sdk/get-started).
 
@@ -46,8 +46,6 @@ of these are separate and not overlapping.
 | `responsive.mongo.windowed.key.timestamp.first`                 | `Boolean` | Whether to put the window start timestamp first in composite windowed key format. This can be toggled true/false to get better "performance depending on the density of unique keys per window, and should be experimented with for best results. However it is important to note that this cannot be changed for an active application. Messing with this can corrupt existing state! |
 
 ### Cassandra
-
-:::
 
 | Config Name                                                     | Type     | Description                                                                                                                                                                                                                                                                                                                                                                                              |
 |-----------------------------------------------------------------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
