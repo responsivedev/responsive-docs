@@ -4,8 +4,6 @@ slug: /sdk/sdk-configs
 sidebar_position: 2
 ---
 
-import {Icons} from '/src/components/icons'
-
 :::info
 
 This page covers the basics for configuring your Kafka Streams application with the Responsive SDK.
@@ -19,33 +17,18 @@ with Responsive, for a full list of the most up-to-date configurations, see
 [`ResponsiveConfig`](https://github.com/responsivedev/responsive-pub/blob/main/kafka-client/src/main/java/dev/responsive/kafka/api/config/ResponsiveConfig.java)
 source code (don't be afraid, it's easy to read).
 
-## Required
+## License
 
-| Config Name      | Type     | Description                                                 |
-|------------------|----------|-------------------------------------------------------------|
-| `responsive.org` | `String` | The Responsive organization slug (not the organization ID). |
-| `responsive.env` | `String` | The Responsive environment slug (not the environment ID).   |
+| Config Name               | Type   | Description                                            |
+|---------------------------|--------|--------------------------------------------------------|
+| `responsive.license`      | string | Required if `responsive.license.file` is not specified |
+| `responsive.license.file` | string | Required if `responsive.license` is not specified      |
 
-## Metrics
-
-:::note API Keys
-
-Note that the API Keys created for metrics can be used both for Operator and your `ResponsiveKafkaStreams`
-deployment. We recommended, however, to keep them separate for more granular control.
-
-:::
-
-| Config Name                      | Type       | Description                                                                                                                                                                                                                                                                             |
-|----------------------------------|------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `responsive.controller.endpoint` | `String`   | The endpoint provided to you in the Responsive UI for your controller connection.                                                                                                                                                                                                       |
-| `responsive.platform.api.key`    | `String`   | The API Key created in the Responsive UI for your `responsive.env`.                                                                                                                                                                                                                     |
-| `responsive.platform.api.secret` | `Password` | The API Secret created in the Responsive UI for your `responsive.env` that corresponds to `responsive.platform.api.key`                                                                                                                                                                 |
-| `responsive.metrics.enabled`     | `Boolean`  | Whether to enable metric reporting (required for autoscaling and UI integration).                                                                                                                                                                                                       |
-| `responsive.application.id`      | `String`   | The application ID that uniquely identifies this application with Responsive. This defaults to the configured Kafka Streams `application.id` but can be specified in the case you have multiple applications with the same `application.id` configured to run in the same `responsive.env` |
+You can request a free trial license [here](https://www.responsive.dev/sdk/get-started).
 
 ## Storage
 
-Responsive supports two storage backends: `CASSANDRA` and `MONGO_DB`. Configurations for each
+Responsive supports two storage backends: `MONGO_DB` and `CASSANDRA`. Configurations for each
 of these are separate and not overlapping.
 
 ### MongoDB
@@ -64,12 +47,6 @@ of these are separate and not overlapping.
 
 ### Cassandra
 
-:::warning Self-Serve Not Available
-
-Only `MONGO_DB` is supported in the self-serve Responsive UI. If you would like to configure Cassandra, you
-may reach out to us to provision a cluster for you. We provision a Cassandra-compatible backend using ScyllaDB
-Cloud.
-
 :::
 
 | Config Name                                                     | Type     | Description                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -85,6 +62,26 @@ Cloud.
 | `responsive.cassandra.consistency.reads`                        | `String` | See the [Cassandra Documentation](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html) for valid configuration values and their respective behavior.                                                                                                                                                                                                                  |
 | `responsive.cassandra.consistency.writes`                       | `String` | See the [Cassandra Documentation](https://docs.datastax.com/en/cassandra-oss/3.0/cassandra/dml/dmlConfigConsistency.html) for valid configuration values and their respective behavior.                                                                                                                                                                                                                  |
 | `responsive.cassandra.desired.num.partitions`                   | `Int`    | The desired number of partitions to create in the remote store. This is a best effort target, as the actual number of partitions will be the next multiple of the Kafka topic's number of partitions that is greater than or equal to this number. This configuration does not apply to global stores. A value of `-1` indicates to use the number of Kafka Partitions as the remote partitions as well. |
+
+
+## Metrics
+
+:::note API Keys
+
+Note that the API Keys created for metrics can be used both for Operator and your `ResponsiveKafkaStreams`
+deployment. We recommended, however, to keep them separate for more granular control.
+
+:::
+
+| Config Name                      | Type       | Description                                                                                                                                                                                                                                                                                |
+|----------------------------------|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `responsive.org`                 | `String`   | The Responsive organization slug (not the organization ID).                                                                                                                                                                                                                                |
+| `responsive.env`                 | `String`   | The Responsive environment slug (not the environment ID).                                                                                                                                                                                                                                  |
+| `responsive.controller.endpoint` | `String`   | The endpoint provided to you in the Responsive UI for your controller connection.                                                                                                                                                                                                          |
+| `responsive.platform.api.key`    | `String`   | The API Key created in the Responsive UI for your `responsive.env`.                                                                                                                                                                                                                        |
+| `responsive.platform.api.secret` | `Password` | The API Secret created in the Responsive UI for your `responsive.env` that corresponds to `responsive.platform.api.key`                                                                                                                                                                    |
+| `responsive.metrics.enabled`     | `Boolean`  | Whether to enable metric reporting (required for autoscaling and UI integration).                                                                                                                                                                                                          |
+| `responsive.application.id`      | `String`   | The application ID that uniquely identifies this application with Responsive. This defaults to the configured Kafka Streams `application.id` but can be specified in the case you have multiple applications with the same `application.id` configured to run in the same `responsive.env` |
 
 ## Restricted Configurations
 
