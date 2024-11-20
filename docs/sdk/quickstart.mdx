@@ -126,6 +126,9 @@ Let's produce some data in the `words` topic, and then verify that
 the application is counting those words! First, produce using `kafka-console-producer`
 
 ```bash
+# if you do not have the kafka-console-producer locally, it is available
+# on the kafka-broker docker container we started earlier in this tutorial
+$ docker exec -it kafka-broker bash
 $ kafka-console-producer --bootstrap-server localhost:9092 --topic words
 > all streams flow through kafka streams
 ```
@@ -134,7 +137,8 @@ You can verify that the word count app is working as designed by consuming
 from the output topic using `kafka-console-consumer`:
 
 ```bash
-kafka-console-consumer \
+$ docker exec -it kafka-broker bash
+$ kafka-console-consumer \
      --bootstrap-server localhost:9092 \
      --topic output \
      --from-beginning \
