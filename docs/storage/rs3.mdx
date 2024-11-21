@@ -16,7 +16,7 @@ elasticity, and far lower costs, without sacrificing performance or correctness.
 
 :::
 
-RS3 is Responsive's cloud native, object-store based Managed State Store built on top of [SlateDB](https://www.slatedb.io).
+RS3 is Responsive's cloud native managed `StateStore` built on top of [SlateDB](https://www.slatedb.io).
 It offers a superior cost and operations profile compared with other databases while delivering all the benefits
 of disaggregated state. It's particularly relevant to applications with large amounts of state since it solves the
 reliability and operability problems typically faced by these applications without adding significant costs.
@@ -26,13 +26,33 @@ private beta of RS3.
 
 ## RS3 Architecture
 
-RS3 is a durable and highly available store for your processors' state. It's built on the shoulders of giants:
+### RS3's design principles
 
-At one end, RS3 uses Kafka for a write-ahead-log (WAL) with isolated writes that serves as a durable and highly
-available staging area for the most recently written data.
+All implementations of the Kafka Streams `StateStore` interface ultimately need to satisfy these high-level
+requirements:
 
-On the other end, it relies on a cloud object store like S3 to provide cheap, durable, and highly available storage
+1. Support a high rate of updates, to enable high throughput workloads.
+2. Support fast key lookups, to enable fast aggregations.
+3. Support fast range lookups, to enable fast joins.
+4. Some sort of compare-and-set operation to align with Kafka transactions.
+
+Embedded RocksDB satisfies those requirements, as do databases like MongoDB and ScyllaDB. However, embedding RocksDB
+has [many drawbacks](https://www.responsive.dev/blog/stop-embedding-rocksdb-in-kafka-streams), and remote databases
+can get extremely expensive and also hard to operate at scale.
+
+RS3 was built to enable remote state with low operational overhead and in an extremely cost-effective way. It achieves
+this goal by fully leveraging Kafka along with objectstores like S3 to solve the hardest problems that a database
+must solve:
+
+1. At one end, RS3 uses Kafka for a write-ahead-log (WAL) with isolated writes that serves as a durable, highly
+available, and transaction-aligned staging area for the most recently written data.
+2. On the other end, it relies on a cloud object store like S3 to provide cheap, durable, and highly available storage
 for the bulk of the store's data, and a channel to replicate data to caches at zero cost.
+
+By using Kafka as a transactional write ahead log and S3 as a persistence and replication layer, RS3 can remain simple
+while benefiting from cloud economics.
+
+### How RS3 Works
 
 RS3 itself is composed of a service and a client that plugs into Kafka Streams. Together, they materialize the WAL
 into a queryable store persisted in an Object Store.
@@ -57,6 +77,22 @@ Now let’s look more closely at the RS3 storage service and client:
     />
 </div>
 
+The RS3 service serves RS3’s GRPC protocol for writing segments of the Kafka changelog and querying the store. A segment
+is a subset of the changelog starting at a start offset and containing all data up to an end offset.
+
+Each write request specifies the start and end offset of the contained segment. When handling writes, RS3 first verifies
+that it has all data up to the start offset of the segment. Then, it writes the data into SlateDB so that it can be
+efficiently read.
+
+SlateDB provides a fast LSM tree that uses a cloud object store (like S3) for persistence, while caching the working
+set in memory and (optionally) on local disks. RS3 will also support maintaining replicas of the cache for
+high-availability and enabling placement of tasks in the same zone as the data being accessed.
+
+Thus, the RS3 service leverages SlateDB to materialize the Kafka changelog into the object store while enabling
+fast key and range lookups. This is very similar to the way Kafka Streams uses RocksDB except that persistence is in S3
+and the state is decoupled from your app, bringing significant operational and cost benefits.
+
+
 :::info
 
 [SlateDB](https://slatedb.io/) is an Apache 2.0 licensed LSM tree implementation designed for object stores.
@@ -71,7 +107,9 @@ them well suited to the object store APIs.
 
 :::
 
-Let’s zoom in a little further, starting with the client and working our way to the service.
+
+Next, let’s zoom into the client, which runs in your application context and allows your Kafka Streams application to
+use the RS3 service:
 
 <div className={'flex mb-4 mx-auto w-3/4'}>
     <img
@@ -80,11 +118,12 @@ Let’s zoom in a little further, starting with the client and working our way t
     />
 </div>
 
-The client acts as a Kafka Streams state store. It buffers the store's changelog topic, and flushes the buffered data
-to RS3 using the RS3 protocol. Once data is flushed, it’s cleared from the buffer. When Kafka Streams calls a state
-store read API, the client first looks in the local buffer. If the requested data is not present, it sends the read
-to the RS3 service. Additionally, Responsive makes some optimizations to mitigate the latency added by requesting
-remote data:
+The client presents itself to your app as a Kafka Streams `StateStore`. It buffers the store's changelog topic, and
+flushes the buffered data to RS3 using the RS3 protocol. Once data is flushed, it’s cleared from the buffer.
+
+When Kafka Streams calls a state store read API, the client first looks in the local buffer. If the requested data is
+not present, it sends the read to the RS3 service. Additionally, Responsive makes some optimizations to mitigate the
+latency added by requesting remote data:
 
 - The State Store maintains a cache so that recently accessed data can be served locally.
 - For windowed operators, the State Store maintains a bloom filter of the keys in the current window to avoid remote
@@ -92,15 +131,6 @@ lookups for the first key in a window.
 - Responsive's [async processing](https://www.responsive.dev/blog/async-processing-for-kafka-streams) lets you add
 parallelism to a single stream thread to achieve high throughput in the presence of remote reads. You can use this
 in conjunction with RS3 to mitigate higher latencies from remote reads.
-
-The RS3 service serves RS3’s GRPC protocol for writing segments of the changelog and querying the store. A segment is
-a subset of the changelog starting at a start offset and containing all data up to an end offset. Each write request
-specifies the start and end offset of the contained segment. When serving writes, RS3 first verifies that it has all
-data up to the start offset of the segment. Then, it writes the data into SlateDB so that it can be efficiently read.
-
-SlateDB provides a fast LSM tree that uses a cloud object store (like S3) for persistence, while caching the working
-set in memory and (optionally) on local disks. RS3 will also support maintaining replicas of the cache for
-high-availability and enabling placement of tasks in the same zone as the data being accessed.
 
 Observe that because the hard problems of building a distributed storage system are solved by S3 and Apache Kafka, what
 remains is lightweight and stateless. This makes RS3 easy to operate, even in a BYOC model.
