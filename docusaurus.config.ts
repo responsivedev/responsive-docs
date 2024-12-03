@@ -29,7 +29,15 @@ const config: Config = {
   plugins: [
     './src/plugins/koala-plugin',
     './src/plugins/tailwind-config',
-    'vercel-analytics'
+    'vercel-analytics',
+    [
+      "posthog-docusaurus",
+      {
+        apiKey: "phc_RNfNxtoPw5kmWOOpIG1DVEbGszN1uZd4O4d7NvgCdfs",
+        appUrl: "https://us.i.posthog.com",
+        enableInDevelopment: true,
+      },
+    ],
   ],
 
   presets: [
