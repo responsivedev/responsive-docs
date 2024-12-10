@@ -128,6 +128,12 @@ data in the remote stores directly. Check out the [CLI](/storage/cli) for more d
 
 ### Exactly Once Semantics
 
+:::info
+The section below is a summary af our talk at Kafka Summit London 2024 in which we dive deep into the design of
+our remote `StateStore` for Kafka Streams. The talk is free to watch
+[here](https://www.confluent.io/events/kafka-summit-london-2024/its-a-trap-solving-restoration-with-custom-kafka-streams-state-stores/).
+:::
+
 Responsive for Kafka Streams leverages MongoDB's [Atomic Writes](https://www.mongodb.com/docs/manual/tutorial/model-data-for-atomic-operations/)
 jand Scylla's [Lightweight Transactions](https://opensource.docs.scylladb.com/stable/using-scylla/lwt.html)
 along with the Kafka commit protocol to support `processing.guarantee=exactly_once_v2`.
