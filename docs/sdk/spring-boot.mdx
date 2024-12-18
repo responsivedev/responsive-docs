@@ -13,8 +13,8 @@ This page covers the changes you need to make to support Responsive with Spring
 Boot. Note that Spring Boot integration currently requires:
 
 - An application running JDK 17
-- Version `3.2.4` of `spring-kafka`
-- Version `>= 0.29` of `dev.responsive.kafka-client`
+- Version `3.3.0` of `spring-kafka`
+- Version `>= 0.37` of `dev.responsive.kafka-client`
 
 We are working with the `spring-kafka` maintainer team to lift these requirements.
 If your team requires a different configuration, please reach out to us at
@@ -73,16 +73,31 @@ If you use auto-wiring support for spring, replace the `@EnableKafkaStreams` ann
 
 ### Manual Configuration
 
-If you manually wire the configuration using the `StreamsBuilderFactoryBean` class, you
-must replace all usages with `dev.responsive.spring.config.ResponsiveFactoryBean`. For example:
+:::warning warning for users of `KafkaStreamsCustomizer`
 
-```diff java showLineNumbers
--  import org.springframework.kafka.config.StreamsBuilderFactoryBean;
-+  import dev.responsive.spring.config.ResponsiveFactoryBean;
+If you are using `KafkaStreamsCutsomizer` you **must** manually configure `ResponsiveKafkaStreams`
+to avoid overriding the `@EnableResponsive` annotation.
 
-   @Bean
-   public FactoryBean<StreamsBuilder> myKStreamBuilder(KafkaStreamsConfiguration streamsConfig) {
--      return new StreamsBuilderFactoryBean(streamsConfig);
-+      return new ResponsiveFactoryBean(streamsConfig);
-   }
+:::
+
+In `spring-kafka` 3.3.0 we introduced a method to the  `KafkaStreamsCustomizer` class that allows you
+to configure `ResponsiveKafkaStreams` when customizing your Kafka Streams application:
+
+```java showLineNumbers
+public class MyStreamsCustomizer extends KafkaStreamsCustomizer {
+
+  @Override
+  public KafkaStreams initKafkaStreams(
+      Topology topology,
+      Properties properties,
+      KafkaClientSupplier clientSupplier
+  ) {
+    return new ResponsiveKafkaStreams(topology, properties, clientSupplier);
+  }
+
+  ...
+
+}
 ```
+
+This can be wired into the `StreamsBuilderFactoryBean` using the `#setKafkaStreamsCustomizer` method.
