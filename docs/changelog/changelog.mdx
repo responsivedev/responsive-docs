@@ -6,6 +6,19 @@ toc_max_heading_level: 3
 
 # Changelog
 
+## Dec 17, 2024
+
+### Kafka Client (0.37.0)
+
+✨ [responsive-pub/403](https://github.com/responsivedev/responsive-pub/pull/403):
+**Apache Kafka 3.8 and Kafka Spring 3.3 Support**: this commit makes the necessary changes to run
+Responsive with kafka 3.8.1 and kafka-spring 3.3. Note that we recommend you use Kafka Streams as a
+transitive dependency of Responsive `kafka-client` to avoid class loading issues.
+
+🐛 [responsive-pub/396](https://github.com/responsivedev/responsive-pub/pull/396):
+**TTD Async Support**: this commit fixes a bug in the `ResponsiveTopologyTestDriver` that prevented
+async processing from properly working.
+
 ## Nov 19, 2024
 
 ### Kafka Client (0.34.0)
