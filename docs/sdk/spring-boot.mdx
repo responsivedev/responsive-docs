@@ -43,7 +43,7 @@ dependency:
     <TabItem value="gradle" label="Gradle">
 
         ```
-        implementation 'dev.responsive:kafka-client:RESPONSIVE_CLIENT_VERSION'
+        implementation 'dev.responsive:responsive-spring:RESPONSIVE_CLIENT_VERSION'
         ```
     </TabItem>
 </Tabs>
@@ -71,12 +71,22 @@ If you use auto-wiring support for spring, replace the `@EnableKafkaStreams` ann
   }
 ```
 
+### Disabling Autowiring for Cassandra
+
+Spring will attempt to auto-wire Cassandra clients, which are configured by Responsive. You
+should make sure to disable this by adding the following to your spring boot application:
+
+```java
+@SpringBootApplication(exclude = {CassandraDataAutoConfiguration.class, CassandraAutoConfiguration.class})
+```
+
 ### Manual Configuration
 
-:::warning warning for users of `KafkaStreamsCustomizer`
+:::warning
 
 If you are using `KafkaStreamsCutsomizer` you **must** manually configure `ResponsiveKafkaStreams`
-to avoid overriding the `@EnableResponsive` annotation.
+to avoid overriding the `@EnableResponsive` annotation. Similarly, if you specify a bean
+with the name `defaultKafkaStreamsBuilder`, you should use manual configuration.
 
 :::
 
