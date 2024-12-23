@@ -84,7 +84,7 @@ should make sure to disable this by adding the following to your spring boot app
 
 :::warning
 
-If you are using `KafkaStreamsCutsomizer` you **must** manually configure `ResponsiveKafkaStreams`
+If you are using `KafkaStreamsCustomizer` you **must** manually configure `ResponsiveKafkaStreams`
 to avoid overriding the `@EnableResponsive` annotation. Similarly, if you specify a bean
 with the name `defaultKafkaStreamsBuilder`, you should use manual configuration.
 
