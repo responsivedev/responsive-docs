@@ -27,7 +27,7 @@ In `spring-kafka` 3.3.0 we introduced a method to `KafkaStreamsCustomizer` class
 to configure `ResponsiveKafkaStreams` when customizing your Kafka Streams application:
 
 ```java showLineNumbers
-public class ResponsiveStreamsCustomizer extends KafkaStreamsCustomizer {
+public class ResponsiveStreamsCustomizer implements KafkaStreamsCustomizer {
 
   @Override
   public KafkaStreams initKafkaStreams(
