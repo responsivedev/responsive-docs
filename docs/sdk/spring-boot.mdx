@@ -4,9 +4,6 @@ slug: /sdk/springboot
 sidebar_position: 5
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 :::note
 
 This page covers the changes you need to make to support Responsive with Spring
@@ -24,77 +21,13 @@ If your team requires a different configuration, please reach out to us at
 
 ## Usage
 
-### Dependencies
+### Configuration
 
-In order to use Responsive with `spring-kafka`, you must include the following
-dependency:
-
-<Tabs groupId="build-system">
-    <TabItem value="maven" label="Maven" default>
-
-        ```xml
-        <dependency>
-            <groupId>dev.responsive</groupId>
-            <artifactId>responsive-spring</artifactId>
-            <version>RESPONSIVE_CLIENT_VERSION</version>
-        </dependency>
-        ```
-    </TabItem>
-    <TabItem value="gradle" label="Gradle">
-
-        ```
-        implementation 'dev.responsive:responsive-spring:RESPONSIVE_CLIENT_VERSION'
-        ```
-    </TabItem>
-</Tabs>
-
-### Auto-Wiring
-
-If you use auto-wiring support for spring, replace the `@EnableKafkaStreams` annotation with
-`@EnableResponsive`:
-
-```diff java showLineNumbers
-+ import dev.responsive.spring.annotations.EnableResponsive;
-
-  @Configuration
-  @EnableKafka
-+ @EnableResponsive
-- @EnableKafkaStreams
-  public class MyKafkaStreamsConfiguration {
-
-    @Bean
-    public KStream<String, String> stream(StreamsBuilder streamsBuiler) {
-      // this code remains the same
-      ...
-    }
-
-  }
-```
-
-### Disabling Autowiring for Cassandra
-
-Spring will attempt to auto-wire Cassandra clients, which are configured by Responsive. You
-should make sure to disable this by adding the following to your spring boot application:
-
-```java
-@SpringBootApplication(exclude = {CassandraDataAutoConfiguration.class, CassandraAutoConfiguration.class})
-```
-
-### Manual Configuration
-
-:::warning
-
-If you are using `KafkaStreamsCustomizer` you **must** manually configure `ResponsiveKafkaStreams`
-to avoid overriding the `@EnableResponsive` annotation. Similarly, if you specify a bean
-with the name `defaultKafkaStreamsBuilder`, you should use manual configuration.
-
-:::
-
-In `spring-kafka` 3.3.0 we introduced a method to the  `KafkaStreamsCustomizer` class that allows you
+In `spring-kafka` 3.3.0 we introduced a method to `KafkaStreamsCustomizer` class that allows you
 to configure `ResponsiveKafkaStreams` when customizing your Kafka Streams application:
 
 ```java showLineNumbers
-public class MyStreamsCustomizer extends KafkaStreamsCustomizer {
+public class ResponsiveStreamsCustomizer extends KafkaStreamsCustomizer {
 
   @Override
   public KafkaStreams initKafkaStreams(
@@ -110,4 +43,23 @@ public class MyStreamsCustomizer extends KafkaStreamsCustomizer {
 }
 ```
 
-This can be wired into the `StreamsBuilderFactoryBean` using the `#setKafkaStreamsCustomizer` method.
+This can be wired into the `StreamsBuilderFactoryBean` using the `#setKafkaStreamsCustomizer` method
+on the factory bean:
+
+```java showLineNumbers
+  @Bean
+  public StreamsBuilderFactoryBeanConfigurer configure() {
+    return factoryBean -> {
+      factoryBean.setKafkaStreamsCustomizer(new ResponsiveStreamsCustomizer());
+    };
+  }
+```
+
+### Disabling Autowiring for Cassandra
+
+Spring will attempt to auto-wire Cassandra clients, which are configured manually by Responsive. You
+should make sure to disable this by adding the following to your spring boot application:
+
+```java
+@SpringBootApplication(exclude = {CassandraDataAutoConfiguration.class, CassandraAutoConfiguration.class})
+```
