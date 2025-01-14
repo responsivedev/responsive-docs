@@ -6,6 +6,26 @@ toc_max_heading_level: 3
 
 # Changelog
 
+## Jan 14, 2024
+
+### Kafka Client (0.38.0)
+
+✨ [responsive-pub/411](https://github.com/responsivedev/responsive-pub/pull/411):
+**Prefix Scan Support**: this commit adds support for prefix scans on MongoDB, Cassandra & In Memory
+Responsive stores.
+
+✨ [responsive-pub/409](https://github.com/responsivedev/responsive-pub/pull/409):
+**Configurable tombstone retention**: this change makes the default 12h to clean up deleted rows configurable
+using `responsive.mongo.tombstone.retention.seconds`.
+
+🐛 [responsive-pub/412](https://github.com/responsivedev/responsive-pub/pull/412):
+**TTD Async Support**: this commit fixes a bug in the `ResponsiveTopologyTestDriver` that prevented
+async processing from properly working.
+
+❗[responsive-pub/407](https://github.com/responsivedev/responsive-pub/pull/407)
+**Removed `responsive-spring` module**: the `responsive-spring` module is no longer necessary after
+having contributed the change allowing custom instantiation of `KafkaStreams` using `KafkaStreamsCustomizer`.
+
 ## Dec 17, 2024
 
 ### Kafka Client (0.37.0)
