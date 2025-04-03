@@ -6,6 +6,16 @@ toc_max_heading_level: 3
 
 # Changelog
 
+## Apr 3, 2025
+
+### Kafka Client (0.42.0)
+
+🐛 [responsive-pub/439](https://github.com/responsivedev/responsive-pub/pull/439)
+Fixes a minor bug with the `ResponsiveTopologyTestDriver` (RTTD) when loading properties from
+a file. Specifically, this affected users who attempted to enable async processing by setting
+the `responsive.async.thread.pool.size` config in a properties file. Prior to this, you
+could only enable async in the RTTD by setting this config in the Java code
+
 ## Mar 7, 2025
 
 ### Kafka Client (0.41.0)
