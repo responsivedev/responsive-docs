@@ -1,0 +1,55 @@
+---
+title: RS3 Setup
+slug: /storage/rs3/setup
+sidebar_position: 2
+description: Instructions for getting started using RS3 Storage
+---
+
+:::note Overview
+
+These instructions take you through the steps required to configure your application to use RS3 storage.
+
+__Note__: You will need to setup your application to use Responsive, and configure it with an SDK license. Instructions on how to do this can be found in the [quickstart](/sdk/quickstart).
+
+__Note__: You will need to have an RS3 cluster deployed and determine your RS3 endpoint. You can do so by first signing up for [Responsive Cloud](https://cloud.responsive.dev/login) if you haven't already, and then [provisioning RS3 storage](https://cloud.responsive.dev/storage).
+
+:::
+
+# RS3 Setup
+
+## Configure your Application
+
+To configure your application to use RS3, set the following properties either from your application or in your properties file.
+
+Properties file:
+
+```
+responsive.storage.backend.type=RS3
+responsive.rs3.hostname=<YOUR RS3 ENDPOINT>
+# set one of the following two configs to configure your license
+responsive.license=<YOUR RESPONSIVE LICENSE>
+responsive.license.file=<PATH TO YOUR RESPONSIVE LICENSE FILE>
+```
+
+Application:
+
+```java
+import dev.responsive.kafka.api.config.ResponsiveConfig;
+import dev.responsive.kafka.api.config.StorageBackend;
+...
+props.put(ResponsiveConfig.STORAGE_BACKEND_TYPE_CONFIG , StorageBackend.RS3);
+props.put(ResponsiveConfig.RS3_HOSTNAME_CONFIG, "<RS3 ENDPOINT>");
+// set one of the following two configs to configure your license
+props.put(ResponsiveConfig.RESPONSIVE_LICENSE_CONFIG, "<YOUR RESPONSIVE LICENSE>");
+props.put(ResponsiveConfig.RESPONSIVE_LICENSE_FILE_CONFIG, "<PATH TO YOUR RESPONSIVE LICENSE FILE>");
+```
+
+And that's it! Once this is done your application will start storing its state store data in RS3.
+
+## RS3 CLI
+
+You can use the RS3 CLI to interact with your RS3 cluster to manage your stores. The CLI ships as a docker image, so you'll need to have docker set up. You'll also need to provide your SDK license when using the CLI. So, for example to list the stores you've created in RS3:
+
+```bash
+$ docker run -it public.ecr.aws/j8q9y0n6/responsiveinc/rs3-cli:latest -l `cat <PATH TO YOUR RESPONSIVE LICENSE FILE>`  --endpoint https://<YOUR RS3 ENDPOINT> list-stores -d
+```
